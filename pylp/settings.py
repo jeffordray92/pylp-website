@@ -25,7 +25,7 @@ SECRET_KEY = '82)$22$$4#5p+$6cyq3n-z%w2$m@s2tg_9h+gy%)r$dtz2+c7t'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["access-pylp.herokuapp.com"]
+ALLOWED_HOSTS = ["access-pylp.herokuapp.com", "localhost"]
 
 
 # Application definition
@@ -54,7 +54,7 @@ ROOT_URLCONF = 'pylp.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, "template")],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -118,7 +118,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, "static")
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
 ]
+STATIC_ROOT = os.path.join(BASE_DIR, "static-deploy")
