@@ -14,3 +14,4 @@ class Section(models.Model):
     section_image = models.ImageField(upload_to = 'section/')
     subquote = models.CharField(max_length=200)
     subquote_image = models.ImageField(upload_to = 'section/')
+

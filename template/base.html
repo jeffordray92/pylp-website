@@ -10,7 +10,7 @@
     <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Honest &mdash; Free Website Template, Free HTML5 Template by GetTemplates.co</title>
+    <title>{% block title %}{% endblock %} &mdash; ACCESS PYLP Alumni Association</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="Free HTML5 Website Template by GetTemplates.co" />
     <meta name="keywords" content="free website templates, free html5, free template, free bootstrap, free website template, html5, css3, mobile first, responsive" />
@@ -108,7 +108,6 @@
             </div>
         </nav>
     </div>
-
     {% block content %}{% endblock %}
     
 
@@ -183,6 +182,9 @@
     <!-- Magnific Popup -->
     <script src="{% static 'js/jquery.magnific-popup.min.js' %}"></script>
     <script src="{% static 'js/magnific-popup-options.js' %}"></script>
+
+
+    <!-- <script src="{% static 'js/scroll.js' %}"></script> -->
     
     <!-- Main -->
     <script src="{% static 'js/main.js' %}"></script>
