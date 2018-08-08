@@ -697,19 +697,21 @@ form label {
 }
 
 #gtco-counter {
-  text-align: center;
+  margin-top: -20em;
+  padding-top: 20em;
+  position: relative;
 }
 #gtco-counter .counter {
   font-size: 50px;
   margin-bottom: 10px;
-  color: #66D37E;
+  color: #FFFFFF;
   font-weight: 100;
   display: block;
 }
 #gtco-counter .counter-label {
   margin-bottom: 0;
   text-transform: uppercase;
-  color: rgba(0, 0, 0, 0.5);
+  color: rgba(255, 255, 255, 0.5);
   letter-spacing: .1em;
 }
 @media screen and (max-width: 768px) {
@@ -734,6 +736,21 @@ form label {
   text-align: center;
   margin-left: 3px;
 }
+
+
+#gtco-counter:before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  width: 100%;
+  height: 180%;
+  top: 0;
+  -webkit-transform: skewY(-12deg);
+  -moz-transform: skewY(-12deg);
+  transform: skewY(-12deg);
+  background: #66D37E;
+}
+
 
 #gtco-features,
 #gtco-features-2,
@@ -1058,7 +1075,7 @@ form label {
   margin-bottom: 10px;
   line-height: 1.5;
   font-weight: 300;
-  color: #000;
+  color: #ffffff;
   position: relative;
 }
 @media screen and (max-width: 768px) {
@@ -1069,7 +1086,22 @@ form label {
 .gtco-heading p {
   font-size: 20px;
   line-height: 1.5;
-  color: gray;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.gtco-heading-black h2 {
+  font-size: 50px;
+  margin-bottom: 10px;
+  line-height: 1.5;
+  font-weight: 300;
+  color: #000000;
+  position: relative;
+}
+
+.gtco-heading-black p {
+  font-size: 20px;
+  line-height: 1.5;
+  color: rgba(0, 0, 0, 0.5);
 }
 
 #gtco-products {

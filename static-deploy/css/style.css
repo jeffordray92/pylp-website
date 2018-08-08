@@ -702,7 +702,7 @@ form label {
 #gtco-counter .counter {
   font-size: 50px;
   margin-bottom: 10px;
-  color: #66D37E;
+  color: #FFFFFF;
   font-weight: 100;
   display: block;
 }
@@ -810,6 +810,25 @@ form label {
 }
 #gtco-features .feature-center p {
   color: rgba(255, 255, 255, 0.7);
+}
+
+
+.gtco-features {
+  margin-top: -20em;
+  padding-top: 20em;
+  position: relative;
+}
+.gtco-features:before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  width: 100%;
+  height: 180%;
+  top: 0;
+  -webkit-transform: skewY(-12deg);
+  -moz-transform: skewY(-12deg);
+  transform: skewY(-12deg);
+  background: #66D37E;
 }
 
 .flex-section {
