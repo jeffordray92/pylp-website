@@ -19,7 +19,7 @@
 
     <div id="gtco-sections">
     {% for section in sections %}
-    <div class="flex-section {% cycle 'gtco-gray-bg' 'reverse' %}">
+    <div id="gtco-about" class="flex-section {% cycle 'gtco-gray-bg' 'reverse' %}">
         <div class="col-1">
             <div class="text">
 
@@ -41,7 +41,7 @@
     {% endfor %}
     </div>
     <div class="overflow-hid"> 
-        <div class="gtco-section">
+        <div class="gtco-section" id="gtco-news">
             <div class="gtco-container">
                 <div class="row">
                     <div class="col-md-8 col-md-offset-2 text-center gtco-heading-black">
@@ -91,7 +91,7 @@
                         </a>
                     </div>
                 </div>
-                <div><a href="#" class="gtco-card-item text-center">See More</a></div>
+                <div id="gtco-facts"><a href="#" class="gtco-card-item text-center">See More</a></div>
             </div>
         </div>
         <div id="gtco-counter" class="gtco-section">
