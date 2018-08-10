@@ -11,7 +11,7 @@
                 <div class="col-md-12 mt-text text-center animate-box" data-animate-effect="fadeInUp">
                     <h1><strong>{{ header.title }}</strong></h1>    
                     <h2>{{ header.subtitle }}</h2>
-                    <div class="text-center"><a href="https://www.youtube.com/watch?v=UD2nWSSj5SY" class="btn btn-primary btn-lg popup-vimeo">Watch the video</a></div>
+                    <div class="text-center"><a href="{{ header.video }}" class="btn btn-primary btn-lg popup-vimeo">Watch the video</a></div>
                 </div>
             </div>
         </div>
@@ -50,48 +50,23 @@
                     </div>
                 </div>
                 <div class="row">
-
+                {% for article in recent_news %}
                     <div class="col-lg-4 col-md-4 col-sm-6">
-                        <a href="#" class="gtco-card-item">
+                        <a href="{% url 'news' slug=article.slug %}" class="gtco-card-item">
                             <figure>
                                 <div class="overlay"><i class="ti-plus"></i></div>
-                                <img src="{% static 'images/img_1.jpg' %}" alt="Image" class="img-responsive">
+                                <img src="{{ article.image.url }}" alt="Image" class="img-responsive">
                             </figure>
                             <div class="gtco-text">
-                                <h2>Data Analytics</h2>
-                                <p>Far far away, behind the word mountains, far from the countries Vokalia..</p>
+                                <h2>{{ article.title|truncatechars:55 }}</h2>
+                                <p>{{ article.content|safe|truncatewords:12 }}</p>
                                 <p><span class="btn btn-primary">Learn more</span></p>
                             </div>
                         </a>
                     </div>
-                    <div class="col-lg-4 col-md-4 col-sm-6">
-                        <a href="#" class="gtco-card-item">
-                            <figure>
-                                <div class="overlay"><i class="ti-plus"></i></div>
-                                <img src="{% static 'images/img_2.jpg' %}" alt="Image" class="img-responsive">
-                            </figure>
-                            <div class="gtco-text">
-                                <h2>Web Development</h2>
-                                <p>Far far away, behind the word mountains, far from the countries Vokalia..</p>
-                                <p><span class="btn btn-primary">Learn more</span></p>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col-lg-4 col-md-4 col-sm-6">
-                        <a href="#" class="gtco-card-item">
-                            <figure>
-                                <div class="overlay"><i class="ti-plus"></i></div>
-                                <img src="{% static 'images/img_3.jpg' %}" alt="Image" class="img-responsive">
-                            </figure>
-                            <div class="gtco-text">
-                                <h2>Branding</h2>
-                                <p>Far far away, behind the word mountains, far from the countries Vokalia..</p>
-                                <p><span class="btn btn-primary">Learn more</span></p>
-                            </div>
-                        </a>
-                    </div>
+                {% endfor %}
                 </div>
-                <div id="gtco-facts"><a href="#" class="gtco-card-item text-center">See More</a></div>
+                <div><a href="{% url 'news_list' %}" class="gtco-card-item text-center">See More</a></div>
             </div>
         </div>
         <div id="gtco-counter" class="gtco-section">
@@ -99,39 +74,22 @@
 
                 <div class="row">
                     <div class="col-md-8 col-md-offset-2 text-center gtco-heading animate-box">
-                        <h2>Facts</h2>
-                        <p>Dignissimos asperiores vitae velit veniam totam fuga molestias accusamus alias autem provident. Odit ab aliquam dolor eius.</p>
+                        <h2>Facts and Figures</h2>
+                        <p>The Alumni Association in numbers</p>
                     </div>
                 </div>
 
                 <div class="row">
-                    
+
+                    {% for figure in figures %}
                     <div class="col-md-3 col-sm-6 animate-box" data-animate-effect="fadeInUp">
                         <div class="feature-center">
-                            <span class="counter js-counter" data-from="0" data-to="196" data-speed="5000" data-refresh-interval="50">1</span>
-                            <span class="counter-label">Clients</span>
+                            <span class="counter js-counter" data-from="0" data-to="{{ figure.value }}" data-speed="2000" data-refresh-interval="50">1</span>
+                            <span class="counter-label">{{ figure.title }}</span>
 
                         </div>
                     </div>
-                    <div class="col-md-3 col-sm-6 animate-box" data-animate-effect="fadeInUp">
-                        <div class="feature-center">
-                            <span class="counter js-counter" data-from="0" data-to="97" data-speed="5000" data-refresh-interval="50">1</span>
-                            <span class="counter-label">Projects</span>
-                        </div>
-                    </div>
-                    <div class="col-md-3 col-sm-6 animate-box" data-animate-effect="fadeInUp">
-                        <div class="feature-center">
-                            <span class="counter js-counter" data-from="0" data-to="12402" data-speed="5000" data-refresh-interval="50">1</span>
-                            <span class="counter-label">Coffee</span>
-                        </div>
-                    </div>
-                    <div class="col-md-3 col-sm-6 animate-box" data-animate-effect="fadeInUp">
-                        <div class="feature-center">
-                            <span class="counter js-counter" data-from="0" data-to="12202" data-speed="5000" data-refresh-interval="50">1</span>
-                            <span class="counter-label">Line of codes</span>
-
-                        </div>
-                    </div>
+                    {% endfor %}
                         
                 </div>
             </div>

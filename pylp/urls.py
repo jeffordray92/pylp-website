@@ -21,13 +21,16 @@ from django.urls import path
 
 from django.views.generic import TemplateView
 
-from content.views import HomeView
+from content.views import (
+    HomeView,
+)
 
 
 urlpatterns = [
     path('', HomeView.as_view(), name="index"),
+    path('news/', include('news.urls')),
     path('admin/', admin.site.urls),
-    path(r'^tinymce/', include('tinymce.urls')),
+    path('tinymce/', include('tinymce.urls')),
 ]
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

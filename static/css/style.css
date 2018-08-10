@@ -302,7 +302,7 @@ h1, h2, h3, h4, h5, h6, figure {
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.4);
+  background: rgba(0, 0, 0, 0.5);
   -webkit-transition: 0.5s;
   -o-transition: 0.5s;
   transition: 0.5s;
@@ -348,7 +348,7 @@ h1, h2, h3, h4, h5, h6, figure {
   font-size: 59px;
   line-height: 1.5;
   font-weight: 300;
-  text-transform: uppercase !important;
+  text-transform: uppercase;
 }
 #gtco-header h1 strong {
   font-weight: 700;
@@ -467,7 +467,7 @@ h1, h2, h3, h4, h5, h6, figure {
   top: 0;
   left: 0;
   right: 0;
-  background: rgba(0, 0, 0, 0.3);
+  background: rgba(0, 0, 0, 0.5);
 }
 .gtco-cover > .gtco-container {
   position: relative;

@@ -70,13 +70,14 @@
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-md-6 col-xs-6">
-                        <div id="gtco-logo"><a href="index.html"><img src="{% static 'images/logo.jpg' %}" alt="Image" class="img-responsive"/ ></a></div>
+                        <div id="gtco-logo"><a href="{% url 'index' %}"><img src="{% static 'images/logo.jpg' %}" alt="Image" class="img-responsive"/ ></a></div>
                     </div>
                     <div class="col-md-6 col-xs-6 social-icons">
                         <ul class="gtco-social-top">
-                            <li><a href="#"><i class="icon-facebook"></i></a></li>
-                            <li><a href="#"><i class="icon-twitter"></i></a></li>
-                            <li><a href="#"><i class="icon-instagram"></i></a></li>
+                            {% if facebook %}<li><a href="{{ facebook }}"><i class="icon-facebook"></i></a></li>{% endif %}
+                            {% if twitter %}<li><a href="{{ twitter }}"><i class="icon-twitter"></i></a></li>{% endif %}
+                            {% if instagram %}<li><a href="{{ instagram }}"><i class="icon-instagram"></i></a></li>{% endif %}
+                            {% if linkedin %}<li><a href="{{ linkedin }}"><i class="icon-linkedin"></i></a></li>{% endif %}
                         </ul>
                     </div>
                 </div>
@@ -88,10 +89,17 @@
                 <div class="row">
                     <div class="col-xs-12 text-center menu-1">
                         <ul>
+                            {% if request.get_full_path == "/"%}
                             <li class="active"><a href="#head-top">Home</a></li>
                             <li><a href="#gtco-about">Who We Are</a></li>
                             <li><a href="#gtco-news">News and Events</a></li>
-                            <li><a href="#gtco-facts">Facts and Figures</a></li>
+                            <li><a href="#gtco-footer">Contact Us</a></li>
+                            {% else %}
+                            <li class="active"><a href="{% url 'index' %}">Home</a></li>
+                            <li><a href="{% url 'index' %}#gtco-about">Who We Are</a></li>
+                            <li><a href="{% url 'index' %}#gtco-news">News and Events</a></li>
+                            <li><a href="#gtco-footer">Contact Us</a></li>
+                            {% endif %}
                         </ul>
                     </div>
                 </div>
@@ -109,7 +117,7 @@
                 <div class="col-md-6">
                     <div class="gtco-widget">
                         <h3>About Us</h3>
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempore eos molestias quod sint ipsum possimus temporibus officia iste perspiciatis consectetur in fugiat.</p>
+                        <p>{{ about }}</p>
                     </div>
                 </div>
 
@@ -117,9 +125,8 @@
                     <div class="gtco-widget">
                         <h3>Get In Touch</h3>
                         <ul class="gtco-quick-contact">
-                            <li><a href="#"><i class="icon-phone"></i> +1 234 567 890</a></li>
-                            <li><a href="#"><i class="icon-mail2"></i> info@GetTemplates.co</a></li>
-                            <li><a href="#"><i class="icon-chat"></i> Live Chat</a></li>
+                            {% if telephone %}<li><a href="tel:{{ telephone }}"><i class="icon-phone"></i> {{ telephone }}</a></li> {% endif %}
+                            {% if email %}<li><a href="mailto:{{ email }}"><i class="icon-mail2"></i> {{ email }}</a></li>{% endif %}
                         </ul>
                     </div>
                 </div>
@@ -129,15 +136,15 @@
             <div class="row copyright">
                 <div class="col-md-12">
                     <p class="pull-left">
-                        <small class="block">&copy; 2016 Free HTML5. All Rights Reserved.</small> 
-                        <small class="block">Designed by <a href="http://GetTemplates.co/" target="_blank">GetTemplates.co</a> Demo Images: <a href="http://unsplash.com/" target="_blank">Unsplash</a></small>
+                        <small class="block">&copy; 2018 All Rights Reserved.</small> 
+                        <small class="block">Designed and Developed by <a href="https://ph.linkedin.com/in/jefford-ray-mamacus-9310a381" target="_blank">Jefford Ray Mamacus</a>
                     </p>
                     <p class="pull-right">
                         <ul class="gtco-social-icons pull-right">
-                            <li><a href="#"><i class="icon-twitter"></i></a></li>
-                            <li><a href="#"><i class="icon-facebook"></i></a></li>
-                            <li><a href="#"><i class="icon-linkedin"></i></a></li>
-                            <li><a href="#"><i class="icon-dribbble"></i></a></li>
+                            {% if facebook %}<li><a href="{{ facebook }}"><i class="icon-facebook"></i></a></li>{% endif %}
+                            {% if twitter %}<li><a href="{{ twitter }}"><i class="icon-twitter"></i></a></li>{% endif %}
+                            {% if instagram %}<li><a href="{{ instagram }}"><i class="icon-instagram"></i></a></li>{% endif %}
+                            {% if linkedin %}<li><a href="{{ linkedin }}"><i class="icon-linkedin"></i></a></li>{% endif %}
                         </ul>
                     </p>
                 </div>
