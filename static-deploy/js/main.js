@@ -28,11 +28,10 @@
 
 		$(document).click(function (e) {
 	    var container = $("#gtco-offcanvas, .js-gtco-nav-toggle");
-	    if (!container.is(e.target) && container.has(e.target).length === 0) {
+	    var button = $(".button-home");
+	    if ((!container.is(e.target) && container.has(e.target).length === 0) || (button.is(e.target)) ) {
 	    	$('.js-gtco-nav-toggle').addClass('gtco-nav-dark');
-
 	    	if ( $('body').hasClass('offcanvas') ) {
-
     			$('body').removeClass('offcanvas');
     			$('.js-gtco-nav-toggle').removeClass('active');
 				
