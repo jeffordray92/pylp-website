@@ -877,6 +877,12 @@ pre code {
 .container:after {
   clear: both;
 }
+@media (max-width: 500px) {
+  .no-mobile {
+    display: none;
+  }
+}
+
 @media (min-width: 768px) {
   .container {
     width: 750px;
@@ -1135,6 +1141,7 @@ pre code {
 }
 
 @media (min-width: 768px) {
+
   .col-sm-1, .col-sm-2, .col-sm-3, .col-sm-4, .col-sm-5, .col-sm-6, .col-sm-7, .col-sm-8, .col-sm-9, .col-sm-10, .col-sm-11, .col-sm-12 {
     float: left;
   }
