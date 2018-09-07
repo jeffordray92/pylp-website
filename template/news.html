@@ -11,8 +11,7 @@
         <div class="gtco-container">
             <div class="row row-mt-15em">
                 <div class="col-md-12 mt-text text-left animate-box" data-animate-effect="fadeInUp">
-                    <h1 style="text-transform: none;"><strong>{{ article.title }}</strong></h1>  
-                    <h2>Published on: {{ article.date_uploaded|date:"F j, Y"}}</h2>
+                    <h1 style="text-transform: none;"><strong>{{ article.title }}</strong></h1>
                 </div>
             </div>
         </div>
@@ -23,10 +22,34 @@
             <div class="text">
                 <div class="row" style="padding-left:10%; padding-right:10%; padding-top:5%; padding-bottom:5%">
                     <div class="col-md-12">
+                    <strong>Published on: {{ article.date_uploaded|date:"F j, Y"}}
+                    </strong>
+                    </div>
+                    <div class="col-md-12">
                     {{ article.content|safe }}
                     </div>
                 </div>
             </div>
         </div>
     </div>
+{% endblock %}
+
+{% block meta %}
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="The official website of the ACCESS Philippine Youth Leadership Program - Alumni Association, Inc." />
+    <meta name="keywords" content="access, pylp, access pylp, philippine youth leadership program" />
+    <meta name="author" content="ACCESS-PYLP" />
+    <meta name="google" content="notranslate">
+
+    <!-- Facebook and Twitter integration -->
+    <meta property="og:title" content="{{ article.title }}"/>
+    <meta property="og:image" content="{{ article.image.url }}"/>
+    <meta property="og:url" content="{% url 'index' %}"/>
+    <meta property="og:site_name" content="ACCESS PYLP Alumni Association, Inc."/>
+    <meta property="og:description" content="The official website of the ACCESS Philippine Youth Leadership Program - Alumni Association, Inc."/>
+    <meta name="twitter:title" content="{{ article.title }}" />
+    <meta name="twitter:description" content="The official website of the ACCESS Philippine Youth Leadership Program - Alumni Association, Inc." />
+    <meta name="twitter:image" content="{{ article.image.url }}" />
+    <meta name="twitter:url" content="{% url 'index' %}" />
+    <meta name="twitter:card" content="summary_large_image" />
 {% endblock %}

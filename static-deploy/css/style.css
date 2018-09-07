@@ -345,7 +345,7 @@ h1, h2, h3, h4, h5, h6, figure {
 }
 #gtco-header h1 {
   margin-bottom: 0px;
-  font-size: 59px;
+  font-size: 50px;
   line-height: 1.5;
   font-weight: 300;
   text-transform: uppercase;
@@ -354,18 +354,23 @@ h1, h2, h3, h4, h5, h6, figure {
   font-weight: 700;
   color: #66D37E;
 }
+#gtco-header h2 {
+  font-weight: 300;
+  font-size: 32px;
+  line-height: 1.5;
+  margin-bottom: 30px;
+}
 @media screen and (max-width: 768px) {
   #gtco-header h1 {
-    font-size: 34px;
+    font-size: 30px;
     line-height: 1.2;
     margin-bottom: 10px;
   }
-}
-#gtco-header h2 {
-  font-weight: 300;
-  font-size: 22px;
-  line-height: 1.5;
-  margin-bottom: 30px;
+  #gtco-header h2 {
+    font-size: 22px;
+    line-height: 1.5;
+    margin-bottom: 20px;
+  }
 }
 
 #gtco-header,
