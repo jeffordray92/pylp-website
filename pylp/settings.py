@@ -25,7 +25,12 @@ SECRET_KEY = '82)$22$$4#5p+$6cyq3n-z%w2$m@s2tg_9h+gy%)r$dtz2+c7t'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["access-pylp.herokuapp.com", "localhost"]
+ALLOWED_HOSTS = [
+    "access-pylp.herokuapp.com",
+    "localhost",
+    "www.access-pylp.com",
+    "access-pylp.com"
+]
 
 
 # Application definition
