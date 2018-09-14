@@ -1,7 +1,9 @@
 import os
 
-from datetime import datetime  
-from tinymce.models import HTMLField
+from datetime import datetime
+from djrichtextfield.models import RichTextField
+# from tinymce.models import HTMLField
+# from tinymce.widgets import TinyMCE
 
 from django.db import models
 from django.template.defaultfilters import slugify
@@ -33,7 +35,8 @@ class NewsList(models.Model):
 
 class News(models.Model):
     title = models.CharField(max_length=100)
-    content = HTMLField()
+    # content = HTMLField()
+    content = RichTextField()
     image = models.ImageField(upload_to=get_image_path)
     date_uploaded = models.DateTimeField(default=datetime.now, blank=True)
     slug = models.SlugField(default="", **optional)

@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'tinymce',
+    'djrichtextfield',
 
     'content',
     'news',
@@ -136,3 +137,16 @@ STATIC_ROOT = os.path.join(BASE_DIR, "static-deploy")
 
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 MEDIA_URL = '/media/'
+
+
+#DJ RichTextField
+DJRICHTEXTFIELD_CONFIG = {
+    'js': ['//tinymce.cachefly.net/4.1/tinymce.min.js'],
+    'init_template': 'djrichtextfield/init/tinymce.js',
+    'settings': {
+        'menubar': False,
+        'plugins': 'link image code',
+        'toolbar': 'bold italic | link image code | removeformat ',
+        'width': 700
+    }
+}
