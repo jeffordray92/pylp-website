@@ -11,6 +11,7 @@ gunicorn = "*"
 django-heroku = "*"
 django-tinymce = "*"
 Pillow = "*"
+django-richtextfield=="*"
 
 [requires]
 
