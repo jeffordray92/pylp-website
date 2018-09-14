@@ -25,6 +25,7 @@ from content.views import (
     HomeView,
 )
 
+admin.site.site_header = 'ACCESS-PYLP Site Admin'
 
 urlpatterns = [
     path('', HomeView.as_view(), name="index"),
