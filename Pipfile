@@ -12,6 +12,7 @@ django-heroku = "*"
 django-tinymce = "*"
 Pillow = "*"
 django-richtextfield = "*"
+dj-database-url = "*"
 
 [requires]
 

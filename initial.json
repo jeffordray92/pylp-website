@@ -1,0 +1,133 @@
+[
+{
+    "model": "content.header",
+    "pk": 1,
+    "fields": {
+        "title": "ACCESS PYLP Alumni Association, Inc.",
+        "subtitle": "Legacy stays the same",
+        "image": "header/rawpixel-760060-unsplash.jpg",
+        "video": "https://www.youtube.com/watch?v=UD2nWSSj5SY",
+        "details": "A community based on faith and culture that advances interfaith and intercultural initiatives geared towards sustainable peace & development"
+    }
+},
+{
+    "model": "content.section",
+    "pk": 1,
+    "fields": {
+        "title": "Creative Minds",
+        "content": "<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Repudiandae accusamus, fugiat ut! Ducimus accusamus, quos. Esse ea iste, expedita atque quod quo maxime, saepe! Architecto unde aliquid atque excepturi dolores dolore fugit rem recusandae amet a, molestiae et! Dolore, laborum?</p>\r\n<p>Quaerat quisquam quasi minima at molestias porro accusantium qui atque doloremque ab, odio tempora obcaecati cumque veritatis quo, assumenda nihil dolor optio enim fugit accusamus laborum. Autem neque dignissimos, corrupti, fugiat labore nisi illo, delectus, alias natus optio distinctio culpa!</p>",
+        "section_image": "section/10268450_678885965498313_7633922112764887069_n.jpg",
+        "subquote_image": "section/41688085_10217606942110975_5923832071049969664_n.jpg"
+    }
+},
+{
+    "model": "content.section",
+    "pk": 2,
+    "fields": {
+        "title": "Expertise & Beliefs",
+        "content": "<p>Dignissimos asperiores vitae velit veniam totam fuga molestias accusamus alias autem provident. Odit ab aliquam dolor eius.</p>\r\n<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Repudiandae accusamus, fugiat ut! Ducimus accusamus, quos. Esse ea iste, expedita atque quod quo maxime, saepe! Architecto unde aliquid atque excepturi dolores dolore fugit rem recusandae amet a, molestiae et! Dolore, laborum?</p>\r\n<p>Quaerat quisquam quasi minima at molestias porro accusantium qui atque doloremque ab, odio tempora obcaecati cumque veritatis quo, assumenda nihil dolor optio enim fugit accusamus laborum. Autem neque dignissimos, corrupti, fugiat labore nisi illo, delectus, alias natus optio distinctio culpa!</p>",
+        "section_image": "section/601697_519057718147806_1446693442_n.jpg",
+        "subquote_image": "section/37749343_1770521443001421_991993374993022976_n.jpg"
+    }
+},
+{
+    "model": "content.fact",
+    "pk": 1,
+    "fields": {
+        "title": "Years",
+        "value": 15
+    }
+},
+{
+    "model": "content.fact",
+    "pk": 2,
+    "fields": {
+        "title": "Member Alumni",
+        "value": 148
+    }
+},
+{
+    "model": "content.fact",
+    "pk": 3,
+    "fields": {
+        "title": "Projects",
+        "value": 62
+    }
+},
+{
+    "model": "content.fact",
+    "pk": 4,
+    "fields": {
+        "title": "Key Areas",
+        "value": 87
+    }
+},
+{
+    "model": "content.socialmedia",
+    "pk": 1,
+    "fields": {
+        "facebook": "https://www.facebook.com/accesspylpAA/",
+        "twitter": null,
+        "instagram": null,
+        "linkedin": null,
+        "telephone": "+63 917 716 9023",
+        "email": "access.pylp@gmail.com"
+    }
+},
+{
+    "model": "news.newslist",
+    "pk": 1,
+    "fields": {
+        "title": "News & Events",
+        "subtitle": "Get know more about our Alumni Association's recent engagements",
+        "image": "news_header/rawpixel-558597-unsplash.jpg"
+    }
+},
+{
+    "model": "news.news",
+    "pk": 1,
+    "fields": {
+        "title": "YALI Alum Bags Success with a Green Attitude",
+        "content": "<p>Exchange alumnus Nazeem Mohammad Fadiir Junggee from Mauritius has transformed the old saying, &ldquo;one person&rsquo;s trash is another person&rsquo;s treasure.&rdquo;</p>\r\n<p>While completing his Young African Leadership Initiative (YALI)-Mandela Washington Fellowship in 2016 at Dartmouth College, Nazeem won a business plan competition and was awarded a $25,000 grant from the United States African Development Foundation (USADF) for his project to upcycle advertising banners into tote bags. Nazeem and his wife, Anousha &mdash; herself an alumna of the YALI Regional Leadership Center in South Africa and a 2017 Mandela Washington Fellow &mdash; came up with the idea shortly after his home country banned the use of plastic bags in 2016, resulting in higher demand for an alternative. At the time, Nazeem and Anousha were running a print and design company that they had co-founded. The company specializes in large format digital printing, including advertising banners and billboards. Living on an island nation, Nazeem and Anousha believe that protecting the environment is an investment in their country and they wanted to find a way to reduce advertising waste in Mauritius, which produces over 300,000 square meters of printing material annually.</p>\r\n<p align=\"center\"><img src=\"https://alumni.state.gov/files/alumni/anousha.jpg\" alt=\"\" width=\"500\" height=\"500\" /></p>\r\n<p>Many printed banners or billboards contain polyvinyl chloride (PVC), which is not a biodegradable material. These banners and billboards also have a short life span -- between 20 to 90 days for most advertising purposes; sometimes, only a day. Once used, some are burnt; the rest, which collectively weigh nearly 100 tons, become waste in the landfills of Mauritius. Being an environmentally conscious couple, Nazeem and Anousha decided that upcycling the banners into multi-purpose, fashionable bags was the way to go. The result was &ldquo;SAKILI&rdquo; (include hyperlink), a brand name as creative as its concept: &ldquo;Sak&rdquo; in Mauritian Creole means &ldquo;bag&rdquo; and &ldquo;Sakili&rdquo; is a colloquial expression which signifies, &ldquo;Way to go!&rdquo;</p>\r\n<p>The tote bags, also known as &ldquo;the bags with a green attitude,&rdquo; have made quite an impact since their debut on Earth Day 2017. The launching of SAKILI was followed by a weeklong exhibit at Le Caudan Waterfront, in the capital city of Port Louis. The exhibit, entitled &ldquo;Once a billboard now a bag,&rdquo; displayed totes made from various advertising campaigns, including the U.S. Embassy of Mauritius&rsquo;s Fourth of July fireworks banner from 2016. In addition, Nazeem and Anousha&rsquo;s tote bags were featured at Dartmouth College in 2017, where he had completed his Mandela Washington Fellowship for Young African Leaders the year before.</p>\r\n<p align=\"center\"><iframe src=\"https://www.youtube.com/embed/m1uw0bz5SXk?rel=0&amp;controls=0\" width=\"560\" height=\"315\" frameborder=\"0\" allowfullscreen=\"\"></iframe></p>\r\n<p>When he&rsquo;s not saving the environment, Nazeem is involved in the Mauritian Mandela Washington Fellows alumni community. Together with this alumni community, he helped organize an incredible leadership conference in February 2018, funded through the YALI Engagement Fund. The conference, titled &ldquo;The Leadership We Want,&rdquo; included participants from ages 17 to 50 and focused on three key themes: Education and Community Development, Business and Socio-environmental Responsibility, and Human Rights and Gender.</p>\r\n<p>&ldquo;The Leadership We Want&rdquo; conference and SAKILI are two great examples of how #ExchangeAlumni like Nazeem are invested -- and continue to invest -- in efforts which promote mutual understanding within their countries and the world.</p>\r\n<p>&nbsp;</p>\r\n<p>Thank you for your leadership, Nazeem!</p>",
+        "image": "news/2018-09-12/nazeem_1.jpg",
+        "date_uploaded": "2018-09-12T10:35:09Z",
+        "slug": "yali-alum-bags-success-with-a-green-attitude"
+    }
+},
+{
+    "model": "auth.user",
+    "pk": 1,
+    "fields": {
+        "password": "pbkdf2_sha256$120000$yFhMboNEmQ8k$P+bZJytKD6YPelkGkxAYPaoNnXK+rhoj2Lkk9UCiCr8=",
+        "last_login": "2018-09-14T13:39:21.968Z",
+        "is_superuser": true,
+        "username": "admin",
+        "first_name": "",
+        "last_name": "",
+        "email": "",
+        "is_staff": true,
+        "is_active": true,
+        "date_joined": "2018-08-08T07:19:40.577Z",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "auth.user",
+    "pk": 2,
+    "fields": {
+        "password": "pbkdf2_sha256$120000$xc3Cp35XtTSB$Y96Uc10nfqnjs03nZghNRTMRqa6rNMh0WIEupKTzaUw=",
+        "last_login": "2018-09-15T07:20:45.073Z",
+        "is_superuser": true,
+        "username": "jefford",
+        "first_name": "Jefford Ray",
+        "last_name": "Mamacus",
+        "email": "jeffordraymamacus@gmail.com",
+        "is_staff": true,
+        "is_active": true,
+        "date_joined": "2018-09-14T13:39:43Z",
+        "groups": [],
+        "user_permissions": []
+    }
+}
+]
