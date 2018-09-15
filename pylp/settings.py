@@ -83,25 +83,7 @@ TEMPLATES = [
 WSGI_APPLICATION = 'pylp.wsgi.application'
 
 
-# Database
-# https://docs.djangoproject.com/en/2.0/ref/settings/#databases
 
-DATABASES = {
-    "default": {
-        # Add "postgresql_psycopg2", "mysql", "sqlite3" or "oracle".
-        "ENGINE": "django.db.backends.postgresql_psycopg2",
-        # DB name or path to database file if using sqlite3.
-        "NAME": "pylp",
-        # Not used with sqlite3.
-        "USER": "postgres",
-        # Not used with sqlite3.
-        "PASSWORD": "admin",
-        # Set to empty string for localhost. Not used with sqlite3.
-        "HOST": "",
-        # Set to empty string for default. Not used with sqlite3.
-        "PORT": "",
-    }
-}
 
 
 # Password validation
@@ -163,4 +145,10 @@ DJRICHTEXTFIELD_CONFIG = {
 }
 
 
-# django_heroku.settings(locals())
+django_heroku.settings(locals())
+
+PROJECT_APP_PATH = os.path.dirname(os.path.abspath(__file__))
+
+f = os.path.join(PROJECT_APP_PATH, "local_settings.py")
+if os.path.exists(f):
+    exec(open(f, "rb").read())
