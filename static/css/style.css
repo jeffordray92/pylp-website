@@ -349,6 +349,7 @@ h1, h2, h3, h4, h5, h6, figure {
   line-height: 1.5;
   font-weight: 300;
   text-transform: uppercase;
+  text-shadow: 3px 3px #000000;
 }
 #gtco-header h1 strong {
   font-weight: 700;
@@ -359,6 +360,7 @@ h1, h2, h3, h4, h5, h6, figure {
   font-size: 32px;
   line-height: 1.5;
   margin-bottom: 30px;
+  text-shadow: 2px 2px #000000;
 }
 @media screen and (max-width: 768px) {
   #gtco-header h1 {
@@ -1126,11 +1128,11 @@ form label {
 }
 
 #gtco-subscribe {
-  background: #66D37E;
+  background: #FFFFFF;
 }
 #gtco-subscribe .form-control {
   background: transparent;
-  color: #fff;
+  color: #000000;
   font-size: 16px !important;
   width: 100%;
   border: 2px solid rgba(255, 255, 255, 0.2) !important;
@@ -1143,24 +1145,24 @@ form label {
   border: 2px solid rgba(255, 255, 255, 0.8) !important;
 }
 #gtco-subscribe .form-control::-webkit-input-placeholder {
-  color: #fff;
+  color: #000000;
 }
 #gtco-subscribe .form-control:-moz-placeholder {
   /* Firefox 18- */
-  color: #fff;
+  color: #000000;
 }
 #gtco-subscribe .form-control::-moz-placeholder {
   /* Firefox 19+ */
-  color: #fff;
+  color: #000000;
 }
 #gtco-subscribe .form-control:-ms-input-placeholder {
-  color: #fff;
+  color: #000000;
 }
 #gtco-subscribe .btn {
   height: 46px;
   border: none !important;
-  background: #fff;
-  color: #66D37E;
+  color: #fff;
+  background: #66D37E;
   font-size: 16px;
   text-transform: uppercase;
   font-weight: 400;
@@ -1178,10 +1180,10 @@ form label {
   margin-bottom: 30px;
 }
 #gtco-subscribe .gtco-heading h2 {
-  color: #fff;
+  color: #000000;
 }
 #gtco-subscribe .gtco-heading p {
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(0, 0, 0, 0.5);
 }
 
 #gtco-footer {
@@ -2167,3 +2169,19 @@ form label {
   color: #66D37E;
 }
 
+
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+}
+
+tr:nth-child(even) {
+    background-color: #dddddd;
+}

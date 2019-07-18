@@ -1,5 +1,5 @@
 import os
-
+from django.contrib.auth.models import User
 from datetime import datetime
 from djrichtextfield.models import RichTextField
 # from tinymce.models import HTMLField
@@ -13,6 +13,7 @@ optional = {
     'null': True,
     'blank': True
 }
+
 
 def get_image_path(instance, filename):
     return os.path.join('news', str(datetime.now().date()), filename)
@@ -35,11 +36,13 @@ class NewsList(models.Model):
 
 class News(models.Model):
     title = models.CharField(max_length=100)
-    # content = HTMLField()
+    author = models.ForeignKey(User, on_delete=models.CASCADE, **optional)
     content = RichTextField()
     image = models.ImageField(upload_to=get_image_path)
     date_uploaded = models.DateTimeField(default=datetime.now, blank=True)
     slug = models.SlugField(default="", **optional)
+    categories = models.ManyToManyField('news.Category', related_name="articles")
+    is_published = models.BooleanField(default=False, verbose_name="Published")
 
     def __str__(self):
         return self.title
@@ -53,3 +56,22 @@ class News(models.Model):
     class Meta:
         verbose_name = "News Article"
         verbose_name_plural = "News Articles"
+
+
+class Category(models.Model):
+    name = models.CharField(max_length=50)
+    description = models.TextField(**optional)
+    slug = models.SlugField(default="", **optional)
+
+    def __str__(self):
+        return self.name
+
+    def save(self, *args, **kwargs):
+        if not self.id:
+            # Newly created object, so set slug
+            self.slug = slugify(self.name)
+        super(Category, self).save(*args, **kwargs)
+
+    class Meta:
+        verbose_name = "Category"
+        verbose_name_plural = "Categories"

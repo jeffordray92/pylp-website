@@ -59,14 +59,14 @@
                             </figure>
                             <div class="gtco-text">
                                 <h2>{{ article.title|truncatechars:55 }}</h2>
-                                <p>{{ article.content|safe|truncatewords:12 }}</p>
+                                <p>{{ article.content|safe|truncatewords:10 }}</p>
                                 <p><span class="btn btn-primary">Learn more</span></p>
                             </div>
                         </a>
                     </div>
                 {% endfor %}
                 </div>
-                <div><a href="{% url 'news_list' %}" class="gtco-card-item text-center">See More</a></div>
+                <div><a href="{% url 'news_list' %}" style="border-color: #ebebeb" class="btn text-center gtco-card-item">See more news and events</a></div>
             </div>
         </div>
         <div id="gtco-counter" class="gtco-section">
@@ -94,6 +94,35 @@
                 </div>
             </div>
         </div>
+        {% if resources %}
+        <div id="gtco-subscribe">
+            <div class="gtco-container">
+                <div class="row animate-box">
+                    <div class="col-md-8 col-md-offset-2 text-center gtco-heading">
+                        <h2>Resources</h2>
+                        <p>Downloadable contents for everyone's viewing</p>
+                    </div>
+                </div>
+                <div class="row">
+                {% for resource in resources %}
+                    <div class="col-lg-4 col-md-4 col-sm-6">
+                        <a href="{% url 'resource' resource.slug %}" class="gtco-card-item" target="_blank">
+                            <figure>
+                                <div class="overlay"><i class="ti-plus"></i></div>
+                                <img src="{{ resource.image.url }}" alt="Image" class="img-responsive">
+                            </figure>
+                            <div class="gtco-text">
+                                <h2>{{ resource.title|truncatechars:55 }}</h2>
+                                <p>{{ resource.description|safe }}</p>
+                            </div>
+                        </a>
+                    </div>
+                {% endfor %}
+                </div>
+                <div><a href="{% url 'resource_list' %}" style="border-color: #ebebeb" class="btn text-center gtco-card-item">See all resources</a></div>
+            </div>
+        </div>
+        {% endif %}
     </div>
 
 {% endblock %}

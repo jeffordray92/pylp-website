@@ -23,6 +23,9 @@ from django.views.generic import TemplateView
 
 from content.views import (
     HomeView,
+    ResourceListView,
+    ResourceView,
+    DirectoryView
 )
 
 admin.site.site_header = 'ACCESS-PYLP Site Admin'
@@ -34,6 +37,9 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('tinymce/', include('tinymce.urls')),
     path('djrichtextfield/', include('djrichtextfield.urls')),
+    path('resources/', ResourceListView.as_view(), name="resource_list"),
+    path('resources/<slug:slug>', ResourceView.as_view(), name="resource"),
+    path('directory/', DirectoryView.as_view(), name="directory"),
 ]
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

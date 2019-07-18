@@ -18,6 +18,19 @@
 
     <div class="gtco-section gtco-gray-bg">
         <div class="gtco-container">
+
+            <div class="row">
+                {% if categories %}
+                <div class="col-lg-3 col-md-3 col-sm-6">
+                <a href="{% url 'news_list' %}" class="btn text-center gtco-card-item"{% if tag_category %}{% else %} style="background:#5cb85c; color: #fff"{% endif %}>All</a>
+                </div>
+                {% endif %}
+                {% for category in categories %}
+                <div class="col-lg-3 col-md-3 col-sm-6">
+                <a href="{% url 'news_list' category.slug %}" class="btn text-center gtco-card-item"{% if tag_category.slug == category.slug %} style="background:#5cb85c; color: #fff"{% endif %}>{{ category.name }}</a>
+                </div>
+                {% endfor %}
+            </div>
             <div class="row">
                 {% for article in articles %}
                 <div class="col-lg-4 col-md-4 col-sm-6">
