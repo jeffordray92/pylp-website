@@ -2,8 +2,9 @@ import os
 from datetime import datetime
 from django.db import models
 from tinymce.models import HTMLField
-
+from django.contrib.auth.models import User
 from django.template.defaultfilters import slugify
+from django.db.models.signals import post_save
 
 
 optional = {
@@ -27,6 +28,19 @@ def get_image_path(instance, filename):
 
 
 # Create your models here.
+class Account(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, editable=False)
+    is_verified = models.BooleanField(default=False, null=True)
+    user_name = models.CharField(max_length=50, null=True, blank=True)
+    email = models.EmailField(null=True, blank=True)
+    
+    def __str__(self):
+        return self.user.username
+
+    class Meta:
+        verbose_name_plural = "Accounts"
+
+
 class Header(models.Model):
     title = models.CharField(max_length=100)
     subtitle = models.CharField(max_length=200)
@@ -113,6 +127,7 @@ class ResourceListDetail(models.Model):
     class Meta:
         verbose_name = "Resource List Detail"
         verbose_name_plural = "Resource List Details"
+
 
 class Location(models.Model):
     name = models.CharField(max_length=20)
