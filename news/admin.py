@@ -40,6 +40,6 @@ class CategoryAdmin(admin.ModelAdmin):
     exclude = ('slug',)
 
 
-admin.site.register(News, NewsAdmin)
+admin.site.register(News)
 admin.site.register(NewsList)
-admin.site.register(Category, CategoryAdmin)
+admin.site.register(Category)
