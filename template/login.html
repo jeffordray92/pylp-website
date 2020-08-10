@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block title %}Login{% endblock %}
+{% block content %}
+{% endblock %}
+{% block meta %}
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="The official website of the ACCESS Philippine Youth Leadership Program - Alumni Association, Inc." />
+    <meta name="keywords" content="access, pylp, access pylp, philippine youth leadership program" />
+    <meta name="author" content="ACCESS-PYLP" />
+    <meta name="google" content="notranslate">
+
+    <!-- Facebook and Twitter integration -->
+    <meta property="og:title" content="ACCESS PYLP Alumni Association, Inc."/>
+    <meta property="og:image" content="{% if request.is_secure %}https://{% else %}http://{% endif %}{{ request.get_host }}{{ header.image.url }}"/>
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="{{ request.build_absolute_uri }}"/>
+    <meta property="og:site_name" content="ACCESS PYLP Alumni Association, Inc."/>
+    <meta property="og:description" content="The official website of the ACCESS Philippine Youth Leadership Program - Alumni Association, Inc."/>
+    <meta name="twitter:title" content="ACCESS PYLP Alumni Association, Inc." />
+    <meta name="twitter:description" content="The official website of the ACCESS Philippine Youth Leadership Program - Alumni Association, Inc." />
+    <meta name="twitter:image" content="{% if request.is_secure %}https://{% else %}http://{% endif %}{{ request.get_host }}{{ header.image.url }}" />
+    <meta name="twitter:url" content="{{ request.build_absolute_uri }}" />
+    <meta name="twitter:card" content="summary_large_image" />
+{% endblock %}

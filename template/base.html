@@ -62,6 +62,8 @@
                             {% if twitter %}<li><a href="{{ twitter }}"><i class="icon-twitter"></i></a></li>{% endif %}
                             {% if instagram %}<li><a href="{{ instagram }}"><i class="icon-instagram"></i></a></li>{% endif %}
                             {% if linkedin %}<li><a href="{{ linkedin }}"><i class="icon-linkedin"></i></a></li>{% endif %}
+                            <li><a href="{% url 'login' %}">Login</a></li>
+                            <li><a href="{% url 'signup' %}">Sign Up</a></li>
                         </ul>
                     </div>
                 </div>
