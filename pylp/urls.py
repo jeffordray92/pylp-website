@@ -25,7 +25,9 @@ from content.views import (
     HomeView,
     ResourceListView,
     ResourceView,
-    DirectoryView
+    DirectoryView,
+    LoginView,
+    SignupView
 )
 
 admin.site.site_header = 'ACCESS-PYLP Site Admin'
@@ -33,6 +35,8 @@ admin.site.site_title = 'Admin: ACCESS-PYLP'
 
 urlpatterns = [
     path('', HomeView.as_view(), name="index"),
+    path('login/', LoginView.as_view(), name="login"),
+    path('signup/', SignupView.as_view(), name="signup"),
     path('news/', include('news.urls')),
     path('admin/', admin.site.urls),
     path('tinymce/', include('tinymce.urls')),

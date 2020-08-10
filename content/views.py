@@ -1,11 +1,12 @@
 from math import floor
-
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseNotFound
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.utils.encoding import smart_str
 from django.views import View
-
-from content.models import Header, Section, Fact, Resource, ResourceListDetail
+from django.contrib import messages
+from django.contrib.auth.forms import UserCreationForm
+from content.models import Header, Section, Fact, Resource, ResourceListDetail, Account
+from content.forms import SignupForm
 from news.models import News
 
 
@@ -58,3 +59,27 @@ class DirectoryView(View):
         else:
             print('hello')
         return render(request, 'directory.html', {})
+
+
+class LoginView(View):
+    
+    def get(self, request, *args, **kwargs):
+        return render(request, 'login.html', {})
+
+
+class SignupView(View):
+
+    def get(self, request, *args, **kwargs):
+        return render(request, 'signup.html', {'UserForm': SignupForm})
+         
+    def post(self, request, *args, **kwargs):
+        user_form = SignupForm(request.POST)
+        if user_form.is_valid():
+            user_form.save()
+            username = user_form.cleaned_data.get('username')
+            messages.success(request, f'{username} is created! Log in now.')
+            return redirect('signup')
+        else:
+            return render(request, 'signup.html', {
+                'UserForm': user_form,
+            })
