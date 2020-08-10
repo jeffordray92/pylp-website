@@ -43,10 +43,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
     'tinymce',
     'djrichtextfield',
-
+    'crispy_forms',
     'content',
     'news',
 ]
@@ -145,10 +144,17 @@ DJRICHTEXTFIELD_CONFIG = {
 }
 
 
-django_heroku.settings(locals())
+#django_heroku.settings(locals())
 
 PROJECT_APP_PATH = os.path.dirname(os.path.abspath(__file__))
 
 f = os.path.join(PROJECT_APP_PATH, "local_settings.py")
 if os.path.exists(f):
     exec(open(f, "rb").read())
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    }
+}
