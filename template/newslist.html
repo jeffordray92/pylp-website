@@ -48,6 +48,9 @@
                 </div>
                 {% endfor %}
             </div>
+            {% if request.user.is_authenticated %}
+            <div><a href="{% url 'submit-news' %}" style="border-color: grey" class="btn text-center gtco-card-item">Submit an article</a></div>
+            {% endif %}
         </div>
     </div>
 {% endblock %}

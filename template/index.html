@@ -67,6 +67,9 @@
                 {% endfor %}
                 </div>
                 <div><a href="{% url 'news_list' %}" style="border-color: #ebebeb" class="btn text-center gtco-card-item">See more news and events</a></div>
+                {% if request.user.is_authenticated %}
+                <div><a href="{% url 'submit-news' %}" style="border-color: grey" class="btn text-center gtco-card-item">Submit an article</a></div>
+                {% endif %}
             </div>
         </div>
         <div id="gtco-counter" class="gtco-section">
