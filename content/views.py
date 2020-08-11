@@ -33,7 +33,8 @@ class HomeView(View):
     def get(self, request, *args, **kwargs):
         header_content = Header.objects.all().first()
         sections = Section.objects.all()
-        recent_news = News.objects.filter(is_published=True)[:6]
+        recent_news = News.objects.filter(
+            is_published=True).order_by('-date_published')[:6]
         figures = Fact.objects.all().order_by('id')
         resources = Resource.objects.all()[:6]
         if figures.count() > 4:

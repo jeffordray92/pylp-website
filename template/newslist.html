@@ -42,7 +42,7 @@
                         <div class="gtco-text text-left">
                             <h2>{{ article.title|truncatechars:55 }}</h2>
                             <p>{{ article.content|safe|truncatewords:12 }}</p>
-                            <p class="gtco-category">{{ article.date_uploaded|date:"F j, Y"}}</p>
+                            <p class="gtco-category">{{ article.date_published|date:"F j, Y"}}</p>
                         </div>
                     </a>
                 </div>
