@@ -47,16 +47,24 @@ class AccountAdmin(admin.ModelAdmin):
     model = Account
     readonly_fields = ('user', 'get_name')
     actions = ['verify_selected', ]
-    list_display = ['email', 'get_name', 'is_verified', ]
+    list_display = ['email', 'get_username',
+                    'get_name', 'is_verified', 'get_userstaff']
     list_filter = ['is_verified']
 
     def get_name(self, obj):
         return obj.user.first_name
-    get_name.admin_order_field = 'user'  # Allows column order sorting
-    get_name.short_description = 'first Name'  # Renames column head
+    get_name.admin_order_field = 'user__first_name'
+    get_name.short_description = 'first Name'
 
-    # Filtering on side - for some reason, this works
-    #list_filter = ['title', 'author__name']
+    def get_username(self, obj):
+        return obj.user.username
+    get_username.admin_order_field = 'user__username'
+    get_username.short_description = 'username'
+
+    def get_userstaff(self, obj):
+        return obj.user.is_staff
+    get_userstaff.admin_order_field = 'user__is_staff'
+    get_userstaff.short_description = 'staff'
 
     def verify_selected(self, request, queryset):
         queryset.update(is_verified=True)
