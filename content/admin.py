@@ -43,12 +43,30 @@ from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 #             return qs
 
 
-
 class AccountAdmin(admin.ModelAdmin):
-    readonly_fields=('user',)
+    model = Account
+    readonly_fields = ('user', 'get_name')
+    actions = ['verify_selected', ]
+    list_display = ['email', 'get_name', 'is_verified', ]
+    list_filter = ['is_verified']
+
+    def get_name(self, obj):
+        return obj.user.first_name
+    get_name.admin_order_field = 'user'  # Allows column order sorting
+    get_name.short_description = 'first Name'  # Renames column head
+
+    # Filtering on side - for some reason, this works
+    #list_filter = ['title', 'author__name']
+
+    def verify_selected(self, request, queryset):
+        queryset.update(is_verified=True)
+        for q in queryset:
+            q.user.is_active = True
+            q.user.save()
+    verify_selected.short_description = "Mark selected users as verified"
 
 
-#admin.site.unregister(User)
+# admin.site.unregister(User)
 admin.site.register(Account, AccountAdmin)
 #admin.site.register(User, UserAdmin)
 

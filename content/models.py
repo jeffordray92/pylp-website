@@ -30,12 +30,22 @@ def get_image_path(instance, filename):
 # Create your models here.
 class Account(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, editable=False)
-    is_verified = models.BooleanField(default=False, null=True)
+    is_verified = models.BooleanField(default=False)
     user_name = models.CharField(max_length=50, null=True, blank=True)
     email = models.EmailField(null=True, blank=True)
-    
+
     def __str__(self):
         return self.user.username
+
+    def save(self, *args, **kwargs):
+        self.user.is_active = self.is_verified
+        self.user.save()
+        super(Account, self).save(*args, **kwargs)
+
+    def update(self, *args, **kwargs):
+        self.user.is_active = self.is_verified
+        self.user.save()
+        super(Account, self).save(*args, **kwargs)
 
     class Meta:
         verbose_name_plural = "Accounts"
@@ -140,9 +150,12 @@ class Location(models.Model):
 class Directory(models.Model):
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=20)
-    gender = models.CharField(max_length=1, choices=GENDER_CHOICES, default="M")
-    age_group = models.CharField(max_length=1, choices=GROUP_CHOICES, default="Y")
-    location = models.ForeignKey(Location, on_delete=models.CASCADE, related_name="members", **optional)
+    gender = models.CharField(
+        max_length=1, choices=GENDER_CHOICES, default="M")
+    age_group = models.CharField(
+        max_length=1, choices=GROUP_CHOICES, default="Y")
+    location = models.ForeignKey(
+        Location, on_delete=models.CASCADE, related_name="members", **optional)
 
     class Meta:
         verbose_name = "Directory Entry"
