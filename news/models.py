@@ -1,9 +1,6 @@
 import os
 from django.contrib.auth.models import User
 from datetime import datetime
-from djrichtextfield.models import RichTextField
-# from tinymce.models import HTMLField
-# from tinymce.widgets import TinyMCE
 from django.db import models
 from django.template.defaultfilters import slugify
 from django.core.exceptions import ValidationError
@@ -45,7 +42,7 @@ class NewsList(models.Model):
 class News(models.Model):
     title = models.CharField(max_length=100)
     author = models.ForeignKey(User, on_delete=models.CASCADE, **optional)
-    content = RichTextField()
+    content = models.TextField(blank=True)
     image = models.ImageField(upload_to=get_image_path)
     date_uploaded = models.DateTimeField(default=datetime.now, blank=True)
     slug = models.SlugField(default="", **optional)
