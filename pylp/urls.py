@@ -27,7 +27,8 @@ from content.views import (
     ResourceView,
     DirectoryView,
     LoginView,
-    SignupView
+    SignupView,
+    VerificationView
 )
 
 admin.site.site_header = 'ACCESS-PYLP Site Admin'
@@ -37,6 +38,7 @@ urlpatterns = [
     path('', HomeView.as_view(), name="index"),
     path('login/', LoginView.as_view(), name="login"),
     path('signup/', SignupView.as_view(), name="signup"),
+    path('activate/<uidb64>/<token>', VerificationView.as_view(), name='activate'),
     path('news/', include('news.urls')),
     path('admin/', admin.site.urls),
     path('tinymce/', include('tinymce.urls')),
