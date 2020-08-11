@@ -74,6 +74,8 @@ class DirectoryView(View):
 class SignupView(View):
 
     def get(self, request, *args, **kwargs):
+        if(request.user.is_authenticated):
+            return redirect('index')
         return render(request, 'signup.html', {'UserForm': SignupForm})
 
     def post(self, request, *args, **kwargs):
@@ -81,12 +83,20 @@ class SignupView(View):
         if user_form.is_valid():
             userform = User.objects.create_user(
                 username=user_form.cleaned_data['username'],
+                first_name=user_form.cleaned_data['first_name'],
                 email=user_form.cleaned_data['email'])
             userform.set_password(
                 user_form.cleaned_data['password1']
             )
             userform.is_active = False
             userform.save()
+            account = Account(
+                user=User.objects.get(
+                    username=user_form.cleaned_data['username']),
+                user_name=user_form.cleaned_data['username'],
+                email=user_form.cleaned_data['email']
+            )
+            account.save()
             email_subject = "PYLP Registration Email Confirmation"
             uidb64 = urlsafe_base64_encode(force_bytes(userform.pk)).decode()
             token = token_generator.make_token(userform)
@@ -123,6 +133,10 @@ class VerificationView(View):
             # activate user and login:
             user.is_active = True
             user.save()
+            account = Account.objects.get(user_name=user.username)
+            account.is_verified = True
+            account.save()
+
         messages.success(request, "Account Activated successfully. You may log in now.",
                          extra_tags='register')
         return redirect('login')
@@ -130,6 +144,8 @@ class VerificationView(View):
 
 class LoginView(View):
     def get(self, request, *args, **kwargs):
+        if(request.user.is_authenticated):
+            return redirect('index')
         return render(request, 'login.html', {'loginForm': LogInForm})
 
     def post(self, request, *args, **kwargs):
