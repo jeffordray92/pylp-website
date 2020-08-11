@@ -41,7 +41,8 @@ class News(models.Model):
     image = models.ImageField(upload_to=get_image_path)
     date_uploaded = models.DateTimeField(default=datetime.now, blank=True)
     slug = models.SlugField(default="", **optional)
-    categories = models.ManyToManyField('news.Category', related_name="articles")
+    categories = models.ManyToManyField(
+        'news.Category', related_name="articles")
     is_published = models.BooleanField(default=False, verbose_name="Published")
 
     def __str__(self):

@@ -112,7 +112,7 @@
     {% block content %}
     <div class="flex-section {% cycle 'gtco-gray-bg' 'reverse' %}">
         <div class="col-1" style="margin-left: 13em;">
-        {{content}}
+        {{content.content|safe}}
         </div>
     </div>
     {% endblock %}

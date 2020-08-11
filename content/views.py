@@ -14,7 +14,15 @@ from django.utils.encoding import (
 )
 from django.contrib.sites.shortcuts import get_current_site
 from django.urls import reverse
-from content.models import Header, Section, Fact, Resource, ResourceListDetail, Account
+from content.models import (
+    Account,
+    Fact,
+    Header,
+    Resource,
+    ResourceListDetail,
+    Section,
+    SignUpInstructions)
+
 from content.forms import LogInForm, SignupForm
 from content.utils import token_generator
 from news.models import News
@@ -104,18 +112,18 @@ class SignupView(View):
             link = reverse('activate', kwargs={
                 'uidb64': uidb64, 'token': token})
             activate_url = f'http://{domain}{link}'
+            instruction = SignUpInstructions.objects.last()
             email_body = "Thank you for registering at PYLP Alumni Association, Inc.\n\nTo get started, activate your account by clicking the" \
                 " below.\n" + activate_url
             email = EmailMessage(
                 email_subject,
-                email_body,
+                email_body+instruction.content,
                 'noreply@pylp.com',
                 [user_form.cleaned_data['email']],
             )
             email.send(fail_silently=False)
-            signup_instructions = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris ut turpis faucibus, pharetra diam quis, ultricies leo. Fusce tortor lectus, ultricies at nisi at, blandit egestas sem. Curabitur porttitor tempus justo vel semper. Vivamus sodales, eros lacinia vulputate rhoncus, tellus metus dapibus turpis, et malesuada massa nisl vitae ex. Nam rutrum congue dui, id bibendum nibh tincidunt et. Curabitur ipsum enim, laoreet vel venenatis sit amet, consectetur ut ipsum. In hac habitasse platea dictumst. Mauris sed vulputate nibh. Vivamus mi tellus, pellentesque ut convallis ut, facilisis vel nunc. Praesent vel dolor dictum, mattis sem in, dictum dui. Nullam ac purus dolor. Mauris libero nisl, vulputate id erat ac, egestas sagittis metus. Donec ipsum leo, gravida sed tellus non, commodo hendrerit elit. Vestibulum quis magna ante. Nullam ullamcorper egestas tincidunt."
             return render(request, 'base2.html', {'header': "How To Activate Your Account",
-                                                  'content': signup_instructions})
+                                                  'content': instruction})
         else:
             return render(request, 'signup.html', {
                 'UserForm': user_form,
@@ -162,9 +170,9 @@ class LoginView(View):
                     username=login_form.cleaned_data['user_name']).first()
                 if(not_active):
                     if(not_active.is_active == False):
-                        signup_instructions = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam rutrum bibendum diam ac laoreet. Fusce eu urna sit amet elit mattis facilisis. Aenean eu risus scelerisque, dapibus risus id, iaculis dui. Cras et ornare lorem. Ut ultrices ornare diam sed facilisis. Curabitur et augue molestie, tristique magna eu, porta dui. Nulla ut eros metus. Morbi in sodales nisl. Mauris a augue scelerisque, maximus lacus non, ultricies odio. Morbi quam dui, euismod a tincidunt et, hendrerit sit amet ex."
+                        instruction = SignUpInstructions.objects.last()
                         return render(request, 'base2.html', {'header': "Your Account Isn't Activated Yet.",
-                                                              'content': signup_instructions})
+                                                              'content': instruction})
                     else:
                         messages.error(request, "Incorrect credentials.")
                         return render(request, 'login.html', {
