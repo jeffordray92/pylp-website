@@ -4,7 +4,7 @@ from django.shortcuts import render
 from django.views import View
 from django.http import HttpResponseNotFound
 from django.shortcuts import redirect
-from news.models import News, NewsList, Category
+from news.models import Attachment, Category, News, NewsList
 from news.forms import NewsForm
 
 
@@ -19,7 +19,8 @@ class NewsListView(View):
             articles = tag_category.articles.filter(is_published=True)
         else:
             tag_category = []
-            articles = News.objects.filter(is_published=True)
+            articles = News.objects.filter(
+                is_published=True).order_by('-date_published')
         header = NewsList.objects.first()
         categories = Category.objects.all()
         return render(request, 'newslist.html', {
@@ -54,12 +55,21 @@ class SubmitArticleView(View):
     def post(self, request, *args, **kwargs):
         news_form = NewsForm(request.POST, request.FILES)
         if news_form.is_valid():
+            files = request.FILES.getlist('attachments')
             news = News(
                 title=news_form.cleaned_data['title'],
                 author=request.user,
-                content=news_form.content,
-                image=request.FILES['image'])
+                content=news_form.cleaned_data['content'],
+                image=request.FILES['image'],
+                tags=news_form.cleaned_data['tags'])
             news.save()
-            return redirect('news')
+            for f in files:
+                attachment = Attachment(
+                    news=news,
+                    file=f
+                )
+                attachment.save()
+
+            return redirect('news_list')
         else:
             return render(request, 'submit_article.html', {'NewsForm': NewsForm})

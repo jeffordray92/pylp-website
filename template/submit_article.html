@@ -4,6 +4,7 @@
 {% block content %}
 <head>
     {{ NewsForm.media }}
+    <script src="https://cdn.ckeditor.com/ckeditor5/21.0.0/classic/ckeditor.js"></script>
 </head>
     <form method="post" enctype="multipart/form-data" >
         {% csrf_token %}
@@ -26,22 +27,23 @@
             <div class="text">
                 <div class="row" style="padding-left:10%; padding-right:10%; padding-top:5%; padding-bottom:5%">
                     <div style="margin-bottom: 15px;">
-                    Content:
                     {{NewsForm.error}}
-                    {{NewsForm.content}}
+                    Content:
+                    <textarea name="content" id="editor">
+                        &lt;p&gt;This is some sample content.&lt;/p&gt;
+                    </textarea>
                     </div>
                     <div style="margin-bottom: 15px;">
                         Tags:
                         <br/>
-                        <input style="width: 700px;" type="text" placeholder="(comma-separated)">
+                        <input style="width: 700px;" name="tags" type="text" placeholder="(comma-separated)">
                     </div>
                     <div style="margin-bottom: 15px;">
                         Attachments:
                         <br/>
-                        <input style="width: 700px;" type="file" id="attachment_tag" multiple>
+                        <input name="attachments" type="file" id="attachment_tag" multiple>
                     </div>
                     <button class="btn btn-primary" type="submit">Submit Article</button>
-
                 </div>
             </div>
         </div>
@@ -75,6 +77,17 @@
             this.value = "";
             };
         };
+    
+        ClassicEditor
+            .create( document.querySelector( '#editor' ), {
+                cloudServices: {
+                    tokenUrl: 'https://73723.cke-cs.com/token/dev/402fa9a2ec59e068f5f88f4d7e5c9119d1f7a4baf3b69c11efa91d8ed639',
+                    uploadUrl: 'https://73723.cke-cs.com/easyimage/upload/'
+                    }
+                } )
+                .catch( error => {
+                    console.error( error );
+                } );
     </script>
 {% endblock %}
 
