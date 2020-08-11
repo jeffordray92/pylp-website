@@ -11,6 +11,7 @@ class AttachmentInLine(admin.StackedInline):
 
 class NewsAdmin(admin.ModelAdmin):
     exclude = ('slug',)
+    readonly_fields = ('date_published',)
     filter_horizontal = ['categories']
     list_display = ['title', 'get_author', 'is_published']
     ordering = ['is_published']

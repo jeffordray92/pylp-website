@@ -51,12 +51,21 @@ class News(models.Model):
     slug = models.SlugField(default="", **optional)
     categories = models.ManyToManyField(
         'news.Category', related_name="articles")
+    tags = models.CharField(null=True, max_length=100, blank=True)
+    caption = models.TextField(max_length=250, **optional)
+    share_on_facebook = models.BooleanField(default=False)
     is_published = models.BooleanField(default=False, verbose_name="Published")
+    date_published = models.DateTimeField(
+        null=True, blank=True, editable=False)
 
     def __str__(self):
         return self.title
 
     def save(self, *args, **kwargs):
+        if self.is_published:
+            self.date_published = datetime.now()
+        if not self.is_published:
+            self.date_published = None
         if not self.id:
             # Newly created object, so set slug
             self.slug = slugify(self.title)
