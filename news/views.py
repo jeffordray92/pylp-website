@@ -3,7 +3,9 @@ from django.shortcuts import render
 # Create your views here.
 from django.views import View
 from django.http import HttpResponseNotFound
+from django.shortcuts import redirect
 from news.models import News, NewsList, Category
+from news.forms import NewsForm
 
 
 class NewsListView(View):
@@ -41,3 +43,23 @@ class NewsView(View):
                 return HttpResponseNotFound('<h1>Article not found</h1>')
         except Exception:
             return HttpResponseNotFound('<h1>Article not found</h1>')
+
+
+class SubmitArticleView(View):
+    def get(self, request, *args, **kwargs):
+        if(request.user.is_authenticated == False):
+            return redirect('index')
+        return render(request, 'submit_article.html', {'NewsForm': NewsForm})
+
+    def post(self, request, *args, **kwargs):
+        news_form = NewsForm(request.POST, request.FILES)
+        if news_form.is_valid():
+            news = News(
+                title=news_form.cleaned_data['title'],
+                author=request.user,
+                content=news_form.content,
+                image=request.FILES['image'])
+            news.save()
+            return redirect('news')
+        else:
+            return render(request, 'submit_article.html', {'NewsForm': NewsForm})

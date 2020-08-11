@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}TITLE{% endblock %}
+{% block content %}
+<head>
+    {{ NewsForm.media }}
+</head>
+    <form method="post" enctype="multipart/form-data" >
+        {% csrf_token %}
+    <header id="gtco-header" class="gtco-cover gtco-cover-sm" role="banner"  data-stellar-background-ratio="0.5">
+        <div class="overlay"></div>
+        <div class="gtco-container">
+            <div class="row row-mt-15em">
+                <div class="col-md-12 mt-text text-left animate-box" data-animate-effect="fadeInUp">
+                    <h1 style="text-transform: none;"><strong><input name="title" style="background-color: transparent; border: none"  type="text" placeholder="Article Title"></strong></h1>
+                    <label class="btn btn-primary">
+                        <i class="fa fa-image"></i> Choose Banner Image
+                        <input type="file" style="display: none;" onchange="previewFile()" id="upload_image" name="image">
+                      </label>
+                </div>
+            </div>
+        </div>
+    </header>
+    <div class="flex-section gtco-gray-bg">
+        <div class="container">
+            <div class="text">
+                <div class="row" style="padding-left:10%; padding-right:10%; padding-top:5%; padding-bottom:5%">
+                    <div style="margin-bottom: 15px;">
+                    Content:
+                    {{NewsForm.content}}
+                    </div>
+                    <button class="btn btn-primary" type="submit">Submit Article</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</form>
+
+    <script>
+        function previewFile() {
+            const preview = document.getElementById('gtco-header');
+            const file = document.getElementById('upload_image').files[0];
+            const reader = new FileReader();
+            reader.addEventListener("load", function () {
+            // convert image file to base64 string
+            preview.style.backgroundImage = "url("+reader.result+")";
+            }, false);
+
+            if (file) {
+            reader.readAsDataURL(file);
+            }
+        }
+    </script>
+{% endblock %}
+
+{% block meta %}
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="The official website of the ACCESS Philippine Youth Leadership Program - Alumni Association, Inc." />
+    <meta name="keywords" content="access, pylp, access pylp, philippine youth leadership program" />
+    <meta name="author" content="ACCESS-PYLP" />
+    <meta name="google" content="notranslate">
+
+    <!-- Facebook and Twitter integration -->
+    <meta property="og:title" content="{{ article.title }}"/>
+    <meta property="og:image" content="{% if request.is_secure %}https://{% else %}http://{% endif %}{{ request.get_host }}{{ article.image.url }}"/>
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="{{ request.build_absolute_uri }}"/>
+    <meta property="og:site_name" content="ACCESS PYLP Alumni Association, Inc."/>
+    <meta property="og:description" content="{{ article.content|truncatewords:15|safe }}"/>
+    <meta name="twitter:title" content="{{ article.title }}" />
+    <meta name="twitter:description" content="{{ article.content|truncatewords:15|safe }}" />
+    <meta name="twitter:image" content="{% if request.is_secure %}https://{% else %}http://{% endif %}{{ request.get_host }}{{ article.image.url }}" />
+    <meta name="twitter:url" content="{{ request.build_absolute_uri }}" />
+    <meta name="twitter:card" content="summary_large_image" />
+{% endblock %}
