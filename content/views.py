@@ -4,6 +4,7 @@ from django.shortcuts import render, redirect
 from django.utils.encoding import smart_str
 from django.views import View
 from django.contrib import messages
+from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
 from django.core.mail import EmailMessage
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
@@ -14,7 +15,7 @@ from django.utils.encoding import (
 from django.contrib.sites.shortcuts import get_current_site
 from django.urls import reverse
 from content.models import Header, Section, Fact, Resource, ResourceListDetail, Account
-from content.forms import SignupForm
+from content.forms import LogInForm, SignupForm
 from content.utils import token_generator
 from news.models import News
 
@@ -70,12 +71,6 @@ class DirectoryView(View):
         return render(request, 'directory.html', {})
 
 
-class LoginView(View):
-
-    def get(self, request, *args, **kwargs):
-        return render(request, 'login.html', {})
-
-
 class SignupView(View):
 
     def get(self, request, *args, **kwargs):
@@ -92,16 +87,14 @@ class SignupView(View):
             )
             userform.is_active = False
             userform.save()
-            email_subject = "Activate your account."
-
-            uidb64 = urlsafe_base64_encode(force_bytes(userform.pk))
+            email_subject = "PYLP Registration Email Confirmation"
+            uidb64 = urlsafe_base64_encode(force_bytes(userform.pk)).decode()
             token = token_generator.make_token(userform)
             domain = get_current_site(request).domain
             link = reverse('activate', kwargs={
                 'uidb64': uidb64, 'token': token})
-
-            activate_url = 'http://' + domain + link
-            email_body = "To get started, activate your account by clicking the" \
+            activate_url = f'http://{domain}{link}'
+            email_body = "Thank you for registering at PYLP Alumni Association, Inc.\n\nTo get started, activate your account by clicking the" \
                 " below.\n" + activate_url
             email = EmailMessage(
                 email_subject,
@@ -110,10 +103,9 @@ class SignupView(View):
                 [user_form.cleaned_data['email']],
             )
             email.send(fail_silently=False)
-            username = user_form.cleaned_data.get('username')
-            messages.success(
-                request, f'{username} is created! Activate your account.')
-            return redirect('signup')
+            signup_instructions = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris ut turpis faucibus, pharetra diam quis, ultricies leo. Fusce tortor lectus, ultricies at nisi at, blandit egestas sem. Curabitur porttitor tempus justo vel semper. Vivamus sodales, eros lacinia vulputate rhoncus, tellus metus dapibus turpis, et malesuada massa nisl vitae ex. Nam rutrum congue dui, id bibendum nibh tincidunt et. Curabitur ipsum enim, laoreet vel venenatis sit amet, consectetur ut ipsum. In hac habitasse platea dictumst. Mauris sed vulputate nibh. Vivamus mi tellus, pellentesque ut convallis ut, facilisis vel nunc. Praesent vel dolor dictum, mattis sem in, dictum dui. Nullam ac purus dolor. Mauris libero nisl, vulputate id erat ac, egestas sagittis metus. Donec ipsum leo, gravida sed tellus non, commodo hendrerit elit. Vestibulum quis magna ante. Nullam ullamcorper egestas tincidunt."
+            return render(request, 'base2.html', {'header': "How To Activate Your Account",
+                                                  'content': signup_instructions})
         else:
             return render(request, 'signup.html', {
                 'UserForm': user_form,
@@ -131,6 +123,43 @@ class VerificationView(View):
             # activate user and login:
             user.is_active = True
             user.save()
-        messages.success(request, "Account Activated successfully.",
+        messages.success(request, "Account Activated successfully. You may log in now.",
                          extra_tags='register')
-        return redirect('signup')
+        return redirect('login')
+
+
+class LoginView(View):
+    def get(self, request, *args, **kwargs):
+        return render(request, 'login.html', {'loginForm': LogInForm})
+
+    def post(self, request, *args, **kwargs):
+        login_form = LogInForm(request.POST)
+        if login_form.is_valid():
+            user = authenticate(
+                username=login_form.cleaned_data['user_name'],
+                password=login_form.cleaned_data['password'])
+            if user is not None:
+                login(request, user)
+                return redirect('index')
+            else:
+                not_active = User.objects.filter(
+                    username=login_form.cleaned_data['user_name']).first()
+                if(not_active):
+                    if(not_active.is_active == False):
+                        signup_instructions = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam rutrum bibendum diam ac laoreet. Fusce eu urna sit amet elit mattis facilisis. Aenean eu risus scelerisque, dapibus risus id, iaculis dui. Cras et ornare lorem. Ut ultrices ornare diam sed facilisis. Curabitur et augue molestie, tristique magna eu, porta dui. Nulla ut eros metus. Morbi in sodales nisl. Mauris a augue scelerisque, maximus lacus non, ultricies odio. Morbi quam dui, euismod a tincidunt et, hendrerit sit amet ex."
+                        return render(request, 'base2.html', {'header': "Your Account Isn't Activated Yet.",
+                                                              'content': signup_instructions})
+                    else:
+                        messages.error(request, "Incorrect credentials.")
+                        return render(request, 'login.html', {
+                            'loginForm': login_form,
+                        })
+                else:
+                    messages.error(request, "Incorrect credentials.")
+                    return render(request, 'login.html', {
+                        'loginForm': login_form,
+                    })
+        else:
+            return render(request, 'login.html', {
+                'loginForm': login_form,
+            })

@@ -85,9 +85,6 @@ TEMPLATES = [
 WSGI_APPLICATION = 'pylp.wsgi.application'
 
 
-
-
-
 # Password validation
 # https://docs.djangoproject.com/en/2.0/ref/settings/#auth-password-validators
 
@@ -134,7 +131,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 MEDIA_URL = '/media/'
 
 
-#DJ RichTextField
+# DJ RichTextField
 DJRICHTEXTFIELD_CONFIG = {
     'js': ['//tinymce.cachefly.net/4.1/tinymce.min.js'],
     'init_template': 'djrichtextfield/init/tinymce.js',
@@ -147,7 +144,7 @@ DJRICHTEXTFIELD_CONFIG = {
 }
 
 
-#django_heroku.settings(locals())
+# django_heroku.settings(locals())
 
 PROJECT_APP_PATH = os.path.dirname(os.path.abspath(__file__))
 
@@ -167,3 +164,6 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = env('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
+
+LOGIN_REDIRECT_URL = 'index'
+LOGOUT_REDIRECT_URL = 'index'

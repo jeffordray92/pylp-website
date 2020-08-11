@@ -18,17 +18,16 @@ from django.conf.urls import include
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path
-
+from django.contrib.auth import views as auth_views
 from django.views.generic import TemplateView
-
 from content.views import (
     HomeView,
     ResourceListView,
     ResourceView,
     DirectoryView,
-    LoginView,
     SignupView,
-    VerificationView
+    VerificationView,
+    LoginView
 )
 
 admin.site.site_header = 'ACCESS-PYLP Site Admin'
@@ -36,7 +35,8 @@ admin.site.site_title = 'Admin: ACCESS-PYLP'
 
 urlpatterns = [
     path('', HomeView.as_view(), name="index"),
-    path('login/', LoginView.as_view(), name="login"),
+    path('login/', LoginView.as_view(), name='login'),
+    path('logout/', auth_views.LogoutView.as_view(), name='logout'),
     path('signup/', SignupView.as_view(), name="signup"),
     path('activate/<uidb64>/<token>', VerificationView.as_view(), name='activate'),
     path('news/', include('news.urls')),
