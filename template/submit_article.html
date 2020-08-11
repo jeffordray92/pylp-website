@@ -27,7 +27,18 @@
                 <div class="row" style="padding-left:10%; padding-right:10%; padding-top:5%; padding-bottom:5%">
                     <div style="margin-bottom: 15px;">
                     Content:
+                    {{NewsForm.error}}
                     {{NewsForm.content}}
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        Tags:
+                        <br/>
+                        <input style="width: 700px;" type="text" placeholder="(comma-separated)">
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        Attachments:
+                        <br/>
+                        <input style="width: 700px;" type="file" id="attachment_tag" multiple>
                     </div>
                     <button class="btn btn-primary" type="submit">Submit Article</button>
 
@@ -52,6 +63,18 @@
             reader.readAsDataURL(file);
             }
         }
+        
+        var uploadField = document.getElementById("attachment_tag");
+        uploadField.onchange = function() {
+        if(this.files[0].size > (2097152*12.5)){
+            alert("File is too big!");
+            this.value = "";
+            };
+        if (this.files.length > 5) {
+            alert("Only 5 files accepted.");
+            this.value = "";
+            };
+        };
     </script>
 {% endblock %}
 
