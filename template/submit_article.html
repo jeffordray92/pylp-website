@@ -3,7 +3,6 @@
 {% block title %}TITLE{% endblock %}
 {% block content %}
 <head>
-    {{ NewsForm.media }}
     <script src="https://cdn.ckeditor.com/ckeditor5/21.0.0/classic/ckeditor.js"></script>
 </head>
     <form method="post" enctype="multipart/form-data" >
@@ -27,7 +26,9 @@
             <div class="text">
                 <div class="row" style="padding-left:10%; padding-right:10%; padding-top:5%; padding-bottom:5%">
                     <div style="margin-bottom: 15px;">
-                    {{NewsForm.error}}
+                        Errors
+                    {{NewsForm.errors}}
+                    <br/>
                     Content:
                     <textarea name="content" id="editor">
                         &lt;p&gt;This is some sample content.&lt;/p&gt;

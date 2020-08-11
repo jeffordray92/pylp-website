@@ -28,6 +28,14 @@
                     <div class="col-md-12">
                     {{ article.content|safe }}
                     </div>
+                    <div class="col-md-12" style="margin-top: 15px;">
+                        <strong>Attachments</strong>
+                        <br/>
+                        {%for attach in attachments%}
+                        <a href="{{attach.file.url}}" download>{{attach.file.name}}</a>
+                        <br/>
+                        {%endfor%}
+                    </div>
                 </div>
             </div>
         </div>

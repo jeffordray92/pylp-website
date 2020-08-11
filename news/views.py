@@ -37,8 +37,10 @@ class NewsView(View):
         try:
             article = News.objects.get(slug=kwargs.get('slug'))
             if article.is_published:
+                attachments = list(Attachment.objects.filter(news=article))
                 return render(request, 'news.html', {
-                    'article': article
+                    'article': article,
+                    'attachments': attachments
                 })
             else:
                 return HttpResponseNotFound('<h1>Article not found</h1>')
@@ -72,4 +74,4 @@ class SubmitArticleView(View):
 
             return redirect('news_list')
         else:
-            return render(request, 'submit_article.html', {'NewsForm': NewsForm})
+            return render(request, 'submit_article.html', {'NewsForm': news_form})
