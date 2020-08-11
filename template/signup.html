@@ -37,8 +37,11 @@
                     {{ UserForm|crispy }}
                 </fieldset>
                 <div class="form-group">
-                    <button class="btn" style="background-color: black;" type="submit">Save changes</button>
+                    <button class="btn" style="background-color: black;" type="submit">Sign Up</button>
                 </div>
+                <small class="text-muted">
+                    Already Have An Account? <a class="ml-2" href="{% url 'login'%}">Log in here</a>
+                </small>
             </form>
         </div>
     </div>
