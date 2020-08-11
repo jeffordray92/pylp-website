@@ -4,10 +4,9 @@ from datetime import datetime
 from djrichtextfield.models import RichTextField
 # from tinymce.models import HTMLField
 # from tinymce.widgets import TinyMCE
-
 from django.db import models
 from django.template.defaultfilters import slugify
-
+from django.core.exceptions import ValidationError
 
 optional = {
     'null': True,
@@ -19,7 +18,16 @@ def get_image_path(instance, filename):
     return os.path.join('news', str(datetime.now().date()), filename)
 
 
+def validate_file_size(value):
+    filesize = value.size
+
+    if filesize > 26214400:
+        raise ValidationError(
+            "The maximum file size that can be uploaded is 25MB")
+    else:
+        return value
 # Create your models here.
+
 
 class NewsList(models.Model):
     title = models.CharField(max_length=100)
@@ -54,6 +62,11 @@ class News(models.Model):
             self.slug = slugify(self.title)
         super(News, self).save(*args, **kwargs)
 
+    def add_attachment(self, attachment):
+        if self.attachment_set.count() >= 5:
+            raise Exception("Too many attachments on this News")
+        self.attachment_set.add(attachment)
+
     class Meta:
         verbose_name = "News Article"
         verbose_name_plural = "News Articles"
@@ -76,3 +89,13 @@ class Category(models.Model):
     class Meta:
         verbose_name = "Category"
         verbose_name_plural = "Categories"
+
+
+class Attachment(models.Model):
+    news = models.ForeignKey(
+        "News", on_delete=models.CASCADE)
+    file = models.FileField(upload_to=get_image_path,
+                            validators=[validate_file_size, ])
+
+    def __str__(self):
+        return self.file.name
