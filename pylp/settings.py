@@ -133,7 +133,7 @@ MEDIA_URL = '/media/'
 
 # DJ RichTextField
 DJRICHTEXTFIELD_CONFIG = {
-    'js': ['//tinymce.cachefly.net/4.1/tinymce.min.js'],
+    'js': ['//cdn.tinymce.com/4/tinymce.min.js'],
     'init_template': 'djrichtextfield/init/tinymce.js',
     'settings': {
         'menubar': False,
