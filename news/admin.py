@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.models import Group
 from news.models import News, NewsList, Category, Attachment
+from news.forms import NewsModelForm
 
 
 class AttachmentInLine(admin.StackedInline):
@@ -10,12 +11,14 @@ class AttachmentInLine(admin.StackedInline):
 
 
 class NewsAdmin(admin.ModelAdmin):
+    form = NewsModelForm
     exclude = ('slug',)
     readonly_fields = ('date_published',)
     filter_horizontal = ['categories']
     list_display = ['title', 'get_author', 'is_published']
     ordering = ['is_published']
     inlines = [AttachmentInLine, ]
+    list_filter = ['is_published']
 
     def get_author(self, obj):
         return obj.author.get_full_name()

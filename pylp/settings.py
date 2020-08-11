@@ -46,7 +46,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'tinymce',
     'djrichtextfield',
     'crispy_forms',
     'content',
@@ -133,14 +132,9 @@ MEDIA_URL = '/media/'
 
 # DJ RichTextField
 DJRICHTEXTFIELD_CONFIG = {
-    'js': ['//cdn.tinymce.com/4/tinymce.min.js'],
-    'init_template': 'djrichtextfield/init/tinymce.js',
-    'settings': {
-        'menubar': False,
-        'plugins': 'link image code',
-        'toolbar': 'bold italic | link image code | removeformat ',
-        'width': 700
-    }
+    'js': ['//cdn.ckeditor.com/4.14.1/standard/ckeditor.js'],
+    'init_template': 'djrichtextfield/init/ckeditor.js',
+
 }
 
 
