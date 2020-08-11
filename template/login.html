@@ -1,9 +1,51 @@
 {% extends "base.html" %}
-
+{% load crispy_forms_tags%}
 {% load static %}
-
 {% block title %}Login{% endblock %}
 {% block content %}
+<header id="gtco-header" class="gtco-cover gtco-cover-sm" role="banner" style="background-image: url({% get_media_prefix %}/directory.jpg)" data-stellar-background-ratio="0.5">
+    <div class="overlay"></div>
+    <div class="gtco-container">
+        <div class="row row-mt-15em">
+            <div class="col-md-7 mt-text text-left animate-box" data-animate-effect="fadeInUp">
+                <h1><strong>Log in</strong></h1>  
+                <h2>Be part of the organization</h2>
+            </div>
+        </div>
+    </div>
+</header>
+<div class="gtco-section gtco-gray-bg">
+    <div class="gtco-container">
+        <div class="row">
+            <form method="post">
+                {% csrf_token %}
+                <fieldset class="form-group">
+                    <legend class="border-bottom mb-4">
+                        Join Today
+                    </legend>
+                    {%if messages%}
+                        {%for message in messages%}
+                            <div class="alert alert-{{message.tags}}">
+                                {{message}}
+                            </div>
+                        {%endfor%}
+                    {%endif%}
+                    {% if loginForm.errors %}
+                    Please double-check the following:    
+                    {{loginForm.errors}}
+                    {% endif %}
+                    {{ loginForm|crispy }}
+                </fieldset>
+                <div class="form-group">
+                    <button class="btn" style="background-color: black;" type="submit">Log in</button>
+                </div>
+                <small class="text-muted">
+                    Don't Have An Account? <a class="ml-2" href="{% url 'signup'%}">Sign Up</a>
+                </small>
+            </form>
+        </div>
+    </div>
+</div>
 {% endblock %}
 {% block meta %}
     <meta name="viewport" content="width=device-width, initial-scale=1">

@@ -102,7 +102,20 @@
             </div>
         </nav>
     </div>
-    {% block content %}{% endblock %}
+    <header id="gtco-header" class="gtco-cover gtco-cover-sm" role="banner" style="background-image: url({% get_media_prefix %}/directory.jpg); height: 250px;" data-stellar-background-ratio="0.5">
+        <div class="gtco-container">
+            <div class="row" style="margin-top: 11em;">
+                    <h2>{{header}}</h2>
+            </div>
+        </div>
+    </header>
+    {% block content %}
+    <div class="flex-section {% cycle 'gtco-gray-bg' 'reverse' %}">
+        <div class="col-1" style="margin-left: 13em;">
+        {{content}}
+        </div>
+    </div>
+    {% endblock %}
     
 
     <footer id="gtco-footer" role="contentinfo">
