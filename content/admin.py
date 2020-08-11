@@ -1,14 +1,15 @@
 from django.contrib import admin
 from content.models import (
     Account,
-    Header,
-    Section,
+    Directory,
     Fact,
-    SocialMedia,
+    Header,
+    Location,
     Resource,
     ResourceListDetail,
-    Location,
-    Directory)
+    Section,
+    SocialMedia,
+    SignUpInstructions)
 from django.contrib.auth.models import Group, User
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 
@@ -77,7 +78,7 @@ class AccountAdmin(admin.ModelAdmin):
 # admin.site.unregister(User)
 admin.site.register(Account, AccountAdmin)
 #admin.site.register(User, UserAdmin)
-
+admin.site.register(SignUpInstructions)
 admin.site.register(Header)
 admin.site.register(Section)
 admin.site.register(Fact)

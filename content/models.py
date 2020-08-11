@@ -5,7 +5,7 @@ from tinymce.models import HTMLField
 from django.contrib.auth.models import User
 from django.template.defaultfilters import slugify
 from django.db.models.signals import post_save
-
+from djrichtextfield.models import RichTextField
 
 optional = {
     'null': True,
@@ -160,3 +160,15 @@ class Directory(models.Model):
     class Meta:
         verbose_name = "Directory Entry"
         verbose_name_plural = "Directory Entries"
+
+
+class SignUpInstructions(models.Model):
+    title = models.CharField(max_length=20)
+    content = RichTextField()
+
+    def __str__(self):
+        return self.title
+
+    class Meta:
+        verbose_name = "Signing Up Instruction"
+        verbose_name_plural = "Signing Up Instructions"
