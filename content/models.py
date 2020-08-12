@@ -6,6 +6,7 @@ from django.contrib.auth.models import User
 from django.template.defaultfilters import slugify
 from django.db.models.signals import post_save
 from djrichtextfield.models import RichTextField
+from django.core.exceptions import ValidationError
 
 optional = {
     'null': True,
@@ -21,6 +22,16 @@ GROUP_CHOICES = (
     ('Y', 'Youth'),
     ('A', 'Adult'),
 )
+
+
+def validate_file_size(value):
+    filesize = value.size
+
+    if filesize > 26214400:
+        raise ValidationError(
+            "The maximum file size that can be uploaded is 25MB")
+    else:
+        return value
 
 
 def get_image_path(instance, filename):
@@ -109,7 +120,6 @@ class Resource(models.Model):
     title = models.CharField(max_length=100)
     description = models.TextField(**optional)
     image = models.ImageField(upload_to=get_image_path, **optional)
-    file = models.FileField(upload_to='resources/', max_length=200, **optional)
     slug = models.SlugField(default="", **optional)
 
     def __str__(self):
@@ -124,6 +134,16 @@ class Resource(models.Model):
     class Meta:
         verbose_name = "Resource"
         verbose_name_plural = "Resources"
+
+
+class Attachment(models.Model):
+    resource = models.ForeignKey(
+        "Resource", on_delete=models.CASCADE)
+    file = models.FileField(upload_to='resources', max_length=200,
+                            validators=[validate_file_size, ])
+
+    def __str__(self):
+        return self.file.name
 
 
 class ResourceListDetail(models.Model):

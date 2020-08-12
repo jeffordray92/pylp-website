@@ -1,6 +1,7 @@
 from django.contrib import admin
 from content.models import (
     Account,
+    Attachment,
     Directory,
     Fact,
     Header,
@@ -75,7 +76,17 @@ class AccountAdmin(admin.ModelAdmin):
     verify_selected.short_description = "Mark selected users as verified"
 
 
-# admin.site.unregister(User)
+class AttachmentInLine(admin.StackedInline):
+    model = Attachment
+    extra = 1
+    max_num = 5
+
+
+class ResourceAdmin(admin.ModelAdmin):
+    inlines = [AttachmentInLine, ]
+    exclude = ['slug', ]
+
+    # admin.site.unregister(User)
 admin.site.register(Account, AccountAdmin)
 #admin.site.register(User, UserAdmin)
 admin.site.register(SignUpInstructions)
@@ -83,7 +94,7 @@ admin.site.register(Header)
 admin.site.register(Section)
 admin.site.register(Fact)
 admin.site.register(SocialMedia)
-admin.site.register(Resource)
+admin.site.register(Resource, ResourceAdmin)
 admin.site.register(ResourceListDetail)
 admin.site.register(Location)
 admin.site.register(Directory)
