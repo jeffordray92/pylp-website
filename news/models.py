@@ -73,6 +73,11 @@ class News(models.Model):
             raise Exception("Too many attachments on this News")
         self.attachment_set.add(attachment)
 
+    def get_absolute_url(self):
+        from django.urls import reverse
+        return reverse('news',
+                       kwargs={'slug': self.slug})
+
     class Meta:
         verbose_name = "News Article"
         verbose_name_plural = "News Articles"

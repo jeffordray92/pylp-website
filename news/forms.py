@@ -1,7 +1,7 @@
 from django import forms
 from djrichtextfield.widgets import RichTextWidget
 from news.models import News
-from django.forms import ModelForm, Textarea
+from django.forms import ModelForm, Textarea, CheckboxInput
 
 
 class NewsForm(forms.Form):
@@ -22,4 +22,7 @@ class NewsModelForm(ModelForm):
             'content': Textarea(
                 attrs={'id': 'news_textarea'}
             ),
+            'share_on_facebook': CheckboxInput(
+                attrs={'id': 'news_share_on_fb'}
+            )
         }
