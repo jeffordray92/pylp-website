@@ -74,7 +74,6 @@ class SubmitArticleView(View):
                     file=f
                 )
                 attachment.save()
-
             return redirect('news_list')
         else:
             return render(request, 'submit_article.html', {'NewsForm': news_form})

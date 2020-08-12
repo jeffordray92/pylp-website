@@ -31,12 +31,14 @@
                         {{content}}
                     </div>
                     <div class="col-md-12" style="margin-top: 15px;">
-                        <strong>Attachments</strong>
-                        <br/>
-                        {%for attach in attachments%}
-                        <a href="{{attach.file.url}}" download>{{attach.file.name}}</a>
-                        <br/>
-                        {%endfor%}
+                        {% if attachments %}
+                            <strong>Attachments</strong>
+                            <br/>
+                            {%for attach in attachments%}
+                            <a href="{{attach.file.url}}" download>{{attach.file.name}}</a>
+                            <br/>
+                            {%endfor%}
+                        {% endif %}
                     </div>
                 </div>
             </div>
