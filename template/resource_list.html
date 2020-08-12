@@ -38,6 +38,9 @@
                 </div>
                 {% endfor %}
             </div>
+            {% if request.user.is_staff %}
+            <div><a href="{% url 'submit-news' %}" style="border-color: grey" class="btn text-center gtco-card-item">Add Resources</a></div>
+            {% endif %}
         </div>
     </div>
 {% endblock %}
