@@ -59,7 +59,7 @@
                             </figure>
                             <div class="gtco-text">
                                 <h2>{{ article.title|truncatechars:55 }}</h2>
-                                <p>{{ article.content|safe|truncatewords:10 }}</p>
+                                <p>{{ article.content|safe|striptags|truncatechars:140 }}</p>
                                 <p><span class="btn btn-primary">Learn more</span></p>
                             </div>
                         </a>
