@@ -98,6 +98,7 @@
             </div>
         </div>
         {% if resources %}
+        {% if request.user.is_authenticated %}
         <div id="gtco-subscribe">
             <div class="gtco-container">
                 <div class="row animate-box">
@@ -130,6 +131,7 @@
             </div>
         </div>
         {% endif %}
+        {% endif %}        
     </div>
 
 {% endblock %}

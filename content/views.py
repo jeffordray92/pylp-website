@@ -53,6 +53,8 @@ class HomeView(View):
 class ResourceListView(View):
 
     def get(self, request, *args, **kwargs):
+        if(request.user.is_authenticated == False):
+            return redirect('index')
         details = ResourceListDetail.objects.last()
         resources = Resource.objects.all()
         return render(request, 'resource_list.html', {
@@ -64,6 +66,8 @@ class ResourceListView(View):
 class ResourceView(View):
 
     def get(self, request, slug, *args, **kwargs):
+        if(request.user.is_authenticated == False):
+            return redirect('index')
         try:
             details = ResourceListDetail.objects.last()
             resource = Resource.objects.get(slug=slug)
