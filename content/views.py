@@ -16,6 +16,7 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.urls import reverse
 from content.models import (
     Account,
+    Attachment,
     Fact,
     Header,
     Resource,
@@ -63,8 +64,14 @@ class ResourceView(View):
 
     def get(self, request, slug, *args, **kwargs):
         try:
-            item = Resource.objects.get(slug=slug)
-            return HttpResponseRedirect(item.file.url)
+            details = ResourceListDetail.objects.last()
+            resource = Resource.objects.get(slug=slug)
+            attachments = list(Attachment.objects.filter(resource=resource))
+            return render(request, 'resource.html', {
+                'resource': resource,
+                'attachments': attachments,
+                'details': details,
+            })
         except Exception as e:
             print(e)
             return HttpResponseNotFound('<h1>Resource not found</h1>')
