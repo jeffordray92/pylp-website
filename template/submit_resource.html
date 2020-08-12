@@ -1,7 +1,6 @@
 {% extends "base.html" %}
-
 {% load static %}
-
+{% load crispy_forms_tags%}
 {% block title %}Resources{% endblock %}
 {% block content %}
     <header id="gtco-header" class="gtco-cover gtco-cover-sm" role="banner" style="background-image: url({{ details.image.url|safe }})" data-stellar-background-ratio="0.5">
@@ -15,34 +14,36 @@
             </div>
         </div>
     </header>
-
-    <div class="gtco-section gtco-gray-bg">
-        <div class="gtco-container">
-            <div class="row">
-                {% for resource in resources %}
-                <div class="col-lg-4 col-md-4 col-sm-6">
-                    <a href="{% url 'resource' resource.slug %}" class="gtco-card-item" target="_blank">
-                        <figure>
-                            <div class="overlay"><i class="ti-plus"></i></div>
-                            {% if resource.image %}
-                            <img src="{{ resource.image.url }}" alt="Image" class="img-responsive">
-                            {% else %}
-                            <img src="{% static 'images/logo.jpg' %}" alt="Image" class="img-responsive">
-                            {% endif %}
-                        </figure>
-                        <div class="gtco-text text-left">
-                            <h2>{{ resource.title|truncatechars:55 }}</h2>
-                            <p>{{ resource.description|safe }}</p>
-                        </div>
-                    </a>
+    <form method="post" enctype="multipart/form-data" >
+        {% csrf_token %}
+    <div class="flex-section gtco-gray-bg">
+        <div class="container">
+            <div class="text">
+                <div class="row" style="padding-left:10%; padding-right:10%; padding-top:5%; padding-bottom:5%">
+                    <div style="margin-bottom: 15px;">
+                    {{ResourceForm.errors}}
+                    <br/>
+                    <div style="margin-bottom: 15px;">
+                        {{ResourceForm|crispy}}
+                    <button class="btn btn-primary" type="submit">Submit Resource</button>
                 </div>
-                {% endfor %}
             </div>
-            {% if request.user.is_staff %}
-            <div><a href="{% url 'submit-resource' %}" style="border-color: grey" class="btn text-center gtco-card-item">Add Resources</a></div>
-            {% endif %}
         </div>
     </div>
+    </form>
+    <script>
+        var uploadField = document.getElementById("attachment_tag");
+        uploadField.onchange = function() {
+        if(this.files[0].size > (2097152*12.5)){
+            alert("Maximum of 25 mb of File size accepted.");
+            this.value = "";
+            };
+        if (this.files.length > 5) {
+            alert("Only 5 files accepted.");
+            this.value = "";
+            };
+        };
+    </script>
 {% endblock %}
 
 {% block meta %}

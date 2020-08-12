@@ -24,8 +24,9 @@ from content.models import (
     Section,
     SignUpInstructions)
 
-from content.forms import LogInForm, SignupForm
+from content.forms import LogInForm, ResourceForm, SignupForm
 from content.utils import token_generator
+from content.models import Attachment, Resource
 from news.models import News
 
 
@@ -75,6 +76,34 @@ class ResourceView(View):
         except Exception as e:
             print(e)
             return HttpResponseNotFound('<h1>Resource not found</h1>')
+
+
+class SubmitResourceView(View):
+    def get(self, request, *args, **kwargs):
+        if(request.user.is_staff == False):
+            return redirect('index')
+        details = ResourceListDetail.objects.last()
+        return render(request, 'submit_resource.html', {'ResourceForm': ResourceForm, 'details': details})
+
+    def post(self, request, *args, **kwargs):
+        resource_form = ResourceForm(request.POST, request.FILES)
+        if resource_form.is_valid():
+            files = request.FILES.getlist('attachments')
+            resource = Resource(
+                title=resource_form.cleaned_data['title'],
+                description=resource_form.cleaned_data['description'],
+                image=request.FILES['image'])
+            resource.save()
+            for f in files:
+                attachment = Attachment(
+                    resource=resource,
+                    file=f
+                )
+                attachment.save()
+
+            return redirect('resource_list')
+        else:
+            return render(request, 'submit_resource.html', {'ResourceForm': resource_form})
 
 
 class DirectoryView(View):

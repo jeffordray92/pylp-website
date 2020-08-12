@@ -21,13 +21,14 @@ from django.urls import path
 from django.contrib.auth import views as auth_views
 from django.views.generic import TemplateView
 from content.views import (
+    DirectoryView,
     HomeView,
+    LoginView,
     ResourceListView,
     ResourceView,
-    DirectoryView,
     SignupView,
+    SubmitResourceView,
     VerificationView,
-    LoginView
 )
 
 admin.site.site_header = 'ACCESS-PYLP Site Admin'
@@ -44,6 +45,7 @@ urlpatterns = [
     path('tinymce/', include('tinymce.urls')),
     path('djrichtextfield/', include('djrichtextfield.urls')),
     path('resources/', ResourceListView.as_view(), name="resource_list"),
+    path('resources-add/', SubmitResourceView.as_view(), name="submit-resource"),
     path('resources/<slug:slug>', ResourceView.as_view(), name="resource"),
     path('directory/', DirectoryView.as_view(), name="directory"),
 ]
