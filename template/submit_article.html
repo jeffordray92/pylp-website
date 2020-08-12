@@ -1,6 +1,35 @@
 {% extends "base.html" %}
 {% load static %}
 {% block title %}TITLE{% endblock %}
+{% block nav %}
+<nav class="gtco-nav" role="navigation">
+    <div class="gtco-container">
+        
+        <div class="row">
+            <div class="col-xs-12 text-center menu-1">
+                <ul>
+                    {% if request.get_full_path == "/"%}
+                    <li class="active"><a href="#head-top" class="button-home">Home</a></li>
+                    <li><a href="#gtco-about" class="button-home">Who We Are</a></li>
+                    <li><a href="#gtco-news" class="button-home">News and Events</a></li>
+                    <li><a href="#gtco-subscribe" class="button-home">Resources</a></li>
+                    <li><a href="{% url 'directory' %}" class="button-home">Directory</a></li>
+                    <li><a href="#gtco-footer" class="button-home">Contact Us</a></li>
+                    {% else %}
+                    <li class="active"><a href="{% url 'index' %}">Home</a></li>
+                    <li><a href="{% url 'index' %}#gtco-about">Who We Are</a></li>
+                    <li><a href="{% url 'news_list' %}">News and Events</a></li>
+                    <li><a href="{% url 'resource_list' %}" class="button-home">Resources</a></li>
+                    <li><a href="{% url 'directory' %}" class="button-home">Directory</a></li>
+                    <li><a href="#gtco-footer" class="button-home">Contact Us</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+        
+    </div>
+</nav>
+{% endblock %}
 {% block content %}
 <head>
     <script src="https://cdn.ckeditor.com/ckeditor5/21.0.0/classic/ckeditor.js"></script>
@@ -26,7 +55,6 @@
             <div class="text">
                 <div class="row" style="padding-left:10%; padding-right:10%; padding-top:5%; padding-bottom:5%">
                     <div style="margin-bottom: 15px;">
-                        Errors
                     {{NewsForm.errors}}
                     <br/>
                     Content:

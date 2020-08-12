@@ -5,7 +5,10 @@
 {% block title %}{{ article.title }}{% endblock %}
 
 {% block content %}
-    
+    <head>
+        <script async charset="utf-8" src="//cdn.embedly.com/widgets/platform.js"></script>
+        <link rel="stylesheet" href="{% static 'css/content-styles.css' %}" type="text/css">
+    </head>
     <header id="gtco-header" class="gtco-cover gtco-cover-sm" role="banner" style="background-image: url({{ article.image.url }})" data-stellar-background-ratio="0.5">
         <div class="overlay"></div>
         <div class="gtco-container">
@@ -22,11 +25,10 @@
             <div class="text">
                 <div class="row" style="padding-left:10%; padding-right:10%; padding-top:5%; padding-bottom:5%">
                     <div class="col-md-12">
-                    <strong>Published on: {{ article.date_published|date:"F j, Y"}}
-                    </strong>
+                    <strong>Published on: {{ article.date_published|date:"F j, Y"}}</strong>
                     </div>
-                    <div class="col-md-12">
-                    {{ article.content|safe }}
+                    <div class="col-md-12 ck-content" style="margin-top: 5px;">
+                        {{content}}
                     </div>
                     <div class="col-md-12" style="margin-top: 15px;">
                         <strong>Attachments</strong>
@@ -40,6 +42,18 @@
             </div>
         </div>
     </div>
+    <script>
+        document.querySelectorAll( 'oembed[url]' ).forEach( element => {
+            // Create the <a href="..." class="embedly-card"></a> element that Embedly uses
+            // to discover the media.
+            const anchor = document.createElement( 'a' );
+    
+            anchor.setAttribute( 'href', element.getAttribute( 'url' ) );
+            anchor.className = 'embedly-card';
+    
+            element.appendChild( anchor );
+        } );
+    </script>
 {% endblock %}
 
 {% block meta %}
