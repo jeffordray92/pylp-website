@@ -123,8 +123,8 @@ class SignupView(View):
                 [user_form.cleaned_data['email']],
             )
             email.send(fail_silently=False)
-            return render(request, 'base2.html', {'header': "How To Activate Your Account",
-                                                  'content': instruction})
+            return render(request, 'activate_account.html', {'header': "How To Activate Your Account",
+                                                             'content': instruction})
         else:
             return render(request, 'signup.html', {
                 'UserForm': user_form,
@@ -172,8 +172,8 @@ class LoginView(View):
                 if(not_active):
                     if(not_active.is_active == False):
                         instruction = SignUpInstructions.objects.last()
-                        return render(request, 'base2.html', {'header': "Your Account Isn't Activated Yet.",
-                                                              'content': instruction})
+                        return render(request, 'activate_account.html', {'header': "Your Account Isn't Activated Yet.",
+                                                                         'content': instruction})
                     else:
                         messages.error(request, "Incorrect credentials.")
                         return render(request, 'login.html', {
