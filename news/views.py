@@ -4,6 +4,7 @@ from django.shortcuts import render
 from django.views import View
 from django.http import HttpResponseNotFound
 from django.shortcuts import redirect
+from django.utils.html import format_html
 from news.models import Attachment, Category, News, NewsList
 from news.forms import NewsForm
 
@@ -38,9 +39,11 @@ class NewsView(View):
             article = News.objects.get(slug=kwargs.get('slug'))
             if article.is_published:
                 attachments = list(Attachment.objects.filter(news=article))
+                content = format_html(article.content)
                 return render(request, 'news.html', {
                     'article': article,
-                    'attachments': attachments
+                    'attachments': attachments,
+                    'content': content
                 })
             else:
                 return HttpResponseNotFound('<h1>Article not found</h1>')
