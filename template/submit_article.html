@@ -98,7 +98,7 @@
         var uploadField = document.getElementById("attachment_tag");
         uploadField.onchange = function() {
         if(this.files[0].size > (2097152*12.5)){
-            alert("File is too big!");
+            alert("Maximum of 25 mb of File size accepted.");
             this.value = "";
             };
         if (this.files.length > 5) {
