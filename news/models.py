@@ -18,7 +18,7 @@ def get_image_path(instance, filename):
 def validate_file_size(value):
     filesize = value.size
 
-    if filesize > 26214400:
+    if int(filesize) > 26214400:
         raise ValidationError(
             "The maximum file size that can be uploaded is 25MB")
     else:

@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'djrichtextfield',
     'crispy_forms',
+    'gdstorage',
     'content',
     'news',
 ]
@@ -163,3 +164,5 @@ LOGIN_REDIRECT_URL = 'index'
 LOGOUT_REDIRECT_URL = 'index'
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+GOOGLE_DRIVE_STORAGE_JSON_KEY_FILE = "insert path"
