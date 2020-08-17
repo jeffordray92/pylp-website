@@ -24,7 +24,13 @@ from content.models import (
     Section,
     SignUpInstructions)
 
-from content.forms import LogInForm, ResourceForm, SignupForm
+from content.forms import (
+    LogInForm,
+    OrganizationMembershipFormset,
+    PersonalInformationForm,
+    ResourceForm,
+    SignupForm
+)
 from content.utils import token_generator
 from content.models import Attachment, Resource
 from news.models import News
@@ -125,14 +131,18 @@ class SignupView(View):
     def get(self, request, *args, **kwargs):
         if(request.user.is_authenticated):
             return redirect('index')
-        return render(request, 'signup.html', {'UserForm': SignupForm})
+        return render(request, 'signup.html',
+                      {'UserForm': SignupForm,
+                       'InformationForm': PersonalInformationForm})
 
     def post(self, request, *args, **kwargs):
         user_form = SignupForm(request.POST)
-        if user_form.is_valid():
+        personal_information_form = PersonalInformationForm(request.POST)
+        if user_form.is_valid() and personal_information_form.is_valid():
             userform = User.objects.create_user(
                 username=user_form.cleaned_data['username'],
-                first_name=user_form.cleaned_data['first_name'],
+                first_name=personal_information_form.cleaned_data['first_name'],
+                last_name=personal_information_form.cleaned_data['last_name'],
                 email=user_form.cleaned_data['email'])
             userform.set_password(
                 user_form.cleaned_data['password1']
@@ -143,11 +153,29 @@ class SignupView(View):
                 user=User.objects.get(
                     username=user_form.cleaned_data['username']),
                 user_name=user_form.cleaned_data['username'],
-                email=user_form.cleaned_data['email']
+                email=user_form.cleaned_data['email'],
+                full_name=f"{personal_information_form.cleaned_data['first_name']} {personal_information_form.cleaned_data['last_name']}",
+                birth_date=personal_information_form.cleaned_data['birth_date'],
+                birth_place=personal_information_form.cleaned_data['birth_place'],
+                civil_status=personal_information_form.cleaned_data['civil_status'],
+                gender=personal_information_form.cleaned_data['gender'],
+                batch_and_year=personal_information_form.cleaned_data['batch_and_year'],
+                host_family=personal_information_form.cleaned_data['host_family'],
+                present_address=personal_information_form.cleaned_data['present_address'],
+                permanent_address=personal_information_form.cleaned_data['permanent_address'],
+                current_work_affiliation=personal_information_form.cleaned_data[
+                    'current_work_affiliation'],
+                name_address_office_school=personal_information_form.cleaned_data[
+                    'name_address_office_school'],
+                ethnicity=personal_information_form.cleaned_data['ethnicity'],
+                religion=personal_information_form.cleaned_data['religion'],
+                facebook_account=personal_information_form.cleaned_data['facebook_account'],
+                contact_number=personal_information_form.cleaned_data['contact_number'],
+                telephone_number=personal_information_form.cleaned_data['telephone_number']
             )
             account.save()
             email_subject = "PYLP Registration Email Confirmation"
-            uidb64 = urlsafe_base64_encode(force_bytes(userform.pk)).decode()
+            uidb64 = urlsafe_base64_encode(force_bytes(userform.pk))
             token = token_generator.make_token(userform)
             domain = get_current_site(request).domain
             link = reverse('activate', kwargs={
@@ -168,6 +196,7 @@ class SignupView(View):
         else:
             return render(request, 'signup.html', {
                 'UserForm': user_form,
+                'InformationForm': personal_information_form
             })
 
 

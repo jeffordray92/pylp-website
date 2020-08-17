@@ -8,6 +8,7 @@ from django.db.models.signals import post_save
 from djrichtextfield.models import RichTextField
 from django.core.exceptions import ValidationError
 from gdstorage.storage import GoogleDriveStorage
+from phonenumber_field.modelfields import PhoneNumberField
 
 # Define Google Drive Storage
 gd_storage = GoogleDriveStorage()
@@ -48,6 +49,24 @@ class Account(models.Model):
     is_verified = models.BooleanField(default=False)
     user_name = models.CharField(max_length=50, null=True, blank=True)
     email = models.EmailField(null=True, blank=True)
+    full_name = models.CharField(max_length=100, null=True, blank=True)
+    birth_date = models.DateTimeField(null=True, blank=True)
+    birth_place = models.CharField(max_length=100, null=True, blank=True)
+    civil_status = models.CharField(max_length=100, null=True, blank=True)
+    gender = models.CharField(max_length=100, null=True, blank=True)
+    batch_and_year = models.CharField(max_length=100, null=True, blank=True)
+    host_family = models.CharField(max_length=100, null=True, blank=True)
+    present_address = models.CharField(max_length=150, null=True, blank=True)
+    permanent_address = models.CharField(max_length=150, null=True, blank=True)
+    current_work_affiliation = models.CharField(
+        max_length=100, null=True, blank=True)
+    name_address_office_school = models.CharField(
+        max_length=150, null=True, blank=True)
+    ethnicity = models.CharField(max_length=80, null=True, blank=True)
+    religion = models.CharField(max_length=80, null=True, blank=True)
+    facebook_account = models.CharField(max_length=80, null=True, blank=True)
+    contact_number = PhoneNumberField(null=True, blank=True)
+    telephone_number = PhoneNumberField(null=True, blank=True)
 
     def __str__(self):
         return self.user.username

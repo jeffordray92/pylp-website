@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load static %}
 {% load crispy_forms_tags%}
-{% block title %}Login{% endblock %}
+{% block title %}Signup{% endblock %}
 {% block content %}
 <header id="gtco-header" class="gtco-cover gtco-cover-sm" role="banner" style="background-image: url({% get_media_prefix %}/directory.jpg)" data-stellar-background-ratio="0.5">
     <div class="overlay"></div>
@@ -21,7 +21,7 @@
                 {% csrf_token %}
                 <fieldset class="form-group">
                     <legend class="border-bottom mb-4">
-                        Join Today
+                        Sign Up Form
                     </legend>
                     {%if messages%}
                         {%for message in messages%}
@@ -33,8 +33,19 @@
                     {% if UserForm.errors %}
                     Please double-check the following:    
                     {{UserForm.errors}}
+                    {{InformationForm.errors}}
                     {% endif %}
                     {{ UserForm|crispy }}
+                    <legend class="border-bottom mb-4">
+                        I. PERSONAL INFORMATION
+                    </legend>
+                    {{InformationForm|crispy}}
+                    <legend class="border-bottom mb-4">
+                        II. EDUCATIONAL BACKGROUND
+                    </legend>
+                    <legend class="border-bottom mb-4">
+                        III. MEMBERSHIP IN YOUTH ORGANIZATIONS
+                    </legend>
                 </fieldset>
                 <div class="form-group">
                     <button class="btn" style="background-color: black;" type="submit">Sign Up</button>

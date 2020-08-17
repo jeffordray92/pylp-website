@@ -33,7 +33,8 @@ ALLOWED_HOSTS = [
     "access-pylp.herokuapp.com",
     "localhost",
     "www.access-pylp.com",
-    "access-pylp.com"
+    "access-pylp.com",
+    "4439347f751b.ngrok.io"
 ]
 
 
@@ -49,6 +50,7 @@ INSTALLED_APPS = [
     'djrichtextfield',
     'crispy_forms',
     'gdstorage',
+    'phonenumber_field',
     'content',
     'news',
 ]
@@ -165,4 +167,4 @@ LOGOUT_REDIRECT_URL = 'index'
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
-GOOGLE_DRIVE_STORAGE_JSON_KEY_FILE = "insert path"
+GOOGLE_DRIVE_STORAGE_JSON_KEY_FILE = f"{os.path.dirname(__file__)}/pylp-dev-key.json"
