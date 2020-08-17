@@ -17,6 +17,7 @@ from django.urls import reverse
 from content.models import (
     Account,
     Attachment,
+    EducationalBackground,
     Fact,
     Header,
     Resource,
@@ -25,8 +26,10 @@ from content.models import (
     SignUpInstructions)
 
 from content.forms import (
+    CommunityActivityForm,
+    EducationalBackgroundForm,
     LogInForm,
-    OrganizationMembershipFormset,
+    MembershipOrganizationForm,
     PersonalInformationForm,
     ResourceForm,
     SignupForm
@@ -133,12 +136,18 @@ class SignupView(View):
             return redirect('index')
         return render(request, 'signup.html',
                       {'UserForm': SignupForm,
-                       'InformationForm': PersonalInformationForm})
+                       'InformationForm': PersonalInformationForm,
+                       'EducationForm': EducationalBackgroundForm,
+                       'MembershipForm': MembershipOrganizationForm,
+                       'CommunityForm': CommunityActivityForm})
 
     def post(self, request, *args, **kwargs):
         user_form = SignupForm(request.POST)
         personal_information_form = PersonalInformationForm(request.POST)
-        if user_form.is_valid() and personal_information_form.is_valid():
+        education_form = EducationalBackgroundForm(request.POST)
+        membership_form = MembershipOrganizationForm(request.POST)
+        community_form = CommunityActivityForm(request.POST)
+        if user_form.is_valid() and personal_information_form.is_valid() and EducationalBackgroundForm(request.POST):
             userform = User.objects.create_user(
                 username=user_form.cleaned_data['username'],
                 first_name=personal_information_form.cleaned_data['first_name'],
@@ -159,7 +168,8 @@ class SignupView(View):
                 birth_place=personal_information_form.cleaned_data['birth_place'],
                 civil_status=personal_information_form.cleaned_data['civil_status'],
                 gender=personal_information_form.cleaned_data['gender'],
-                batch_and_year=personal_information_form.cleaned_data['batch_and_year'],
+                pylp_batch=personal_information_form.cleaned_data['pylp_batch'],
+                pylp_year=personal_information_form.cleaned_data['pylp_year'],
                 host_family=personal_information_form.cleaned_data['host_family'],
                 present_address=personal_information_form.cleaned_data['present_address'],
                 permanent_address=personal_information_form.cleaned_data['permanent_address'],
@@ -174,6 +184,13 @@ class SignupView(View):
                 telephone_number=personal_information_form.cleaned_data['telephone_number']
             )
             account.save()
+            education = EducationalBackground(
+                account=account,
+                education_type=education_form.cleaned_data['education_type'],
+                inclusive_date=education_form.cleaned_data['inclusive_date'],
+                level_attained=education_form.cleaned_data['level_attained'],
+            )
+            education.save()
             email_subject = "PYLP Registration Email Confirmation"
             uidb64 = urlsafe_base64_encode(force_bytes(userform.pk))
             token = token_generator.make_token(userform)
@@ -196,8 +213,10 @@ class SignupView(View):
         else:
             return render(request, 'signup.html', {
                 'UserForm': user_form,
-                'InformationForm': personal_information_form
-            })
+                'InformationForm': personal_information_form,
+                'EducationForm': education_form,
+                'MembershipForm': membership_form,
+                'CommunityForm': community_form})
 
 
 class VerificationView(View):
