@@ -21,41 +21,50 @@ class SignupForm(UserCreationForm):
         fields = ("username", "password1", "password2")
 
 
-class PersonalInformationForm(forms.Form):
+class PersonalInformationForm(forms.ModelForm):
     first_name = forms.CharField(
         max_length=50, label='First Name')
     last_name = forms.CharField(
         required=True, max_length=50, label='Last Name')
-    nickname = forms.CharField(required=True, max_length=50, label='Nickname')
-    birth_date = forms.DateField(required=True, label='Date of Birth', widget=forms.TextInput(
+    birth_date = forms.DateField(required=True, widget=forms.TextInput(
         attrs={'type': 'date'}
     ))
-    birth_place = forms.CharField(
-        required=True, max_length=50, label='Place of Birth')
-    civil_status = forms.CharField(
-        required=True, max_length=50, label='Civil Status')
-    gender = forms.ChoiceField(
-        required=True, choices=GENDER_CHOICES, label='Gender')
-    pylp_batch = forms.IntegerField(
-        required=True,  min_value=0, label='PYLP Batch')
     pylp_year = forms.ChoiceField(
-        choices=year_choices, initial=current_year, label='PYLP Year')
-    host_family = forms.CharField(
-        required=True, max_length=50, label='Host Family')
-    present_address = forms.CharField(
-        required=True, max_length=150, label='Present Address')
-    permanent_address = forms.CharField(required=True,
-                                        max_length=150, label='Permanent Address')
-    current_work_affiliation = forms.CharField(required=True,
-                                               max_length=50, label='Current Work Affiliation')
-    name_address_office_school = forms.CharField(required=True,
-                                                 max_length=150, label='Name and Address of Office/School')
-    ethnicity = forms.CharField(
-        required=True, max_length=50, label='Ethnicity')
-    religion = forms.CharField(required=True, max_length=50, label='Religion')
-    facebook_account = forms.CharField(required=True, max_length=150)
+        choices=year_choices, initial=current_year)
     contact_number = PhoneNumberField(region="PH")
     telephone_number = PhoneNumberField(region="PH")
+
+    class Meta:
+        model = Profile
+        fields = ('first_name',
+                  'last_name',
+                  'birth_date',
+                  'birth_place',
+                  'civil_status',
+                  'gender',
+                  'pylp_batch',
+                  'pylp_year',
+                  'host_family',
+                  'present_address',
+                  'permanent_address',
+                  'current_work_affiliation',
+                  'name_address_office_school',
+                  'ethnicity',
+                  'religion',
+                  'facebook_account',
+                  'contact_number',
+                  'telephone_number',)
+        required = '__all__'
+        exclude = ('user', 'is_verified', 'user_name', 'email', 'full_name')
+
+    def save(self, commit=True, user=None):
+        profile = super(PersonalInformationForm, self).save(commit=False)
+        profile.user = user
+        profile.email = user.email
+        profile.full_name = f"{self.cleaned_data['first_name']} {self.cleaned_data['last_name']}"
+        if commit:
+            profile.save()
+        return profile
 
 
 class EducationalBackgroundForm(forms.ModelForm):
@@ -67,7 +76,7 @@ class EducationalBackgroundForm(forms.ModelForm):
         model = EducationalBackground
         fields = '__all__'
         required = '__all__'
-        exclude = ('account',)
+        exclude = ('profile',)
 
 
 class MembershipOrganizationForm(forms.ModelForm):
@@ -79,7 +88,7 @@ class MembershipOrganizationForm(forms.ModelForm):
         model = MembershipOrganization
         fields = '__all__'
         required = '__all__'
-        exclude = ('account',)
+        exclude = ('profile',)
 
 
 class CommunityActivityForm(forms.ModelForm):
@@ -91,7 +100,7 @@ class CommunityActivityForm(forms.ModelForm):
         model = CommunityActivity
         fields = '__all__'
         required = '__all__'
-        exclude = ('account',)
+        exclude = ('profile',)
 
 
 class LogInForm(forms.Form):

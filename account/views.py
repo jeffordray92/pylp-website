@@ -16,6 +16,7 @@ from account.models import (
     Profile,
     EducationalBackground,
 )
+from content.models import SignUpInstructions
 from account.forms import (
     CommunityActivityForm,
     EducationalBackgroundForm,
@@ -43,9 +44,9 @@ class SignupView(View):
         user_form = SignupForm(request.POST)
         personal_information_form = PersonalInformationForm(request.POST)
         education_form = EducationalBackgroundForm(request.POST)
-        membership_form = MembershipOrganizationForm(request.POST)
-        community_form = CommunityActivityForm(request.POST)
-        if user_form.is_valid() and personal_information_form.is_valid() and EducationalBackgroundForm(request.POST):
+        #membership_form = MembershipOrganizationForm(request.POST)
+        #community_form = CommunityActivityForm(request.POST)
+        if user_form.is_valid() and personal_information_form.is_valid():
             userform = User.objects.create_user(
                 username=user_form.cleaned_data['username'],
                 first_name=personal_information_form.cleaned_data['first_name'],
@@ -56,39 +57,8 @@ class SignupView(View):
             )
             userform.is_active = False
             userform.save()
-            account = Account(
-                user=User.objects.get(
-                    username=user_form.cleaned_data['username']),
-                user_name=user_form.cleaned_data['username'],
-                email=user_form.cleaned_data['email'],
-                full_name=f"{personal_information_form.cleaned_data['first_name']} {personal_information_form.cleaned_data['last_name']}",
-                birth_date=personal_information_form.cleaned_data['birth_date'],
-                birth_place=personal_information_form.cleaned_data['birth_place'],
-                civil_status=personal_information_form.cleaned_data['civil_status'],
-                gender=personal_information_form.cleaned_data['gender'],
-                pylp_batch=personal_information_form.cleaned_data['pylp_batch'],
-                pylp_year=personal_information_form.cleaned_data['pylp_year'],
-                host_family=personal_information_form.cleaned_data['host_family'],
-                present_address=personal_information_form.cleaned_data['present_address'],
-                permanent_address=personal_information_form.cleaned_data['permanent_address'],
-                current_work_affiliation=personal_information_form.cleaned_data[
-                    'current_work_affiliation'],
-                name_address_office_school=personal_information_form.cleaned_data[
-                    'name_address_office_school'],
-                ethnicity=personal_information_form.cleaned_data['ethnicity'],
-                religion=personal_information_form.cleaned_data['religion'],
-                facebook_account=personal_information_form.cleaned_data['facebook_account'],
-                contact_number=personal_information_form.cleaned_data['contact_number'],
-                telephone_number=personal_information_form.cleaned_data['telephone_number']
-            )
-            account.save()
-            education = EducationalBackground(
-                account=account,
-                education_type=education_form.cleaned_data['education_type'],
-                inclusive_date=education_form.cleaned_data['inclusive_date'],
-                level_attained=education_form.cleaned_data['level_attained'],
-            )
-            education.save()
+            personal_information_form.save(user=userform)
+
             email_subject = "PYLP Registration Email Confirmation"
             uidb64 = urlsafe_base64_encode(force_bytes(userform.pk))
             token = token_generator.make_token(userform)
@@ -112,9 +82,7 @@ class SignupView(View):
             return render(request, 'signup.html', {
                 'UserForm': user_form,
                 'InformationForm': personal_information_form,
-                'EducationForm': education_form,
-                'MembershipForm': membership_form,
-                'CommunityForm': community_form})
+                'EducationForm': education_form})
 
 
 class VerificationView(View):
@@ -128,7 +96,7 @@ class VerificationView(View):
             # activate user and login:
             user.is_active = True
             user.save()
-            account = Account.objects.get(user_name=user.username)
+            account = Profile.objects.get(user_name=user.username)
             account.is_verified = True
             account.save()
 

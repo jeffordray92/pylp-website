@@ -32,29 +32,37 @@ def max_value_current_year(value):
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, editable=False)
     is_verified = models.BooleanField(default=False)
-    user_name = models.CharField(max_length=50, null=True)
     email = models.EmailField(null=True)
     full_name = models.CharField(max_length=100, null=True)
-    birth_date = models.DateTimeField(null=True)
-    birth_place = models.CharField(max_length=100, null=True)
-    civil_status = models.CharField(max_length=100, null=True)
+    birth_date = models.DateTimeField(null=True, verbose_name=u"Date of Birth")
+    birth_place = models.CharField(
+        max_length=100, null=True, verbose_name=u"Place of Birth")
+    civil_status = models.CharField(
+        max_length=100, null=True, verbose_name=u"Civil Status")
     gender = models.CharField(
         max_length=1, choices=GENDER_CHOICES, default="M")
-    pylp_batch = models.IntegerField(null=True)
+    pylp_batch = models.PositiveIntegerField(
+        null=True, verbose_name=u"PYLP Batch")
     pylp_year = models.IntegerField(
-        null=True, validators=[MinValueValidator(1984), max_value_current_year])
-    host_family = models.CharField(max_length=100, null=True)
-    present_address = models.CharField(max_length=150, null=True)
-    permanent_address = models.CharField(max_length=150, null=True)
+        null=True, validators=[MinValueValidator(1984), max_value_current_year], verbose_name=u"PYLP Year")
+    host_family = models.CharField(
+        max_length=100, null=True, verbose_name=u"Host Family")
+    present_address = models.CharField(
+        max_length=150, null=True, verbose_name=u"Present Address")
+    permanent_address = models.CharField(
+        max_length=150, null=True, verbose_name=u"Permanent Address")
     current_work_affiliation = models.CharField(
-        max_length=100, null=True)
+        max_length=100, null=True, verbose_name=u"Current Work Affiliation")
     name_address_office_school = models.CharField(
-        max_length=150, null=True)
+        max_length=150, null=True, verbose_name=u"Name and Address of Office")
     ethnicity = models.CharField(max_length=80, null=True)
     religion = models.CharField(max_length=80, null=True)
-    facebook_account = models.CharField(max_length=80, null=True)
-    contact_number = PhoneNumberField(null=True)
-    telephone_number = PhoneNumberField(null=True)
+    facebook_account = models.CharField(
+        max_length=80, null=True, verbose_name=u"Facebook Account")
+    contact_number = PhoneNumberField(
+        null=True, verbose_name=u"Contact Number")
+    telephone_number = PhoneNumberField(
+        null=True, verbose_name=u"Telephone Number")
 
     def __str__(self):
         return self.user.username
