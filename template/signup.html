@@ -17,7 +17,7 @@
 <div class="gtco-section gtco-gray-bg">
     <div class="gtco-container">
         <div class="row">
-            <form method="post">
+            <form method="post" enctype="multipart/form-data">
                 {% csrf_token %}
                 <fieldset class="form-group">
                     <legend class="border-bottom mb-4">
@@ -35,8 +35,7 @@
                     {{UserForm.errors}}
                     {{InformationForm.errors}}
                     {{EducationForm.errors}}
-                    {{MembershipForm.errors}}
-                    {{CommunityForm.errors}}
+                    {{InformationForm.errors}}
                     {% endif %}
                     {{ UserForm|crispy }}
                     <legend class="border-bottom mb-4">
@@ -46,6 +45,7 @@
                     <legend class="border-bottom mb-4">
                         II. EDUCATIONAL BACKGROUND
                     </legend>
+                    {{ EducationForm.management_form|crispy }}
                     {{EducationForm|crispy}}
                     <legend class="border-bottom mb-4">
                         III. MEMBERSHIP IN YOUTH ORGANIZATIONS

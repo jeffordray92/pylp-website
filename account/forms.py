@@ -1,16 +1,18 @@
 from django import forms
 from account.models import (
-    Profile,
+    CommunityActivity,
     current_year,
     EducationalBackground,
     EDUCATIONAL_TYPE,
     GENDER_CHOICES,
     MembershipOrganization,
-    CommunityActivity,
+    Profile,
+    School,
     year_choices,)
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from phonenumber_field.formfields import PhoneNumberField
+from dal import autocomplete
 
 
 class SignupForm(UserCreationForm):
@@ -77,6 +79,13 @@ class EducationalBackgroundForm(forms.ModelForm):
         fields = '__all__'
         required = '__all__'
         exclude = ('profile',)
+
+    def save(self, commit=True, profile=None):
+        education = super(EducationalBackgroundForm, self).save(commit=False)
+        education.profile = profile
+        if commit:
+            education.save()
+        return education
 
 
 class MembershipOrganizationForm(forms.ModelForm):

@@ -1,21 +1,23 @@
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseNotFound
 from django.shortcuts import render, redirect
-from django.views import View
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
+from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import EmailMessage
+from django.forms import formset_factory
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import (
     force_bytes,
     force_text
 )
-from django.contrib.sites.shortcuts import get_current_site
 from django.urls import reverse
 from account.models import (
     Profile,
     EducationalBackground,
+    School
 )
+from django.views import View
 from content.models import SignUpInstructions
 from account.forms import (
     CommunityActivityForm,
@@ -26,27 +28,35 @@ from account.forms import (
     SignupForm
 )
 from account.utils import token_generator
+from dal import autocomplete
 
 
 class SignupView(View):
 
+    EducationalBackgroundFormSet = formset_factory(
+        EducationalBackgroundForm, extra=1, max_num=4)
+
     def get(self, request, *args, **kwargs):
         if(request.user.is_authenticated):
             return redirect('index')
+
+        education_formset = self.EducationalBackgroundFormSet(
+            prefix='education')
         return render(request, 'signup.html',
                       {'UserForm': SignupForm,
                        'InformationForm': PersonalInformationForm,
-                       'EducationForm': EducationalBackgroundForm,
+                       'EducationForm': education_formset,
                        'MembershipForm': MembershipOrganizationForm,
                        'CommunityForm': CommunityActivityForm})
 
     def post(self, request, *args, **kwargs):
         user_form = SignupForm(request.POST)
         personal_information_form = PersonalInformationForm(request.POST)
-        education_form = EducationalBackgroundForm(request.POST)
+        education_formset = self.EducationalBackgroundFormSet(
+            request.POST, prefix='education')
         #membership_form = MembershipOrganizationForm(request.POST)
         #community_form = CommunityActivityForm(request.POST)
-        if user_form.is_valid() and personal_information_form.is_valid():
+        if user_form.is_valid() and personal_information_form.is_valid() and education_formset.is_valid():
             userform = User.objects.create_user(
                 username=user_form.cleaned_data['username'],
                 first_name=personal_information_form.cleaned_data['first_name'],
@@ -57,7 +67,9 @@ class SignupView(View):
             )
             userform.is_active = False
             userform.save()
-            personal_information_form.save(user=userform)
+            profile = personal_information_form.save(user=userform)
+            for educ_form in education_formset:
+                educ_form.save(profile=profile)
 
             email_subject = "PYLP Registration Email Confirmation"
             uidb64 = urlsafe_base64_encode(force_bytes(userform.pk))
@@ -82,7 +94,7 @@ class SignupView(View):
             return render(request, 'signup.html', {
                 'UserForm': user_form,
                 'InformationForm': personal_information_form,
-                'EducationForm': education_form})
+                'EducationForm': education_formset})
 
 
 class VerificationView(View):
