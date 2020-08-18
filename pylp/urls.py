@@ -23,23 +23,17 @@ from django.views.generic import TemplateView
 from content.views import (
     DirectoryView,
     HomeView,
-    LoginView,
     ResourceListView,
     ResourceView,
-    SignupView,
     SubmitResourceView,
-    VerificationView,
 )
-
 admin.site.site_header = 'ACCESS-PYLP Site Admin'
 admin.site.site_title = 'Admin: ACCESS-PYLP'
 
 urlpatterns = [
     path('', HomeView.as_view(), name="index"),
-    path('login/', LoginView.as_view(), name='login'),
+    path('', include('account.urls')),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
-    path('signup/', SignupView.as_view(), name="signup"),
-    path('activate/<uidb64>/<token>', VerificationView.as_view(), name='activate'),
     path('news/', include('news.urls')),
     path('admin/', admin.site.urls),
     path('tinymce/', include('tinymce.urls')),

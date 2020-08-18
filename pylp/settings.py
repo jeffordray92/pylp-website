@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'crispy_forms',
     'gdstorage',
     'phonenumber_field',
+    'account',
     'content',
     'news',
 ]
