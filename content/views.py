@@ -3,11 +3,13 @@ from django.http import HttpResponse, HttpResponseRedirect, HttpResponseNotFound
 from django.shortcuts import render, redirect
 from django.utils.encoding import smart_str
 from django.views import View
+from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
 from django.core.mail import EmailMessage
 from content.models import (
     Attachment,
+    ContactUsEmail,
     Fact,
     Header,
     Resource,
@@ -132,8 +134,27 @@ class ContactUsView(View):
         return render(request, 'contact_us.html', {'contactForm': contact_form})
 
     def post(self, request, *args, **kwargs):
+        contact_email = ""
+        try:
+            contact_email = ContactUsEmail.objects.first().email
+        except:
+            contact_email = ""
         contact_form = ContactUsForm(request.POST)
         if contact_form.is_valid():
-            pass
+            name = contact_form.cleaned_data['name']
+            email = contact_form.cleaned_data['email']
+            email_subject = contact_form.cleaned_data['subject']
+            email_body = contact_form.cleaned_data['message']
+            email_sender = f"Sender Name: {name}\n\n Sender Email: {email}\n\n Email Body:\n\n"
+            email = EmailMessage(
+                email_subject,
+                email_sender+email_body,
+                email,
+                [contact_email],
+            )
+            email.send(fail_silently=False)
+            messages.success(request, "Message sent successfully.",
+                             extra_tags='contact_us')
+            return redirect('contact-us')
         else:
             return render(request, 'contact_us.html', {'contactForm': contact_form})

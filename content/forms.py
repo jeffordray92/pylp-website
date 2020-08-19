@@ -24,6 +24,6 @@ class SignUpInstructionsForm(forms.ModelForm):
 
 class ContactUsForm(forms.Form):
     name = forms.CharField(required=True)
-    email = forms.CharField(required=True)
+    email = forms.EmailField(required=True)
     subject = forms.CharField(required=True)
     message = forms.CharField(required=True, widget=forms.Textarea)
