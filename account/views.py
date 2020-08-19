@@ -12,6 +12,7 @@ from django.utils.encoding import (
     force_text
 )
 from django.urls import reverse
+from django.utils.html import format_html
 from account.models import (
     Profile,
     EducationalBackground,
@@ -99,17 +100,19 @@ class SignupView(View):
                 'uidb64': uidb64, 'token': token})
             activate_url = f'http://{domain}{link}'
             instruction = SignUpInstructions.objects.last()
+            content = format_html(instruction.content)
             email_body = "Thank you for registering at PYLP Alumni Association, Inc.\n\nTo get started, activate your account by clicking the" \
                 " below.\n" + activate_url
             email = EmailMessage(
                 email_subject,
-                email_body+instruction.content,
+                email_body+content,
                 'noreply@pylp.com',
                 [user_form.cleaned_data['email']],
             )
             email.send(fail_silently=False)
             return render(request, 'activate_account.html', {'header': "How To Activate Your Account",
-                                                             'content': instruction})
+                                                             'instruction': instruction,
+                                                             'instruction_content': content})
         else:
             return render(request, 'signup.html', {
                 'UserForm': user_form,
@@ -160,8 +163,10 @@ class LoginView(View):
                 if(not_active):
                     if(not_active.is_active == False):
                         instruction = SignUpInstructions.objects.last()
+                        content = format_html(instruction.content)
                         return render(request, 'activate_account.html', {'header': "Your Account Isn't Activated Yet.",
-                                                                         'content': instruction})
+                                                                         'instruction': instruction,
+                                                                         'instruction_content': content})
                     else:
                         messages.error(request, "Incorrect credentials.")
                         return render(request, 'login.html', {

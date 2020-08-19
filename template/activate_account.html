@@ -38,7 +38,8 @@
     <!--[if lt IE 9]>
     <script src="{% static 'js/respond.min.js' %}"></script>
     <![endif]-->
-
+    <script async charset="utf-8" src="//cdn.embedly.com/widgets/platform.js"></script>
+    <link rel="stylesheet" href="{% static 'css/content-styles.css' %}" type="text/css">
     </head>
     <body>
         
@@ -111,10 +112,28 @@
     </header>
     {% block content %}
     <div class="flex-section {% cycle 'gtco-gray-bg' 'reverse' %}">
-        <div class="col-1" style="margin-left: 13em;">
-        {{content.content|safe}}
+        <div class="col-4">
+            <div class="text">
+                <div class="row" style="padding-left:10%; padding-right:10%; padding-top:5%; padding-bottom:5%">
+                    <div class="col-md-12 ck-content" style="margin-top: 5px;">
+                        {{instruction_content}}
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
+    <script>
+        document.querySelectorAll( 'oembed[url]' ).forEach( element => {
+            // Create the <a href="..." class="embedly-card"></a> element that Embedly uses
+            // to discover the media.
+            const anchor = document.createElement( 'a' );
+    
+            anchor.setAttribute( 'href', element.getAttribute( 'url' ) );
+            anchor.className = 'embedly-card';
+    
+            element.appendChild( anchor );
+        } );
+    </script>
     {% endblock %}
     
 

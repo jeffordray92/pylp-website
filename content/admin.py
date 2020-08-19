@@ -1,4 +1,6 @@
 from django.contrib import admin
+from django.contrib.auth.models import Group, User
+from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from content.models import (
     Attachment,
     Directory,
@@ -10,8 +12,7 @@ from content.models import (
     Section,
     SocialMedia,
     SignUpInstructions)
-from django.contrib.auth.models import Group, User
-from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
+from content.forms import SignUpInstructionsForm
 
 
 # class UserAdmin(BaseUserAdmin):
@@ -53,7 +54,11 @@ class ResourceAdmin(admin.ModelAdmin):
     exclude = ['slug', ]
 
 
-admin.site.register(SignUpInstructions)
+class SignUpInstructionsAdmin(admin.ModelAdmin):
+    form = SignUpInstructionsForm
+
+
+admin.site.register(SignUpInstructions, SignUpInstructionsAdmin)
 admin.site.register(Header)
 admin.site.register(Section)
 admin.site.register(Fact)

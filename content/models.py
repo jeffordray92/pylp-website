@@ -164,7 +164,7 @@ class Directory(models.Model):
 
 class SignUpInstructions(models.Model):
     title = models.CharField(max_length=20)
-    content = RichTextField()
+    content = models.TextField(blank=True)
 
     def __str__(self):
         return self.title
