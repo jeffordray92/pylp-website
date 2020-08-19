@@ -143,8 +143,9 @@ class ContactUsView(View):
         if contact_form.is_valid():
             name = contact_form.cleaned_data['name']
             email = contact_form.cleaned_data['email']
-            email_subject = contact_form.cleaned_data['subject']
+            subject = contact_form.cleaned_data['subject']
             email_body = contact_form.cleaned_data['message']
+            email_subject = f"[Contact Us] {subject}"
             email_sender = f"Sender Name: {name}\n\n Sender Email: {email}\n\n Email Body:\n\n"
             email = EmailMessage(
                 email_subject,
