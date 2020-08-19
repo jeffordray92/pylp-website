@@ -21,7 +21,10 @@ class NewsAdmin(admin.ModelAdmin):
     list_filter = ['author', 'is_published']
 
     def get_author(self, obj):
-        return obj.author.get_full_name()
+        name = obj.author.get_full_name()
+        if name != "":
+            return name
+        return obj.author.get_username()
     get_author.short_description = 'Author'
 
     # def add_view(self, request, form_url='', extra_context=None):

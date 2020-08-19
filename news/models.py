@@ -47,7 +47,7 @@ class News(models.Model):
     date_uploaded = models.DateTimeField(default=datetime.now, blank=True)
     slug = models.SlugField(default="", **optional)
     categories = models.ManyToManyField(
-        'news.Category', related_name="articles")
+        'news.Category', related_name="articles", blank=True)
     tags = models.CharField(null=True, max_length=100, blank=True)
     caption = models.TextField(max_length=250, **optional)
     share_on_facebook = models.BooleanField(default=False)

@@ -31,10 +31,11 @@ def max_value_current_year(value):
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, editable=False)
+    cluster = models.ForeignKey("Cluster", on_delete=models.CASCADE, null=True)
     is_verified = models.BooleanField(default=False)
     email = models.EmailField(null=True)
     full_name = models.CharField(max_length=100, null=True)
-    birth_date = models.DateTimeField(null=True, verbose_name=u"Date of Birth")
+    birth_date = models.DateField(null=True, verbose_name=u"Date of Birth")
     birth_place = models.CharField(
         max_length=100, null=True, verbose_name=u"Place of Birth")
     civil_status = models.CharField(
@@ -88,7 +89,7 @@ class EducationalBackground(models.Model):
         max_length=1, choices=EDUCATIONAL_TYPE, default="C")
     school = models.ForeignKey(
         "School", on_delete=models.CASCADE, null=True)
-    inclusive_date = models.DateTimeField(null=True)
+    inclusive_date = models.DateField(null=True)
     level_attained = models.CharField(max_length=150, null=True)
 
     class Meta:
@@ -100,7 +101,7 @@ class MembershipOrganization(models.Model):
         "Profile", on_delete=models.CASCADE, editable=False, null=True)
     organization = models.ForeignKey(
         "Organization", on_delete=models.CASCADE, null=True)
-    inclusive_date = models.DateTimeField(null=True)
+    inclusive_date = models.DateField(null=True)
     position_held = models.CharField(max_length=150, null=True)
 
     class Meta:
@@ -114,7 +115,7 @@ class CommunityActivity(models.Model):
     activity_description = models.CharField(max_length=150, null=True)
     sponsor_organization = models.ForeignKey(
         "Organization", on_delete=models.CASCADE, null=True)
-    inclusive_date = models.DateTimeField(null=True)
+    inclusive_date = models.DateField(null=True)
 
     class Meta:
         verbose_name_plural = "Involvement in Youth/Community Related Activities"
@@ -134,3 +135,10 @@ class Organization(models.Model):
 
     def __str__(self):
         return self.organization_name
+
+
+class Cluster(models.Model):
+    name = models.CharField(max_length=150, null=True)
+
+    def __str__(self):
+        return self.name
