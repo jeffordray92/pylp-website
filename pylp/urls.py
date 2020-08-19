@@ -21,6 +21,7 @@ from django.urls import path
 from django.contrib.auth import views as auth_views
 from django.views.generic import TemplateView
 from content.views import (
+    ContactUsView,
     DirectoryView,
     HomeView,
     ResourceListView,
@@ -34,6 +35,7 @@ urlpatterns = [
     path('', HomeView.as_view(), name="index"),
     path('', include('account.urls')),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
+    path('contact-us/', ContactUsView.as_view(), name="contact-us"),
     path('news/', include('news.urls')),
     path('admin/', admin.site.urls),
     path('tinymce/', include('tinymce.urls')),

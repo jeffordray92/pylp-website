@@ -5,6 +5,7 @@ from django.utils.encoding import smart_str
 from django.views import View
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
+from django.core.mail import EmailMessage
 from content.models import (
     Attachment,
     Fact,
@@ -15,6 +16,7 @@ from content.models import (
     SignUpInstructions)
 
 from content.forms import (
+    ContactUsForm,
     ResourceForm,
 )
 from news.models import News
@@ -108,3 +110,30 @@ class DirectoryView(View):
         else:
             print('hello')
         return render(request, 'directory.html', {})
+
+
+class ContactUsView(View):
+
+    def get(self, request, *args, **kwargs):
+        name = ""
+        email = ""
+        try:
+            name = request.user.first_name
+            email = request.user.email
+        except:
+            pass
+
+        contact_form = ContactUsForm(
+            initial={
+                'name': name,
+                'email': email
+            }
+        )
+        return render(request, 'contact_us.html', {'contactForm': contact_form})
+
+    def post(self, request, *args, **kwargs):
+        contact_form = ContactUsForm(request.POST)
+        if contact_form.is_valid():
+            pass
+        else:
+            return render(request, 'contact_us.html', {'contactForm': contact_form})
