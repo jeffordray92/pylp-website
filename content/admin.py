@@ -3,6 +3,7 @@ from django.contrib.auth.models import Group, User
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from content.models import (
     Attachment,
+    ContactUsEmail,
     Directory,
     Fact,
     Header,
@@ -67,3 +68,4 @@ admin.site.register(Resource, ResourceAdmin)
 admin.site.register(ResourceListDetail)
 admin.site.register(Location)
 admin.site.register(Directory)
+admin.site.register(ContactUsEmail)

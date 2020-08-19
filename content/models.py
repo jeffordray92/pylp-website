@@ -172,3 +172,13 @@ class SignUpInstructions(models.Model):
     class Meta:
         verbose_name = "Signing Up Instruction"
         verbose_name_plural = "Signing Up Instructions"
+
+
+class ContactUsEmail(models.Model):
+    email = models.EmailField(null=True)
+
+    def __str__(self):
+        return self.email
+
+    class Meta:
+        verbose_name = "Contact Email"
