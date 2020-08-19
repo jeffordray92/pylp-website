@@ -1,10 +1,11 @@
 from datetime import datetime
 from django.db import models
 from django.contrib.auth.models import User
+from django.core.mail import EmailMessage
 from django.core.validators import MaxValueValidator, MinValueValidator
 from phonenumber_field.modelfields import PhoneNumberField
 from gdstorage.storage import GoogleDriveStorage
-
+from content.models import ContactUsEmail
 GENDER_CHOICES = (
     ('M', 'Male'),
     ('F', 'Female'),
@@ -28,6 +29,33 @@ def current_year():
 
 def max_value_current_year(value):
     return MaxValueValidator(current_year())(value)
+
+
+def send_email(photo=None, e_sig=None):
+    subject = ""
+    body = ""
+    contact_email = ""
+    try:
+        contact_email = ContactUsEmail.objects.first().email
+    except:
+        contact_email = ""
+    if photo and e_sig:
+        subject = "[Photo & E-Signature Update]"
+        body = f"Updated Photo: {photo} \n\n Updated E-Signature: {e_sig}"
+    elif photo:
+        subject = "[Photo Update]"
+        body = f"Updated Photo: {photo}"
+    elif e_sig:
+        subject = "[E-Signature Update]"
+        body = f"Updated E-Signature: {e_sig}"
+
+    email = EmailMessage(
+        subject,
+        body,
+        'noreply@pylp.com',
+        [contact_email],
+    )
+    email.send(fail_silently=False)
 
 
 class Profile(models.Model):
@@ -75,10 +103,48 @@ class Profile(models.Model):
     telephone_number = PhoneNumberField(
         null=True, verbose_name=u"Telephone Number", region="PH")
 
+    __original_photo = None
+    __original_electronic_signature = None
+
     def __str__(self):
         return self.user.username
 
-    def save(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs):
+        super(Profile, self).__init__(*args, **kwargs)
+        self.__original_photo = self.photo
+        self.__original_electronic_signature = self.electronic_signature
+
+    def save(self, force_insert=False, force_update=False, *args, **kwargs):
+        if self.photo != self.__original_photo and self.electronic_signature != self.__original_electronic_signature:
+            photo = ""
+            if not self.photo:
+                photo = "User removed photo"
+            else:
+                photo = self.photo.url
+            e_sig = ""
+            if not self.electronic_signature:
+                e_sig = "User removed E-Signature"
+            else:
+                e_sig = self.electronic_signature.url
+            send_email(photo=photo, e_sig=e_sig)
+        elif self.photo != self.__original_photo:
+            photo = ""
+            if not self.photo:
+                photo = "User removed photo"
+            else:
+                photo = self.photo.url
+            send_email(photo=photo)
+        elif self.electronic_signature != self.__original_electronic_signature:
+            e_sig = ""
+            if not self.electronic_signature:
+                e_sig = "User removed E-Signature"
+            else:
+                e_sig = self.electronic_signature.url
+            send_email(e_sig=e_sig)
+
+        super(Profile, self).save(force_insert, force_update, *args, **kwargs)
+        self.__original_photo = self.photo
+        self.__original_electronic_signature = self.electronic_signature
         self.user.is_active = self.is_verified
         self.user.first_name = self.first_name
         self.user.last_name = self.last_name
