@@ -36,7 +36,7 @@ class PersonalInformationForm(forms.ModelForm):
         model = Profile
         fields = '__all__'
         required = '__all__'
-        exclude = ('user', 'is_verified', 'user_name', 'photo',
+        exclude = ('user', 'is_verified', 'user_name', 'photo', 'electronic_signature',
                    'email', 'cluster', 'committees')
 
     def save(self, commit=True, user=None):

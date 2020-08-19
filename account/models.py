@@ -38,6 +38,8 @@ class Profile(models.Model):
     is_verified = models.BooleanField(default=False)
     photo = models.ImageField(upload_to='photos', blank=True,
                               null=True, verbose_name=u"Profile Picture")
+    electronic_signature = models.ImageField(upload_to='e_signature', blank=True,
+                                             null=True, verbose_name=u"Electronic Signature")
     email = models.EmailField(null=True)
     first_name = models.CharField(
         max_length=100, null=True, verbose_name=u"First Name")
