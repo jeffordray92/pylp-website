@@ -1,4 +1,6 @@
 from django.contrib import admin
+from django.contrib.auth.models import User
+from django.contrib.auth.admin import UserAdmin
 from account.models import (
     Committee,
     CommunityActivity,
@@ -29,11 +31,11 @@ class CommunityActivityInLine(admin.TabularInline):
 
 class ProfileAdmin(admin.ModelAdmin):
     model = Profile
-    readonly_fields = ('user', 'get_name')
+    readonly_fields = ('user',)
     actions = ['verify_selected', ]
     list_display = ['email', 'get_username',
                     'get_name', 'is_verified', 'get_userstaff']
-    list_filter = ['is_verified', 'cluster', 'pylp_batch',
+    list_filter = ['is_verified', 'cluster', 'committees', 'pylp_batch',
                    'educationalbackground__school', 'membershiporganization__organization']
     filter_horizontal = ('committees',)
     inlines = [EducationalBackgroundInLine,
@@ -61,7 +63,23 @@ class ProfileAdmin(admin.ModelAdmin):
             q.user.save()
     verify_selected.short_description = "Mark selected users as verified"
 
+    def has_add_permission(self, request, obj=None):
+        return False
 
+
+class UserProfileInline(admin.StackedInline):
+    model = Profile
+    max_num = 1
+    min_num = 1
+    can_delete = False
+
+
+class AccountsUserAdmin(UserAdmin):
+    inlines = [UserProfileInline]
+
+
+admin.site.unregister(User)
+admin.site.register(User, AccountsUserAdmin)
 admin.site.register(Profile, ProfileAdmin)
 admin.site.register(School)
 admin.site.register(Organization)

@@ -3,6 +3,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.core.validators import MaxValueValidator, MinValueValidator
 from phonenumber_field.modelfields import PhoneNumberField
+from gdstorage.storage import GoogleDriveStorage
 
 GENDER_CHOICES = (
     ('M', 'Male'),
@@ -35,8 +36,13 @@ class Profile(models.Model):
         "Cluster", on_delete=models.CASCADE, null=True, blank=True)
     committees = models.ManyToManyField('Committee', blank=True)
     is_verified = models.BooleanField(default=False)
+    photo = models.ImageField(upload_to='photos', blank=True,
+                              null=True, verbose_name=u"Profile Picture")
     email = models.EmailField(null=True)
-    full_name = models.CharField(max_length=100, null=True)
+    first_name = models.CharField(
+        max_length=100, null=True, verbose_name=u"First Name")
+    last_name = models.CharField(
+        max_length=100, null=True, verbose_name=u"Last Name")
     birth_date = models.DateField(null=True, verbose_name=u"Date of Birth")
     birth_place = models.CharField(
         max_length=100, null=True, verbose_name=u"Place of Birth")
@@ -63,15 +69,18 @@ class Profile(models.Model):
     facebook_account = models.CharField(
         max_length=80, null=True, verbose_name=u"Facebook Account")
     contact_number = PhoneNumberField(
-        null=True, verbose_name=u"Contact Number")
+        null=True, verbose_name=u"Contact Number", region="PH")
     telephone_number = PhoneNumberField(
-        null=True, verbose_name=u"Telephone Number")
+        null=True, verbose_name=u"Telephone Number", region="PH")
 
     def __str__(self):
         return self.user.username
 
     def save(self, *args, **kwargs):
         self.user.is_active = self.is_verified
+        self.user.first_name = self.first_name
+        self.user.last_name = self.last_name
+        self.user.email = self.email
         self.user.save()
         super(Profile, self).save(*args, **kwargs)
 

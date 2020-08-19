@@ -52,8 +52,7 @@ class ResourceAdmin(admin.ModelAdmin):
     inlines = [AttachmentInLine, ]
     exclude = ['slug', ]
 
-    # admin.site.unregister(User)
-#admin.site.register(User, UserAdmin)
+
 admin.site.register(SignUpInstructions)
 admin.site.register(Header)
 admin.site.register(Section)

@@ -24,10 +24,6 @@ class SignupForm(UserCreationForm):
 
 
 class PersonalInformationForm(forms.ModelForm):
-    first_name = forms.CharField(
-        max_length=50, label='First Name')
-    last_name = forms.CharField(
-        required=True, max_length=50, label='Last Name')
     birth_date = forms.DateField(required=True, widget=forms.TextInput(
         attrs={'type': 'date'}
     ))
@@ -38,32 +34,15 @@ class PersonalInformationForm(forms.ModelForm):
 
     class Meta:
         model = Profile
-        fields = ('first_name',
-                  'last_name',
-                  'birth_date',
-                  'birth_place',
-                  'civil_status',
-                  'gender',
-                  'pylp_batch',
-                  'pylp_year',
-                  'host_family',
-                  'present_address',
-                  'permanent_address',
-                  'current_work_affiliation',
-                  'name_address_office_school',
-                  'ethnicity',
-                  'religion',
-                  'facebook_account',
-                  'contact_number',
-                  'telephone_number',)
+        fields = '__all__'
         required = '__all__'
-        exclude = ('user', 'is_verified', 'user_name', 'email', 'full_name')
+        exclude = ('user', 'is_verified', 'user_name', 'photo',
+                   'email', 'cluster', 'committees')
 
     def save(self, commit=True, user=None):
         profile = super(PersonalInformationForm, self).save(commit=False)
         profile.user = user
         profile.email = user.email
-        profile.full_name = f"{self.cleaned_data['first_name']} {self.cleaned_data['last_name']}"
         if commit:
             profile.save()
         return profile
