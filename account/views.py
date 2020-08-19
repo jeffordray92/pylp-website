@@ -34,29 +34,45 @@ from dal import autocomplete
 class SignupView(View):
 
     EducationalBackgroundFormSet = formset_factory(
-        EducationalBackgroundForm, extra=1, max_num=4)
+        EducationalBackgroundForm, extra=1, max_num=4
+    )
+    MembershipOrganizationFormSet = formset_factory(
+        MembershipOrganizationForm, extra=1, max_num=3
+    )
+    CommunityActivityFormSet = formset_factory(
+        CommunityActivityForm, extra=1, max_num=3
+    )
 
     def get(self, request, *args, **kwargs):
         if(request.user.is_authenticated):
             return redirect('index')
 
         education_formset = self.EducationalBackgroundFormSet(
-            prefix='education')
+            prefix='education'
+        )
+        membership_formset = self.MembershipOrganizationFormSet(
+            prefix='membership'
+        )
+        activity_formset = self.CommunityActivityFormSet(
+            prefix='activity'
+        )
         return render(request, 'signup.html',
                       {'UserForm': SignupForm,
                        'InformationForm': PersonalInformationForm,
                        'EducationForm': education_formset,
-                       'MembershipForm': MembershipOrganizationForm,
-                       'CommunityForm': CommunityActivityForm})
+                       'MembershipForm': membership_formset,
+                       'CommunityForm': activity_formset})
 
     def post(self, request, *args, **kwargs):
         user_form = SignupForm(request.POST)
         personal_information_form = PersonalInformationForm(request.POST)
         education_formset = self.EducationalBackgroundFormSet(
             request.POST, prefix='education')
-        #membership_form = MembershipOrganizationForm(request.POST)
-        #community_form = CommunityActivityForm(request.POST)
-        if user_form.is_valid() and personal_information_form.is_valid() and education_formset.is_valid():
+        membership_formset = self.MembershipOrganizationFormSet(
+            request.POST, prefix='membership')
+        activity_formset = self.CommunityActivityFormSet(
+            request.POST, prefix='activity')
+        if user_form.is_valid() and personal_information_form.is_valid():
             userform = User.objects.create_user(
                 username=user_form.cleaned_data['username'],
                 first_name=personal_information_form.cleaned_data['first_name'],
@@ -68,8 +84,12 @@ class SignupView(View):
             userform.is_active = False
             userform.save()
             profile = personal_information_form.save(user=userform)
-            for educ_form in education_formset:
-                educ_form.save(profile=profile)
+            for education_form in education_formset:
+                education_form.save(profile=profile)
+            for membership_form in membership_formset:
+                membership_form.save(profile=profile)
+            for activity_form in activity_formset:
+                activity_form.save(profile=profile)
 
             email_subject = "PYLP Registration Email Confirmation"
             uidb64 = urlsafe_base64_encode(force_bytes(userform.pk))
@@ -94,7 +114,9 @@ class SignupView(View):
             return render(request, 'signup.html', {
                 'UserForm': user_form,
                 'InformationForm': personal_information_form,
-                'EducationForm': education_formset})
+                'EducationForm': education_formset,
+                'MembershipForm': membership_formset,
+                'CommunityForm': activity_formset})
 
 
 class VerificationView(View):

@@ -99,6 +99,13 @@ class MembershipOrganizationForm(forms.ModelForm):
         required = '__all__'
         exclude = ('profile',)
 
+    def save(self, commit=True, profile=None):
+        membership = super(MembershipOrganizationForm, self).save(commit=False)
+        membership.profile = profile
+        if commit:
+            membership.save()
+        return membership
+
 
 class CommunityActivityForm(forms.ModelForm):
     inclusive_date = forms.DateField(required=True, widget=forms.TextInput(
@@ -110,6 +117,13 @@ class CommunityActivityForm(forms.ModelForm):
         fields = '__all__'
         required = '__all__'
         exclude = ('profile',)
+
+    def save(self, commit=True, profile=None):
+        activity = super(CommunityActivityForm, self).save(commit=False)
+        activity.profile = profile
+        if commit:
+            activity.save()
+        return activity
 
 
 class LogInForm(forms.Form):
