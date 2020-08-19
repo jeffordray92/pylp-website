@@ -31,7 +31,8 @@ class ProfileAdmin(admin.ModelAdmin):
     actions = ['verify_selected', ]
     list_display = ['email', 'get_username',
                     'get_name', 'is_verified', 'get_userstaff']
-    list_filter = ['is_verified']
+    list_filter = ['is_verified', 'pylp_batch',
+                   'educationalbackground__school', 'membershiporganization__organization']
     inlines = [EducationalBackgroundInLine,
                MembershipOrganizationInLine, CommunityActivityInLine]
 

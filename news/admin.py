@@ -18,7 +18,7 @@ class NewsAdmin(admin.ModelAdmin):
     list_display = ['title', 'get_author', 'is_published']
     ordering = ['is_published']
     inlines = [AttachmentInLine, ]
-    list_filter = ['is_published']
+    list_filter = ['author', 'is_published']
 
     def get_author(self, obj):
         return obj.author.get_full_name()
