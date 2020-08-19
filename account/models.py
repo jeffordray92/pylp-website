@@ -31,7 +31,9 @@ def max_value_current_year(value):
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, editable=False)
-    cluster = models.ForeignKey("Cluster", on_delete=models.CASCADE, null=True)
+    cluster = models.ForeignKey(
+        "Cluster", on_delete=models.CASCADE, null=True, blank=True)
+    committees = models.ManyToManyField('Committee', blank=True)
     is_verified = models.BooleanField(default=False)
     email = models.EmailField(null=True)
     full_name = models.CharField(max_length=100, null=True)
@@ -138,6 +140,13 @@ class Organization(models.Model):
 
 
 class Cluster(models.Model):
+    name = models.CharField(max_length=150, null=True)
+
+    def __str__(self):
+        return self.name
+
+
+class Committee(models.Model):
     name = models.CharField(max_length=150, null=True)
 
     def __str__(self):

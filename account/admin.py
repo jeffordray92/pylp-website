@@ -1,5 +1,6 @@
 from django.contrib import admin
 from account.models import (
+    Committee,
     CommunityActivity,
     Cluster,
     EducationalBackground,
@@ -32,8 +33,9 @@ class ProfileAdmin(admin.ModelAdmin):
     actions = ['verify_selected', ]
     list_display = ['email', 'get_username',
                     'get_name', 'is_verified', 'get_userstaff']
-    list_filter = ['is_verified', 'pylp_batch',
+    list_filter = ['is_verified', 'cluster', 'pylp_batch',
                    'educationalbackground__school', 'membershiporganization__organization']
+    filter_horizontal = ('committees',)
     inlines = [EducationalBackgroundInLine,
                MembershipOrganizationInLine, CommunityActivityInLine]
 
@@ -64,3 +66,4 @@ admin.site.register(Profile, ProfileAdmin)
 admin.site.register(School)
 admin.site.register(Organization)
 admin.site.register(Cluster)
+admin.site.register(Committee)
