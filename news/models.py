@@ -41,7 +41,8 @@ class NewsList(models.Model):
 
 class News(models.Model):
     title = models.CharField(max_length=100)
-    author = models.ForeignKey(User, on_delete=models.CASCADE, **optional)
+    author = models.ForeignKey(
+        User, on_delete=models.CASCADE, **optional, verbose_name="Author")
     content = models.TextField(blank=True)
     image = models.ImageField(upload_to=get_image_path)
     date_uploaded = models.DateTimeField(default=datetime.now, blank=True)

@@ -1,6 +1,8 @@
 from django.contrib import admin
 from django.contrib.auth.models import User
 from django.contrib.auth.admin import UserAdmin
+from django.utils.translation import ugettext_lazy as _
+from django.db.models import Q
 from account.models import (
     Committee,
     CommunityActivity,
@@ -29,14 +31,58 @@ class CommunityActivityInLine(admin.TabularInline):
     extra = 1
 
 
+class ImageListFilter(admin.SimpleListFilter):
+
+    title = _('Has photo')
+
+    parameter_name = 'has_photo'
+
+    def lookups(self, request, model_admin):
+
+        return (
+            ('yes', _('Yes')),
+            ('no',  _('No')),
+        )
+
+    def queryset(self, request, queryset):
+
+        if self.value() == 'yes':
+            return queryset.filter(image__isnull=False).exclude(image='')
+
+        if self.value() == 'no':
+            return queryset.filter(Q(image__isnull=True) | Q(image__exact=''))
+
+
+class ImageListFilter(admin.SimpleListFilter):
+
+    title = _('Has photo')
+
+    parameter_name = 'has_photo'
+
+    def lookups(self, request, model_admin):
+
+        return (
+            ('yes', _('Yes')),
+            ('no',  _('No')),
+        )
+
+    def queryset(self, request, queryset):
+
+        if self.value() == 'yes':
+            return queryset.filter(photo__isnull=False).exclude(photo='')
+
+        if self.value() == 'no':
+            return queryset.filter(Q(photo__isnull=True) | Q(photo__exact=''))
+
+
 class ProfileAdmin(admin.ModelAdmin):
     model = Profile
     readonly_fields = ('user',)
     actions = ['verify_selected', ]
     list_display = ['email', 'get_username',
                     'get_name', 'is_verified', 'get_userstaff']
-    list_filter = ['is_verified', 'cluster', 'committees', 'pylp_batch',
-                   'educationalbackground__school', 'membershiporganization__organization']
+    list_filter = ['is_verified', 'cluster', 'pylp_batch', 'educationalbackground__school',
+                   'membershiporganization__organization', 'committees', ImageListFilter]
     filter_horizontal = ('committees',)
     inlines = [EducationalBackgroundInLine,
                MembershipOrganizationInLine, CommunityActivityInLine]
