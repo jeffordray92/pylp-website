@@ -108,3 +108,10 @@ class CommunityActivityForm(forms.ModelForm):
 class LogInForm(forms.Form):
     user_name = forms.CharField(required=True)
     password = forms.CharField(required=True, widget=forms.PasswordInput)
+
+
+class PhotoSignatureForm(forms.Form):
+    photo = forms.ImageField(required=False, label="2x2 with white background is encouraged.",
+                             widget=forms.FileInput(attrs={'accept': ".png, .jpg", 'id': "photo_img"}))
+    e_sig = forms.ImageField(required=False, label="Please sign it in a blank white paper using black marker.",
+                             widget=forms.FileInput(attrs={'accept': ".png, .jpg", 'id': "esig_img"}))

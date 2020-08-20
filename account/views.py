@@ -26,6 +26,7 @@ from account.forms import (
     LogInForm,
     MembershipOrganizationForm,
     PersonalInformationForm,
+    PhotoSignatureForm,
     SignupForm
 )
 from account.utils import token_generator
@@ -112,9 +113,8 @@ class SignupView(View):
                 [user_form.cleaned_data['email']],
             )
             email.send(fail_silently=False)
-            return render(request, 'activate_account.html', {'header': "How To Activate Your Account",
-                                                             'instruction': instruction,
-                                                             'instruction_content': content})
+            profile_pk = urlsafe_base64_encode(force_bytes(profile.pk))
+            return redirect(reverse('photo-sig', kwargs={'pk': profile_pk}))
         else:
             return render(request, 'signup.html', {
                 'UserForm': user_form,
@@ -122,6 +122,32 @@ class SignupView(View):
                 'EducationForm': education_formset,
                 'MembershipForm': membership_formset,
                 'CommunityForm': activity_formset})
+
+
+class PhotoSignatureView(View):
+    def get(self, request, pk, *args, **kwargs):
+        if(request.user.is_authenticated):
+            return redirect('index')
+        try:
+            pk = force_text(urlsafe_base64_decode(pk))
+            Profile.objects.get(pk=pk)
+            return render(request, 'submit_photo_signature.html', {'photoSignatureForm': PhotoSignatureForm})
+        except:
+            return redirect('index')
+
+    def post(self, request, pk, *args, **kwargs):
+        photo_sig_form = PhotoSignatureForm(request.POST, request.FILES)
+        if photo_sig_form.is_valid():
+            pk = force_text(urlsafe_base64_decode(pk))
+            profile = Profile.objects.get(pk=pk)
+            if photo_sig_form.cleaned_data['photo']:
+                profile.photo = photo_sig_form.cleaned_data['photo']
+            if photo_sig_form.cleaned_data['e_sig']:
+                profile.electronic_signature = photo_sig_form.cleaned_data['e_sig']
+            profile.save()
+        instruction = SignUpInstructions.objects.last()
+        content = format_html(instruction.content)
+        return render(request, 'activate_account.html', {'header': "How To Activate Your Account", 'instruction_content': content})
 
 
 class VerificationView(View):
