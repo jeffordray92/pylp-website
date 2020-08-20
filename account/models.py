@@ -56,9 +56,9 @@ class Profile(DirtyFieldsMixin, models.Model):
     committees = models.ManyToManyField('Committee', blank=True)
     is_verified = models.BooleanField(default=False)
     photo = models.ImageField(upload_to=upload_to(
-        "photos", type="PHOTOS"), blank=True, null=True, verbose_name=u"Profile Picture")
+        "photos", type="PHOTOS"), blank=True, null=True, verbose_name=u"Profile Picture", storage=gd_storage)
     electronic_signature = models.ImageField(upload_to=upload_to(
-        "e_signature", type="SIGNATURES"), blank=True, null=True, verbose_name=u"Electronic Signature")
+        "e_signature", type="SIGNATURES"), blank=True, null=True, verbose_name=u"Electronic Signature", storage=gd_storage)
     email = models.EmailField(null=True)
     first_name = models.CharField(
         max_length=100, null=True, verbose_name=u"First Name")
@@ -95,7 +95,7 @@ class Profile(DirtyFieldsMixin, models.Model):
         null=True, verbose_name=u"Telephone Number", region="PH")
 
     def __str__(self):
-        return self.user.username
+        return self.user.first_name
 
     def save(self, *args, **kwargs):
         self.user.is_active = self.is_verified
