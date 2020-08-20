@@ -87,14 +87,14 @@
                             <li><a href="#gtco-news" class="button-home">News and Events</a></li>
                             {% if request.user.is_authenticated%}<li><a href="#gtco-subscribe" class="button-home">Resources</a></li>{%endif%}
                             <li><a href="{% url 'directory' %}" class="button-home">Directory</a></li>
-                            <li><a href="#gtco-footer" class="button-home">Contact Us</a></li>
+                            <li><a href="{% url 'contact-us' %}" class="button-home">Contact Us</a></li>
                             {% else %}
                             <li class="active"><a href="{% url 'index' %}">Home</a></li>
                             <li><a href="{% url 'index' %}#gtco-about">Who We Are</a></li>
                             <li><a href="{% url 'news_list' %}">News and Events</a></li>
                             {% if request.user.is_authenticated %}<li><a href="{% url 'resource_list' %}" class="button-home">Resources</a></li>{%endif%}
                             <li><a href="{% url 'directory' %}" class="button-home">Directory</a></li>
-                            <li><a href="#gtco-footer" class="button-home">Contact Us</a></li>
+                            <li><a href="{% url 'contact-us' %}" class="button-home">Contact Us</a></li>
                             {% endif %}
                         </ul>
                     </div>
