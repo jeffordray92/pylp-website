@@ -1,5 +1,5 @@
 {% load static %}
-
+{% load crispy_forms_tags%}
 <!DOCTYPE HTML>
 
 <html>
@@ -38,7 +38,8 @@
     <!--[if lt IE 9]>
     <script src="{% static 'js/respond.min.js' %}"></script>
     <![endif]-->
-
+    <script async charset="utf-8" src="//cdn.embedly.com/widgets/platform.js"></script>
+    <link rel="stylesheet" href="{% static 'css/content-styles.css' %}" type="text/css">
     </head>
     <body>
         
@@ -62,7 +63,7 @@
                             {% if twitter %}<li><a href="{{ twitter }}"><i class="icon-twitter"></i></a></li>{% endif %}
                             {% if instagram %}<li><a href="{{ instagram }}"><i class="icon-instagram"></i></a></li>{% endif %}
                             {% if linkedin %}<li><a href="{{ linkedin }}"><i class="icon-linkedin"></i></a></li>{% endif %}
-                            {% if request.user.is_authenticated %}
+                            {% if user.is_authenticated %}
                                 <li><a href="{% url 'profile' %}">{{request.user.email}}</a></li>
                                 <li><a href="{% url 'logout' %}">Sign out</a></li>
                             {% else %}
@@ -74,7 +75,6 @@
                 </div>
             </div>  
         </div>
-        {% block nav %}
         <nav class="gtco-nav sticky-banner" role="navigation">
             <div class="gtco-container">
                 
@@ -87,14 +87,14 @@
                             <li><a href="#gtco-news" class="button-home">News and Events</a></li>
                             {% if request.user.is_authenticated%}<li><a href="#gtco-subscribe" class="button-home">Resources</a></li>{%endif%}
                             <li><a href="{% url 'directory' %}" class="button-home">Directory</a></li>
-                            <li><a href="{% url 'contact-us' %}" class="button-home">Contact Us</a></li>
+                            <li><a href="#gtco-footer" class="button-home">Contact Us</a></li>
                             {% else %}
                             <li class="active"><a href="{% url 'index' %}">Home</a></li>
                             <li><a href="{% url 'index' %}#gtco-about">Who We Are</a></li>
                             <li><a href="{% url 'news_list' %}">News and Events</a></li>
                             {% if request.user.is_authenticated %}<li><a href="{% url 'resource_list' %}" class="button-home">Resources</a></li>{%endif%}
                             <li><a href="{% url 'directory' %}" class="button-home">Directory</a></li>
-                            <li><a href="{% url 'contact-us' %}" class="button-home">Contact Us</a></li>
+                            <li><a href="#gtco-footer" class="button-home">Contact Us</a></li>
                             {% endif %}
                         </ul>
                     </div>
@@ -102,9 +102,84 @@
                 
             </div>
         </nav>
-        {% endblock %}
     </div>
-    {% block content %}{% endblock %}
+    <header id="gtco-header" class="gtco-cover gtco-cover-sm" role="banner" style="background-image: url({% get_media_prefix %}/directory.jpg); height: 250px;" data-stellar-background-ratio="0.5">
+        <div class="gtco-container">
+            <div class="row" style="margin-top: 11em;">
+            </div>
+        </div>
+    </header>
+    {% block content %}
+    <div class="gtco-section gtco-gray-bg">
+        <div class="gtco-container">
+            <div class="row">
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <fieldset class="form-group">
+                        <legend class="border-bottom mb-4">
+                            Edit Profile
+                        </legend>
+                        {%if messages%}
+                            {%for message in messages%}
+                                <div class="alert alert-{{message.tags}}">
+                                    {{message}}
+                                </div>
+                            {%endfor%}
+                        {%endif%}
+                        {% if updateProfileForm.errors %}
+                        Please double-check the following:    
+                        {{updateProfileForm.errors}}
+                        {% endif %}
+                        <legend style="border-bottom-color: transparent;">
+                            Profile Photo
+                        </legend>
+                        <img id="image" style="max-height: 150px; max-width: 150px;" src="{{profile.photo.url}}" />
+                        {{ photoSignatureForm.photo|as_crispy_field }}
+                        <a href="#" onclick="foo()">remove image </a>
+                        <small class="text-muted">
+                            <a class="ml-2" onclick="foo()">remove image</a>
+                        </small>
+                        <legend  style="border-bottom-color: transparent; margin-top: 30px;" >
+                            Electronic Signature
+                        </legend>
+                        <img id="signature" style="max-height: 150px; max-width: 150px;" src="{{profile.electronic_signature.url}}" />
+                        {{ photoSignatureForm.e_sig|as_crispy_field }}
+                            I. PERSONAL INFORMATION
+                        </legend>
+                        {{updateProfileForm|crispy}}
+                        <legend  style="border-bottom-color: transparent; margin-top: 30px;" ></legend>
+                            II. EDUCATIONAL BACKGROUND
+                        </legend>
+                        <legend  style="border-bottom-color: transparent; margin-top: 30px;" ></legend>
+                            III. MEMBERSHIP IN YOUTH ORGANIZATIONS
+                        </legend>
+                        <legend  style="border-bottom-color: transparent; margin-top: 30px;" ></legend>
+                            IV. INVOLVEMENT IN YOUTH/COMMUNITY RELATED ACTIVITIES
+                        </legend>
+                    </fieldset>
+                    <div class="form-group">
+                        <button class="btn" style="background-color: black;" type="submit">Update</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script>
+        document.getElementById("photo_img").onchange = function () {
+        var reader = new FileReader();
+        reader.onload = function (e) {
+            document.getElementById("image").src = e.target.result;};
+        reader.readAsDataURL(this.files[0]);
+    }
+    
+        document.getElementById("esig_img").onchange = function () {
+        var reader = new FileReader();
+        reader.onload = function (e) {
+            document.getElementById("signature").src = e.target.result;};
+        reader.readAsDataURL(this.files[0]);
+    };
+    </script>
+    {% endblock %}
     
 
     <footer id="gtco-footer" role="contentinfo">
