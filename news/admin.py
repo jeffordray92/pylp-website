@@ -27,8 +27,8 @@ class NewsAdmin(admin.ModelAdmin):
     list_display = ['title', 'get_author', 'is_published']
     ordering = ['is_published']
     inlines = [AttachmentInLine, ]
-    list_filter = [('author__profile', custom_titled_filter(
-        'Author')), 'author__profile__cluster', 'is_published']
+    list_filter = [('author__profile', admin.RelatedOnlyFieldListFilter),
+                   'author__profile__cluster', 'is_published']
 
     def get_author(self, obj):
         name = obj.author.get_full_name()
