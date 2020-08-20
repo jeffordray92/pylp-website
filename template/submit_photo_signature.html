@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+{% load static %}
+{% load crispy_forms_tags%}
+{% block title %}Signup{% endblock %}
+{% block content %}
+<header id="gtco-header" class="gtco-cover gtco-cover-sm" role="banner" style="background-image: url({% get_media_prefix %}/directory.jpg)" data-stellar-background-ratio="0.5">
+    <div class="overlay"></div>
+    <div class="gtco-container">
+        <div class="row row-mt-15em">
+            <div class="col-md-7 mt-text text-left animate-box" data-animate-effect="fadeInUp">
+                <h1><strong>JOIN PYLP</strong></h1>  
+                <h2>Be part of the organization</h2>
+            </div>
+        </div>
+    </div>
+</header>
+<div class="gtco-section gtco-gray-bg">
+    <div class="gtco-container">
+        <div class="row">
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <fieldset class="form-group">
+                    <legend class="border-bottom mb-4">
+                        Submit Photo & Electronic Signature
+                    </legend>
+                    {%if messages%}
+                        {%for message in messages%}
+                            <div class="alert alert-{{message.tags}}">
+                                {{message}}
+                            </div>
+                        {%endfor%}
+                    {%endif%}
+                    {% if photoSignatureForm.errors %}
+                    Please double-check the following:    
+                    {{photoSignatureForm.errors}}
+                    {% endif %}
+                    <legend style="border-bottom-color: transparent;">
+                        Profile Photo
+                    </legend>
+                    <img id="image" style="max-height: 150px; max-width: 150px;" />
+                    {{ photoSignatureForm.photo|as_crispy_field }}
+                    <legend  style="border-bottom-color: transparent; margin-top: 30px;" >
+                        Electronic Signature
+                    </legend>
+                    <img id="signature" style="max-height: 150px; max-width: 150px;" />
+                    {{ photoSignatureForm.e_sig|as_crispy_field }}
+
+                </fieldset>
+                <div class="form-group">
+                    <button id="SkipButton" class="btn btn-primary"  type="submit" >Skip</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    document.getElementById("photo_img").onchange = function () {
+    var reader = new FileReader();
+    reader.onload = function (e) {
+        document.getElementById("image").src = e.target.result;};
+    reader.readAsDataURL(this.files[0]);
+    document.querySelector('#SkipButton').textContent = 'Submit';
+}
+
+    document.getElementById("esig_img").onchange = function () {
+    var reader = new FileReader();
+    reader.onload = function (e) {
+        document.getElementById("signature").src = e.target.result;};
+    reader.readAsDataURL(this.files[0]);
+    document.querySelector('#SkipButton').textContent = 'Submit';
+};
+</script>
+{% endblock %}
+{% block meta %}
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="The official website of the ACCESS Philippine Youth Leadership Program - Alumni Association, Inc." />
+    <meta name="keywords" content="access, pylp, access pylp, philippine youth leadership program" />
+    <meta name="author" content="ACCESS-PYLP" />
+    <meta name="google" content="notranslate">
+
+    <!-- Facebook and Twitter integration -->
+    <meta property="og:title" content="ACCESS PYLP Alumni Association, Inc."/>
+    <meta property="og:image" content="{% if request.is_secure %}https://{% else %}http://{% endif %}{{ request.get_host }}{{ header.image.url }}"/>
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="{{ request.build_absolute_uri }}"/>
+    <meta property="og:site_name" content="ACCESS PYLP Alumni Association, Inc."/>
+    <meta property="og:description" content="The official website of the ACCESS Philippine Youth Leadership Program - Alumni Association, Inc."/>
+    <meta name="twitter:title" content="ACCESS PYLP Alumni Association, Inc." />
+    <meta name="twitter:description" content="The official website of the ACCESS Philippine Youth Leadership Program - Alumni Association, Inc." />
+    <meta name="twitter:image" content="{% if request.is_secure %}https://{% else %}http://{% endif %}{{ request.get_host }}{{ header.image.url }}" />
+    <meta name="twitter:url" content="{{ request.build_absolute_uri }}" />
+    <meta name="twitter:card" content="summary_large_image" />
+{% endblock %}
