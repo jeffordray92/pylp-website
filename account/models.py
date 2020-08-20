@@ -13,15 +13,15 @@ from dirtyfields import DirtyFieldsMixin
 gd_storage = GoogleDriveStorage()
 
 
-def _update_filename(instance, filename, path):
+def _update_filename(instance, filename, path, type):
     path = path
     ext = filename.split('.')[-1]
-    filename = f"{instance.last_name.upper()}-{instance.pylp_batch}-{instance.pylp_year}-PHOTO.{ext}"
+    filename = f"{instance.last_name.upper()}-{instance.pylp_batch}-{instance.pylp_year}-{type.upper()}.{ext}"
     return os.path.join(path, filename)
 
 
-def upload_to(path):
-    return partial(_update_filename, path=path)
+def upload_to(path, type):
+    return partial(_update_filename, path=path, type=type)
 
 
 GENDER_CHOICES = (
@@ -55,10 +55,10 @@ class Profile(DirtyFieldsMixin, models.Model):
         "Cluster", on_delete=models.CASCADE, null=True, blank=True)
     committees = models.ManyToManyField('Committee', blank=True)
     is_verified = models.BooleanField(default=False)
-    photo = models.ImageField(upload_to=upload_to("photos"), blank=True,
-                              null=True, verbose_name=u"Profile Picture")
-    electronic_signature = models.ImageField(upload_to='e_signature', blank=True,
-                                             null=True, verbose_name=u"Electronic Signature")
+    photo = models.ImageField(upload_to=upload_to(
+        "photos", type="PHOTOS"), blank=True, null=True, verbose_name=u"Profile Picture")
+    electronic_signature = models.ImageField(upload_to=upload_to(
+        "e_signature", type="SIGNATURES"), blank=True, null=True, verbose_name=u"Electronic Signature")
     email = models.EmailField(null=True)
     first_name = models.CharField(
         max_length=100, null=True, verbose_name=u"First Name")
