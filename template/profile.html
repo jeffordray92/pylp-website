@@ -134,11 +134,12 @@
                             Profile Photo
                         </legend>
                         <img id="image" style="max-height: 150px; max-width: 150px;" src="{{profile.photo.url}}" />
-                        {{ photoSignatureForm.photo|as_crispy_field }}
-                        <a href="#" onclick="foo()">remove image </a>
+                        <br/>
                         <small class="text-muted">
-                            <a class="ml-2" onclick="foo()">remove image</a>
+                            <a href="#" class="ml-2" onclick="foo('image')">remove image</a>
                         </small>
+                        <input type="hidden" id="clearphoto" name="clearphoto" value="0" />
+                        {{ photoSignatureForm.photo|as_crispy_field }}
                         <legend  style="border-bottom-color: transparent; margin-top: 30px;" >
                             Electronic Signature
                         </legend>
@@ -170,6 +171,7 @@
         reader.onload = function (e) {
             document.getElementById("image").src = e.target.result;};
         reader.readAsDataURL(this.files[0]);
+        document.getElementById('clearphoto').value = 0;
     }
     
         document.getElementById("esig_img").onchange = function () {
@@ -177,6 +179,14 @@
         reader.onload = function (e) {
             document.getElementById("signature").src = e.target.result;};
         reader.readAsDataURL(this.files[0]);
+    }
+    function foo(id){
+    var image =  document.getElementById(id);
+     if (image != null)
+     {
+        document.getElementById(id).src = "";
+        document.getElementById('clearphoto').value = 1;
+     }
     };
     </script>
     {% endblock %}

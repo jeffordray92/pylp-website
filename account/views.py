@@ -160,9 +160,9 @@ class VerificationView(View):
         if user is not None and token_generator.check_token(user, token):
             # activate user and login:
             user.is_active = True
-            user.save()
-            account = Profile.objects.get(user_name=user.username)
+            account = Profile.objects.get(user=user)
             account.is_verified = True
+            user.save()
             account.save()
 
         messages.success(request, "Account Activated successfully. You may log in now.",
@@ -186,8 +186,8 @@ class LoginView(View):
                 login(request, user)
                 return redirect('index')
             else:
-                not_active = User.objects.filter(
-                    username=login_form.cleaned_data['user_name']).first()
+                not_active = User.objects.get(
+                    username=login_form.cleaned_data['user_name'])
                 if(not_active):
                     if(not_active.is_active == False):
                         instruction = SignUpInstructions.objects.last()
@@ -209,6 +209,30 @@ class LoginView(View):
             return render(request, 'login.html', {
                 'loginForm': login_form,
             })
+
+
+class ProfileView(View):
+    def get(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return redirect('index')
+        try:
+            profile = Profile.objects.get(user=request.user)
+            updateProfileForm = PersonalInformationForm(instance=profile)
+            return render(request, 'profile.html',
+                          {'photoSignatureForm': PhotoSignatureForm,
+                           'updateProfileForm': updateProfileForm,
+                           'profile': profile})
+        except:
+            print("Logged in user has no associated profile!")
+            return redirect('index')
+
+    def post(self, request, *args, **kwargs):
+        profile = Profile.objects.get(user=request.user)
+        personal_information_form = PersonalInformationForm(
+            request.POST, instance=profile)
+        if personal_information_form.is_valid():
+            personal_information_form.save(user=request.user)
+        return redirect('profile')
 
 
 def send_email(photo=None, e_sig=None):

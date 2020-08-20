@@ -39,7 +39,7 @@ class PersonalInformationForm(forms.ModelForm):
         exclude = ('user', 'is_verified', 'user_name', 'photo', 'electronic_signature',
                    'email', 'cluster', 'committees')
 
-    def save(self, commit=True, user=None):
+    def save(self, user, commit=True):
         profile = super(PersonalInformationForm, self).save(commit=False)
         profile.user = user
         profile.email = user.email
