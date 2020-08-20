@@ -133,17 +133,30 @@
                         <legend style="border-bottom-color: transparent;">
                             Profile Photo
                         </legend>
+                        {% if profile.photo %}
                         <img id="image" style="max-height: 150px; max-width: 150px;" src="{{profile.photo.url}}" />
+                        {% else %}
+                        <img id="image" style="max-height: 150px; max-width: 150px;" src="" />
+                        {% endif%}
                         <br/>
                         <small class="text-muted">
                             <a href="#" class="ml-2" onclick="foo('image')">remove image</a>
                         </small>
-                        <input type="hidden" id="clearphoto" name="clearphoto" value="0" />
+                        <input type="hidden" id="clearphoto" name="clearphoto" value=0 />
                         {{ photoSignatureForm.photo|as_crispy_field }}
                         <legend  style="border-bottom-color: transparent; margin-top: 30px;" >
                             Electronic Signature
                         </legend>
+                        {% if profile.electronic_signature %}
                         <img id="signature" style="max-height: 150px; max-width: 150px;" src="{{profile.electronic_signature.url}}" />
+                        {% else %}
+                        <img id="signature" style="max-height: 150px; max-width: 150px;" src="" />
+                        {% endif%}
+                        <br/>
+                        <small class="text-muted">
+                            <a href="#" class="ml-2" onclick="foo('signature')">remove signature</a>
+                        </small>
+                        <input type="hidden" id="clearsig" name="clearsig" value=0 />
                         {{ photoSignatureForm.e_sig|as_crispy_field }}
                             I. PERSONAL INFORMATION
                         </legend>
@@ -171,7 +184,7 @@
         reader.onload = function (e) {
             document.getElementById("image").src = e.target.result;};
         reader.readAsDataURL(this.files[0]);
-        document.getElementById('clearphoto').value = 0;
+        document.getElementById("clearphoto").value = 0;
     }
     
         document.getElementById("esig_img").onchange = function () {
@@ -179,13 +192,15 @@
         reader.onload = function (e) {
             document.getElementById("signature").src = e.target.result;};
         reader.readAsDataURL(this.files[0]);
+        document.getElementById("clearsig").value = 0;
     }
     function foo(id){
     var image =  document.getElementById(id);
      if (image != null)
      {
         document.getElementById(id).src = "";
-        document.getElementById('clearphoto').value = 1;
+        if(id == "image"){document.getElementById("clearphoto").value = 1;}
+        if(id == "signature"){document.getElementById("clearsig").value = 1;}
      }
     };
     </script>

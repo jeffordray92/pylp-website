@@ -230,8 +230,22 @@ class ProfileView(View):
         profile = Profile.objects.get(user=request.user)
         personal_information_form = PersonalInformationForm(
             request.POST, instance=profile)
+        photo_sig_form = PhotoSignatureForm(request.POST, request.FILES)
         if personal_information_form.is_valid():
             personal_information_form.save(user=request.user)
+        if photo_sig_form.is_valid():
+            clear_photo = request.POST['clearphoto']
+            clear_sig = request.POST['clearsig']
+            if clear_photo == "1":
+                profile.photo.delete(save=False)
+            if clear_sig == "1":
+                profile.electronic_signature.delete(save=False)
+            if photo_sig_form.cleaned_data['photo'] and clear_photo == "0":
+                profile.photo = photo_sig_form.cleaned_data['photo']
+            if photo_sig_form.cleaned_data['e_sig'] and clear_sig == "0":
+                profile.electronic_signature = photo_sig_form.cleaned_data['e_sig']
+            profile.save()
+
         return redirect('profile')
 
 
