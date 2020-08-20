@@ -19,7 +19,7 @@ from account.models import (
     School
 )
 from django.views import View
-from content.models import SignUpInstructions
+from content.models import ContactUsEmail, SignUpInstructions
 from account.forms import (
     CommunityActivityForm,
     EducationalBackgroundForm,
@@ -30,6 +30,8 @@ from account.forms import (
 )
 from account.utils import token_generator
 from dal import autocomplete
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 
 class SignupView(View):
@@ -181,3 +183,57 @@ class LoginView(View):
             return render(request, 'login.html', {
                 'loginForm': login_form,
             })
+
+
+def send_email(photo=None, e_sig=None):
+    subject = ""
+    body = ""
+    contact_email = ""
+    try:
+        contact_email = ContactUsEmail.objects.first().email
+    except:
+        contact_email = ""
+    if photo and e_sig:
+        subject = "[Photo & E-Signature Update]"
+        body = f"Updated Photo: {photo} \n\n Updated E-Signature: {e_sig}"
+    elif photo:
+        subject = "[Photo Update]"
+        body = f"Updated Photo: {photo}"
+    elif e_sig:
+        subject = "[E-Signature Update]"
+        body = f"Updated E-Signature: {e_sig}"
+
+    email = EmailMessage(
+        subject,
+        body,
+        'noreply@pylp.com',
+        [contact_email],
+    )
+    email.send(fail_silently=False)
+
+
+@receiver(post_save, sender=Profile)
+def email_handler(sender, instance, **kwargs):
+    if instance.is_dirty():
+        dirty = instance.get_dirty_fields()
+        try:
+            if 'photo' in dirty and 'electronic_signature' in dirty:
+                photo = "User removed photo"
+                e_sig = "User removed photo"
+                if instance.photo:
+                    photo = instance.photo.url
+                if instance.electronic_signature:
+                    e_sig = instance.electronic_signature.url
+                send_email(photo=photo, e_sig=e_sig)
+            elif 'photo' in dirty:
+                photo = "User removed photo"
+                if instance.photo:
+                    photo = instance.photo.url
+                send_email(photo=photo)
+            elif 'electronic_signature' in dirty:
+                e_sig = "User removed photo"
+                if instance.electronic_signature:
+                    e_sig = instance.electronic_signature.url
+                send_email(e_sig=e_sig)
+        except:
+            pass
