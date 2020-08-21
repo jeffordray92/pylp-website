@@ -30,10 +30,19 @@
                             </div>
                         {%endfor%}
                     {%endif%}
-                    {% if UserForm.errors %}
+                    {% if UserForm.errors or EducationForm.errors or MembershipForm.errors or CommunityForm.errors %}
                     Please double-check the following:    
                     {{UserForm.errors}}
                     {{InformationForm.errors}}
+                        {% for dict in EducationForm.errors %}
+                            {{dict}}
+                        {% endfor %}
+                        {% for dict in MembershipForm.errors %}
+                            {{dict}}
+                        {% endfor %}
+                        {% for dict in CommunityForm.errors %}
+                            {{dict}}
+                        {% endfor %}
                     {% endif %}
                     {{ UserForm|crispy }}
                     <legend class="border-bottom mb-4">

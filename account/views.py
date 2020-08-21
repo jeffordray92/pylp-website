@@ -5,7 +5,7 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import EmailMessage
-from django.forms import formset_factory
+from django.forms import BaseFormSet, formset_factory
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import (
     force_bytes,
@@ -35,17 +35,21 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 
 
+class RequiredFormSet(BaseFormSet):
+    def __init__(self, *args, **kwargs):
+        super(RequiredFormSet, self).__init__(*args, **kwargs)
+        for form in self.forms:
+            form.empty_permitted = False
+
+
 class SignupView(View):
 
     EducationalBackgroundFormSet = formset_factory(
-        EducationalBackgroundForm, extra=1, max_num=4
-    )
+        form=EducationalBackgroundForm, formset=RequiredFormSet, extra=2, max_num=4)
     MembershipOrganizationFormSet = formset_factory(
-        MembershipOrganizationForm, extra=1, max_num=3
-    )
+        form=MembershipOrganizationForm, formset=RequiredFormSet, extra=1)
     CommunityActivityFormSet = formset_factory(
-        CommunityActivityForm, extra=1, max_num=3
-    )
+        form=CommunityActivityForm, formset=RequiredFormSet, extra=1)
 
     def get(self, request, *args, **kwargs):
         if(request.user.is_authenticated):
@@ -76,7 +80,7 @@ class SignupView(View):
             request.POST, prefix='membership')
         activity_formset = self.CommunityActivityFormSet(
             request.POST, prefix='activity')
-        if user_form.is_valid() and personal_information_form.is_valid():
+        if user_form.is_valid() and personal_information_form.is_valid() and education_formset.is_valid() and membership_formset.is_valid() and activity_formset.is_valid():
             userform = User.objects.create_user(
                 username=user_form.cleaned_data['username'],
                 first_name=personal_information_form.cleaned_data['first_name'],
@@ -116,6 +120,8 @@ class SignupView(View):
             profile_pk = urlsafe_base64_encode(force_bytes(profile.pk))
             return redirect(reverse('photo-sig', kwargs={'pk': profile_pk}))
         else:
+            print(education_formset.errors)
+            print(user_form.errors)
             return render(request, 'signup.html', {
                 'UserForm': user_form,
                 'InformationForm': personal_information_form,

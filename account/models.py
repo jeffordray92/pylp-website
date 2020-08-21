@@ -116,13 +116,13 @@ class Profile(DirtyFieldsMixin, models.Model):
 
 class EducationalBackground(models.Model):
     profile = models.ForeignKey(
-        "Profile", on_delete=models.CASCADE, editable=False, null=True)
+        "Profile", on_delete=models.CASCADE, editable=False)
     education_type = models.CharField(
         max_length=1, choices=EDUCATIONAL_TYPE, default="C")
     school = models.ForeignKey(
-        "School", on_delete=models.CASCADE, null=True)
-    inclusive_date = models.DateField(null=True)
-    level_attained = models.CharField(max_length=150, null=True)
+        "School", on_delete=models.CASCADE)
+    inclusive_date = models.DateField()
+    level_attained = models.CharField(max_length=150)
 
     class Meta:
         verbose_name_plural = "Educational Background"
@@ -130,11 +130,11 @@ class EducationalBackground(models.Model):
 
 class MembershipOrganization(models.Model):
     profile = models.ForeignKey(
-        "Profile", on_delete=models.CASCADE, editable=False, null=True)
+        "Profile", on_delete=models.CASCADE, editable=False)
     organization = models.ForeignKey(
-        "Organization", on_delete=models.CASCADE, null=True)
-    inclusive_date = models.DateField(null=True)
-    position_held = models.CharField(max_length=150, null=True)
+        "Organization", on_delete=models.CASCADE)
+    inclusive_date = models.DateField()
+    position_held = models.CharField(max_length=150)
 
     class Meta:
         verbose_name_plural = "Membership in Youth Organizations"
@@ -142,12 +142,12 @@ class MembershipOrganization(models.Model):
 
 class CommunityActivity(models.Model):
     profile = models.ForeignKey(
-        "Profile", on_delete=models.CASCADE, editable=False, null=True)
-    activity_name = models.CharField(max_length=150, null=True)
-    activity_description = models.CharField(max_length=150, null=True)
+        "Profile", on_delete=models.CASCADE, editable=False)
+    activity_name = models.CharField(max_length=150)
+    activity_description = models.CharField(max_length=150)
     sponsor_organization = models.ForeignKey(
-        "Organization", on_delete=models.CASCADE, null=True)
-    inclusive_date = models.DateField(null=True)
+        "Organization", on_delete=models.CASCADE)
+    inclusive_date = models.DateField()
 
     class Meta:
         verbose_name_plural = "Involvement in Youth/Community Related Activities"
