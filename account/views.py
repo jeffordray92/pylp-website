@@ -5,17 +5,19 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import EmailMessage
-from django.forms import BaseFormSet, formset_factory
+from django.forms import BaseModelFormSet, formset_factory, modelformset_factory
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import (
     force_bytes,
     force_text
 )
 from django.urls import reverse
-from django.utils.html import format_html
+from django.utils.html import format_html, strip_tags
 from account.models import (
-    Profile,
+    CommunityActivity,
     EducationalBackground,
+    MembershipOrganization,
+    Profile,
     School
 )
 from django.views import View
@@ -35,7 +37,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 
 
-class RequiredFormSet(BaseFormSet):
+class RequiredFormSet(BaseModelFormSet):
     def __init__(self, *args, **kwargs):
         super(RequiredFormSet, self).__init__(*args, **kwargs)
         for form in self.forms:
@@ -44,26 +46,26 @@ class RequiredFormSet(BaseFormSet):
 
 class SignupView(View):
 
-    EducationalBackgroundFormSet = formset_factory(
-        form=EducationalBackgroundForm, formset=RequiredFormSet, extra=2, max_num=4)
-    MembershipOrganizationFormSet = formset_factory(
-        form=MembershipOrganizationForm, formset=RequiredFormSet, extra=1)
-    CommunityActivityFormSet = formset_factory(
-        form=CommunityActivityForm, formset=RequiredFormSet, extra=1)
+    EducationalBackgroundFormSet = modelformset_factory(EducationalBackground,
+                                                        form=EducationalBackgroundForm, formset=RequiredFormSet, extra=2, max_num=4)
+    MembershipOrganizationFormSet = modelformset_factory(MembershipOrganization,
+                                                         form=MembershipOrganizationForm, formset=RequiredFormSet, extra=1)
+    CommunityActivityFormSet = modelformset_factory(CommunityActivity,
+                                                    form=CommunityActivityForm, formset=RequiredFormSet, extra=1)
 
     def get(self, request, *args, **kwargs):
         if(request.user.is_authenticated):
             return redirect('index')
 
-        education_formset = self.EducationalBackgroundFormSet(
-            prefix='education'
-        )
-        membership_formset = self.MembershipOrganizationFormSet(
-            prefix='membership'
-        )
-        activity_formset = self.CommunityActivityFormSet(
-            prefix='activity'
-        )
+        education_formset = self.EducationalBackgroundFormSet(queryset=EducationalBackground.objects.none(),
+                                                              prefix='education'
+                                                              )
+        membership_formset = self.MembershipOrganizationFormSet(queryset=MembershipOrganization.objects.none(),
+                                                                prefix='membership'
+                                                                )
+        activity_formset = self.CommunityActivityFormSet(queryset=MembershipOrganization.objects.none(),
+                                                         prefix='activity'
+                                                         )
         return render(request, 'signup.html',
                       {'UserForm': SignupForm,
                        'InformationForm': PersonalInformationForm,
@@ -108,11 +110,11 @@ class SignupView(View):
             activate_url = f'http://{domain}{link}'
             instruction = SignUpInstructions.objects.last()
             content = format_html(instruction.content)
-            email_body = "Thank you for registering at PYLP Alumni Association, Inc.\n\nTo get started, activate your account by clicking the" \
-                " below.\n" + activate_url
+            content_value = strip_tags(content)
+            email_body = f"Thank you for registering at PYLP Alumni Association, Inc.\n\nTo get started, activate your account by clicking the link below.\n{activate_url}\n\n{content_value}"
             email = EmailMessage(
                 email_subject,
-                email_body+content,
+                email_body,
                 'noreply@pylp.com',
                 [user_form.cleaned_data['email']],
             )
@@ -120,8 +122,6 @@ class SignupView(View):
             profile_pk = urlsafe_base64_encode(force_bytes(profile.pk))
             return redirect(reverse('photo-sig', kwargs={'pk': profile_pk}))
         else:
-            print(education_formset.errors)
-            print(user_form.errors)
             return render(request, 'signup.html', {
                 'UserForm': user_form,
                 'InformationForm': personal_information_form,
@@ -218,15 +218,35 @@ class LoginView(View):
 
 
 class ProfileView(View):
+
+    EducationalBackgroundFormSet = modelformset_factory(EducationalBackground, formset=RequiredFormSet,
+                                                        form=EducationalBackgroundForm, extra=0, max_num=4)
+    MembershipOrganizationFormSet = modelformset_factory(MembershipOrganization,
+                                                         form=MembershipOrganizationForm, formset=RequiredFormSet, extra=0)
+    CommunityActivityFormSet = modelformset_factory(CommunityActivity,
+                                                    form=CommunityActivityForm, formset=RequiredFormSet, extra=0)
+
     def get(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
             return redirect('index')
         try:
             profile = Profile.objects.get(user=request.user)
+            educ = EducationalBackground.objects.filter(profile=profile)
+            membership = MembershipOrganization.objects.filter(profile=profile)
+            activity = CommunityActivity.objects.filter(profile=profile)
+            education_formset = self.EducationalBackgroundFormSet(
+                queryset=educ, prefix="education")
+            membership_formset = self.MembershipOrganizationFormSet(
+                queryset=membership, prefix='membership')
+            activity_formset = self.CommunityActivityFormSet(
+                queryset=activity, prefix='activity')
             updateProfileForm = PersonalInformationForm(instance=profile)
             return render(request, 'profile.html',
                           {'photoSignatureForm': PhotoSignatureForm,
                            'updateProfileForm': updateProfileForm,
+                           'EducationForm': education_formset,
+                           'MembershipForm': membership_formset,
+                           'CommunityForm': activity_formset,
                            'profile': profile})
         except:
             print("Logged in user has no associated profile!")
@@ -236,10 +256,21 @@ class ProfileView(View):
         profile = Profile.objects.get(user=request.user)
         personal_information_form = PersonalInformationForm(
             request.POST, instance=profile)
+        education_formset = self.EducationalBackgroundFormSet(
+            request.POST, prefix='education')
+        membership_formset = self.MembershipOrganizationFormSet(
+            request.POST, prefix='membership')
+        activity_formset = self.CommunityActivityFormSet(
+            request.POST, prefix='activity')
         photo_sig_form = PhotoSignatureForm(request.POST, request.FILES)
-        if personal_information_form.is_valid():
+        if personal_information_form.is_valid() and education_formset.is_valid() and membership_formset.is_valid() and activity_formset.is_valid() and photo_sig_form.is_valid():
             personal_information_form.save(user=request.user)
-        if photo_sig_form.is_valid():
+            for education_form in education_formset:
+                education_form.save(profile=profile)
+            for membership_form in membership_formset:
+                membership_form.save(profile=profile)
+            for activity_form in activity_formset:
+                activity_form.save(profile=profile)
             clear_photo = request.POST['clearphoto']
             clear_sig = request.POST['clearsig']
             if clear_photo == "1":
@@ -251,8 +282,16 @@ class ProfileView(View):
             if photo_sig_form.cleaned_data['e_sig'] and clear_sig == "0":
                 profile.electronic_signature = photo_sig_form.cleaned_data['e_sig']
             profile.save()
-
-        return redirect('profile')
+            return redirect('profile')
+        else:
+            print(education_formset.errors)
+            return render(request, 'profile.html',
+                          {'photoSignatureForm': photo_sig_form,
+                           'updateProfileForm': personal_information_form,
+                           'EducationForm': education_formset,
+                           'MembershipForm': membership_formset,
+                           'CommunityForm': activity_formset,
+                           'profile': profile})
 
 
 def send_email(photo=None, e_sig=None):
@@ -282,7 +321,7 @@ def send_email(photo=None, e_sig=None):
     email.send(fail_silently=False)
 
 
-@receiver(post_save, sender=Profile)
+@ receiver(post_save, sender=Profile)
 def email_handler(sender, instance, **kwargs):
     if instance.is_dirty():
         dirty = instance.get_dirty_fields()
