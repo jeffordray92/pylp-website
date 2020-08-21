@@ -126,9 +126,18 @@
                                 </div>
                             {%endfor%}
                         {%endif%}
-                        {% if updateProfileForm.errors %}
-                        Please double-check the following:    
+                        {% if updateProfileForm.errors or EducationForm.errors or MembershipForm.errors or CommunityForm.errors %}
+                        Please double-check the following:
                         {{updateProfileForm.errors}}
+                            {% for dict in EducationForm.errors %}
+                                {{dict}}
+                            {% endfor %}
+                            {% for dict in MembershipForm.errors %}
+                                {{dict}}
+                            {% endfor %}
+                            {% for dict in CommunityForm.errors %}
+                                {{dict}}
+                            {% endfor %}
                         {% endif %}
                         <legend style="border-bottom-color: transparent;">
                             Profile Photo
@@ -164,12 +173,18 @@
                         <legend  style="border-bottom-color: transparent; margin-top: 30px;" ></legend>
                             II. EDUCATIONAL BACKGROUND
                         </legend>
+                        {{ EducationForm.management_form|crispy }}
+                        {{EducationForm|crispy}}
                         <legend  style="border-bottom-color: transparent; margin-top: 30px;" ></legend>
                             III. MEMBERSHIP IN YOUTH ORGANIZATIONS
                         </legend>
+                        {{ MembershipForm.management_form|crispy }}
+                        {{MembershipForm|crispy}}
                         <legend  style="border-bottom-color: transparent; margin-top: 30px;" ></legend>
                             IV. INVOLVEMENT IN YOUTH/COMMUNITY RELATED ACTIVITIES
                         </legend>
+                        {{ CommunityForm.management_form|crispy }}
+                        {{CommunityForm|crispy}}
                     </fieldset>
                     <div class="form-group">
                         <button class="btn" style="background-color: black;" type="submit">Update</button>
