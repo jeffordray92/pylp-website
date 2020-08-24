@@ -6,6 +6,7 @@ from account.views import (
     PhotoSignatureView,
     ProfileView,
     SignupView,
+    organization_autocomplete,
     school_autocomplete,
     VerificationView,
 )
@@ -18,6 +19,8 @@ urlpatterns = [
     path('activate/<uidb64>/<token>', VerificationView.as_view(), name='activate'),
     path('profile/', ProfileView.as_view(), name="profile"),
     url(r'^school-autocomplete/$', school_autocomplete.as_view(create_field='school_name'),
-        name='school-autocomplete')
+        name='school-autocomplete'),
+    url(r'^organization-autocomplete/$', organization_autocomplete.as_view(create_field='organization_name'),
+        name='organization-autocomplete')
 
 ]
