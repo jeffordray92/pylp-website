@@ -80,6 +80,9 @@ class MembershipOrganizationForm(forms.ModelForm):
         fields = '__all__'
         required = '__all__'
         exclude = ('profile',)
+        widgets = {
+            'organization': autocomplete.ModelSelect2(url='organization-autocomplete')
+        }
 
     def save(self, commit=True, profile=None):
         membership = super(MembershipOrganizationForm, self).save(commit=False)
@@ -99,6 +102,9 @@ class CommunityActivityForm(forms.ModelForm):
         fields = '__all__'
         required = '__all__'
         exclude = ('profile',)
+        widgets = {
+            'sponsor_organization': autocomplete.ModelSelect2(url='organization-autocomplete')
+        }
 
     def save(self, commit=True, profile=None):
         activity = super(CommunityActivityForm, self).save(commit=False)
