@@ -58,6 +58,9 @@ class EducationalBackgroundForm(forms.ModelForm):
         fields = '__all__'
         required = '__all__'
         exclude = ('profile',)
+        widgets = {
+            'school': autocomplete.ModelSelect2(url='school-autocomplete')
+        }
 
     def save(self, commit=True, profile=None):
         education = super(EducationalBackgroundForm, self).save(commit=False)

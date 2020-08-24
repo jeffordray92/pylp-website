@@ -1,3 +1,4 @@
+from dal import autocomplete
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseNotFound
 from django.shortcuts import render, redirect
 from django.contrib import messages
@@ -47,7 +48,7 @@ class RequiredFormSet(BaseModelFormSet):
 class SignupView(View):
 
     EducationalBackgroundFormSet = modelformset_factory(EducationalBackground,
-                                                        form=EducationalBackgroundForm, formset=RequiredFormSet, extra=2, max_num=4)
+                                                        form=EducationalBackgroundForm, formset=RequiredFormSet, extra=1, max_num=4)
     MembershipOrganizationFormSet = modelformset_factory(MembershipOrganization,
                                                          form=MembershipOrganizationForm, formset=RequiredFormSet, extra=1)
     CommunityActivityFormSet = modelformset_factory(CommunityActivity,
@@ -346,3 +347,12 @@ def email_handler(sender, instance, **kwargs):
                 send_email(e_sig=e_sig)
         except:
             pass
+
+
+class school_autocomplete(autocomplete.Select2QuerySetView):
+
+    def get_queryset(self):
+        qs = School.objects.all()
+        if self.q:
+            qs = qs.filter(school_name__istartswith=self.q)
+        return qs
