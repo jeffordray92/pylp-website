@@ -17,7 +17,7 @@ urlpatterns = [
          PhotoSignatureView.as_view(), name="photo-sig"),
     path('activate/<uidb64>/<token>', VerificationView.as_view(), name='activate'),
     path('profile/', ProfileView.as_view(), name="profile"),
-    url(r'^school-autocomplete/$', school_autocomplete.as_view(),
+    url(r'^school-autocomplete/$', school_autocomplete.as_view(create_field='school_name'),
         name='school-autocomplete')
 
 ]

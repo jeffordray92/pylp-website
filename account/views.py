@@ -36,6 +36,9 @@ from account.utils import token_generator
 from dal import autocomplete
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django import http
+from django.core.exceptions import ImproperlyConfigured
+from django.utils.translation import ugettext as _
 
 
 class RequiredFormSet(BaseModelFormSet):
@@ -355,4 +358,50 @@ class school_autocomplete(autocomplete.Select2QuerySetView):
         qs = School.objects.all()
         if self.q:
             qs = qs.filter(school_name__istartswith=self.q)
+            print(qs)
         return qs
+
+    def get_create_option(self, context, q):
+        """Form the correct create_option to append to results."""
+        create_option = []
+        display_create_option = False
+        if self.create_field and q:
+            page_obj = context.get('page_obj', None)
+            if page_obj is None or page_obj.number == 1:
+                display_create_option = True
+
+            # Don't offer to create a new option if a
+            # case-insensitive) identical one already exists
+            existing_options = (self.get_result_label(result).lower()
+                                for result in context['object_list'])
+            if q.lower() in existing_options:
+                display_create_option = False
+
+        if display_create_option:
+            create_option = [{
+                'id': q,
+                'text': _('Create "%(new_value)s"') % {'new_value': q},
+                'create_id': True,
+            }]
+        return create_option
+
+    def post(self, request, *args, **kwargs):
+        """Create an object given a text after checking permissions."""
+        # bypass post so that sign up users can add schools and organization
+        # if not self.has_add_permission(request):
+        # return http.HttpResponseForbidden()
+
+        # if not self.create_field:
+        #raise ImproperlyConfigured('Missing "create_field"')
+
+        text = request.POST.get('text', None)
+
+        if text is None:
+            return http.HttpResponseBadRequest()
+
+        result = self.create_object(text)
+
+        return http.JsonResponse({
+            'id': result.pk,
+            'text': self.get_result_label(result),
+        })
