@@ -99,7 +99,6 @@
                 </div>
             </div>
         </div>
-        {% if resources %}
         {% if request.user.is_authenticated %}
         <div id="gtco-subscribe">
             <div class="gtco-container">
@@ -110,6 +109,7 @@
                     </div>
                 </div>
                 <div class="row">
+                    {% if resources %}
                 {% for resource in resources %}
                     <div class="col-lg-4 col-md-4 col-sm-6">
                         <a href="{% url 'resource' resource.slug %}" class="gtco-card-item" target="_blank">
@@ -117,23 +117,23 @@
                                 <div class="overlay"><i class="ti-plus"></i></div>
                                 {% if resource.image %}
                                 <img src="{{ resource.image.url }}" alt="Image" class="img-responsive">
-                                {% else %}
-                                <img src="{% static 'images/logo.jpg' %}" alt="Image" class="img-responsive">
+                                <!-- {% else %}
+                                <img src="{% static 'images/logo.jpg' %}" alt="Image" class="img-responsive"> -->
                                 {% endif %}
                             </figure>
                             <div class="gtco-text">
-                                <h2>{{ resource.title|truncatechars:55 }}</h2>
-                                <p>{{ resource.description|safe }}</p>
+                                <h2>{{ resource.title }}</h2>
+                                <p>{{ resource.description|safe|truncatechars:55 }}</p>
                             </div>
                         </a>
                     </div>
                 {% endfor %}
+                {%endif%}
                 </div>
                 <div><a href="{% url 'resource_list' %}" style="border-color: #ebebeb" class="btn text-center gtco-card-item">See all resources</a></div>
             </div>
         </div>
         {% endif %}
-        {% endif %}        
     </div>
 
 {% endblock %}

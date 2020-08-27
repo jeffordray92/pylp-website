@@ -9,8 +9,12 @@
         <div class="gtco-container">
             <div class="row row-mt-15em">
                 <div class="col-md-7 mt-text text-left animate-box" data-animate-effect="fadeInUp">
+                    {% if details %}
                     <h1><strong>{{ details.title }}</strong></h1>  
                     <h2>{{ details.subtitle }}</h2>
+                    {%else%}
+                    <h1><strong>Resources</strong></h1>  
+                    {%endif%}
                 </div>
             </div>
         </div>
@@ -31,8 +35,8 @@
                             {% endif %}
                         </figure>
                         <div class="gtco-text text-left">
-                            <h2>{{ resource.title|truncatechars:55 }}</h2>
-                            <p>{{ resource.description|safe }}</p>
+                            <h2>{{ resource.title }}</h2>
+                            <p>{{ resource.description|safe|truncatechars:55 }}</p>
                         </div>
                     </a>
                 </div>
