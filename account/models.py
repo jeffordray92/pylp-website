@@ -4,6 +4,8 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.core.mail import EmailMessage
 from django.core.validators import MaxValueValidator, MinValueValidator
+from django.db.models.signals import post_delete
+from django.dispatch import receiver
 from phonenumber_field.modelfields import PhoneNumberField
 from gdstorage.storage import GoogleDriveStorage
 from functools import partial
@@ -27,6 +29,7 @@ def upload_to(path, type):
 GENDER_CHOICES = (
     ('M', 'Male'),
     ('F', 'Female'),
+    ('O', 'Other')
 )
 
 EDUCATIONAL_TYPE = (
@@ -34,6 +37,13 @@ EDUCATIONAL_TYPE = (
     ('H', 'High School'),
     ('C', 'College'),
     ('P', 'Post Graduate'),
+)
+
+CIVIL_OPTIONS = (
+    ('M', 'Married'),
+    ('S', 'Single'),
+    ('D', 'Divorced'),
+    ('W', 'Widowed')
 )
 
 
@@ -67,14 +77,14 @@ class Profile(DirtyFieldsMixin, models.Model):
     birth_date = models.DateField(null=True, verbose_name=u"Date of Birth")
     birth_place = models.CharField(
         max_length=100, null=True, verbose_name=u"Place of Birth")
-    civil_status = models.CharField(
-        max_length=100, null=True, verbose_name=u"Civil Status")
+    civil_status = models.CharField(null=True,
+                                    max_length=100, choices=CIVIL_OPTIONS, verbose_name=u"Civil Status")
     gender = models.CharField(
         max_length=1, choices=GENDER_CHOICES, default="M")
     pylp_batch = models.PositiveIntegerField(
         null=True, verbose_name=u"PYLP Batch")
     pylp_year = models.IntegerField(
-        null=True, validators=[MinValueValidator(1984), max_value_current_year], verbose_name=u"PYLP Year")
+        null=True, validators=[MinValueValidator(1984), max_value_current_year], verbose_name=u"PYLP Year", choices=year_choices())
     host_family = models.CharField(
         max_length=100, null=True, verbose_name=u"Host Family")
     present_address = models.CharField(
@@ -181,3 +191,12 @@ class Committee(models.Model):
 
     def __str__(self):
         return self.name
+
+
+@receiver(post_delete, sender=Profile)
+def my_post_delete_callback(sender, **kwargs):
+    try:
+        if kwargs['instance'].user:
+            kwargs['instance'].user.delete()
+    except:
+        pass

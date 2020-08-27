@@ -27,14 +27,17 @@ class NewsAdmin(admin.ModelAdmin):
     list_display = ['title', 'get_author', 'is_published']
     ordering = ['is_published']
     inlines = [AttachmentInLine, ]
-    list_filter = [('author__profile', admin.RelatedOnlyFieldListFilter),
-                   'author__profile__cluster', 'is_published']
+    list_filter = [('author', admin.RelatedOnlyFieldListFilter),
+                   'author__cluster', 'is_published']
 
     def get_author(self, obj):
-        name = obj.author.get_full_name()
-        if name != "":
-            return name
-        return obj.author.get_username()
+        try:
+            name = obj.author.user.get_full_name()
+            if name != "":
+                return name
+            return obj.author.user.get_username()
+        except:
+            pass
     get_author.short_description = 'Author'
 
     # def add_view(self, request, form_url='', extra_context=None):
