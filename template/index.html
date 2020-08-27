@@ -59,9 +59,9 @@
                                 <img src="{{ article.image.url }}" alt="Image" class="img-responsive">
                                 {%endif%}
                             </figure>
-                            <div class="gtco-text" style="min-height: 236.8px;">
-                                <h2>{{ article.title|truncatechars:55 }}</h2>
-                                <p>{{ article.content|safe|striptags|truncatechars:140 }}</p>
+                            <div class="gtco-text" style="min-height: 210.4px; max-height: 210.4px;">
+                                <h2 style="min-height: 45px; max-height: 45px;">{{ article.title|truncatechars:55 }}</h2>
+                                <p style="min-height: 55px; max-height: 55px;">{{ article.content|safe|striptags|truncatechars:55 }}</p>
                                 <p><span class="btn btn-primary">Learn more</span></p>
                             </div>
                         </a>
@@ -121,7 +121,7 @@
                                 <img src="{% static 'images/logo.jpg' %}" alt="Image" class="img-responsive"> -->
                                 {% endif %}
                             </figure>
-                            <div class="gtco-text" style="min-height: 116px;">
+                            <div class="gtco-text" style="min-height: 116px; max-height: 116px;">
                                 <h2>{{ resource.title }}</h2>
                                 <p>{{ resource.description|safe|truncatechars:55 }}</p>
                             </div>
