@@ -107,16 +107,10 @@ class SignupView(View):
                 activity_form.save(profile=profile)
 
             email_subject = "PYLP Registration Email Confirmation"
-            uidb64 = urlsafe_base64_encode(force_bytes(userform.pk))
-            token = token_generator.make_token(userform)
-            domain = get_current_site(request).domain
-            link = reverse('activate', kwargs={
-                'uidb64': uidb64, 'token': token})
-            activate_url = f'http://{domain}{link}'
             instruction = SignUpInstructions.objects.last()
             content = format_html(instruction.content)
             content_value = strip_tags(content)
-            email_body = f"Thank you for registering at PYLP Alumni Association, Inc.\n\nTo get started, activate your account by clicking the link below.\n{activate_url}\n\n{content_value}"
+            email_body = f"Thank you for registering at PYLP Alumni Association, Inc.\n\n{content_value}"
             email = EmailMessage(
                 email_subject,
                 email_body,
@@ -393,7 +387,7 @@ class school_autocomplete(autocomplete.Select2QuerySetView):
         # return http.HttpResponseForbidden()
 
         # if not self.create_field:
-        #raise ImproperlyConfigured('Missing "create_field"')
+        # raise ImproperlyConfigured('Missing "create_field"')
 
         text = request.POST.get('text', None)
 
@@ -448,7 +442,7 @@ class organization_autocomplete(autocomplete.Select2QuerySetView):
         # return http.HttpResponseForbidden()
 
         # if not self.create_field:
-        #raise ImproperlyConfigured('Missing "create_field"')
+        # raise ImproperlyConfigured('Missing "create_field"')
 
         text = request.POST.get('text', None)
 
