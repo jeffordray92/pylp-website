@@ -9,7 +9,11 @@
         <script async charset="utf-8" src="//cdn.embedly.com/widgets/platform.js"></script>
         <link rel="stylesheet" href="{% static 'css/content-styles.css' %}" type="text/css">
     </head>
-    <header id="gtco-header" class="gtco-cover gtco-cover-sm" role="banner" style="background-image: url({{ article.image.url }})" data-stellar-background-ratio="0.5">
+    {%if article.image %}
+    <header id="gtco-header" class="gtco-cover gtco-cover-sm" role="banner" style="background-image: url({{ article.image.url|safe }})" data-stellar-background-ratio="0.5">
+    {%else%}
+    <header id="gtco-header" class="gtco-cover gtco-cover-sm" role="banner" data-stellar-background-ratio="0.5">
+    {%endif%}
         <div class="overlay"></div>
         <div class="gtco-container">
             <div class="row row-mt-15em">
@@ -30,7 +34,7 @@
                     <div class="col-md-12 ck-content" style="margin-top: 5px;">
                         {{content}}
                     </div>
-                    <div class="col-md-12" style="display: flex;" >
+                    <div class="col-md-12" style="display: flex; margin-top: 30px;" >
                             {% if article.author.photo %}
                             <img src="{{ article.author.photo.url }}" class="author-image-round">
                             {%else%}
@@ -42,7 +46,7 @@
                           <span  style="font-size: small;">PYLP Year {{article.author.pylp_year}}</span>
                         </div>
                       </div>
-                    <div class="col-md-12" style="margin-top: 15px;">
+                    <div class="col-md-12" style="margin-top: 35px;">
                         {% if attachments %}
                             <strong>Attachments</strong>
                             <br/>
@@ -79,14 +83,16 @@
 
     <!-- Facebook and Twitter integration -->
     <meta property="og:title" content="{{ article.title }}"/>
+    {%if article.image %}
     <meta property="og:image" content="{% if request.is_secure %}https://{% else %}http://{% endif %}{{ request.get_host }}{{ article.image.url }}"/>
+    <meta name="twitter:image" content="{% if request.is_secure %}https://{% else %}http://{% endif %}{{ request.get_host }}{{ article.image.url }}" />
+    {%endif%}
     <meta property="og:type" content="website" />
     <meta property="og:url" content="{{ request.build_absolute_uri }}"/>
     <meta property="og:site_name" content="ACCESS PYLP Alumni Association, Inc."/>
     <!-- <meta property="og:description" content="{{ article.content|truncatewords:15|safe }}"/> -->
     <meta name="twitter:title" content="{{ article.title }}" />
     <!-- <meta name="twitter:description" content="{{ article.content|truncatewords:15|safe }}" /> -->
-    <meta name="twitter:image" content="{% if request.is_secure %}https://{% else %}http://{% endif %}{{ request.get_host }}{{ article.image.url }}" />
     <meta name="twitter:url" content="{{ request.build_absolute_uri }}" />
     <meta name="twitter:card" content="summary_large_image" />
 {% endblock %}
