@@ -1,6 +1,5 @@
 from django.shortcuts import render
-
-# Create your views here.
+from django.contrib import messages
 from django.views import View
 from django.http import HttpResponseNotFound
 from django.shortcuts import redirect
@@ -75,6 +74,8 @@ class SubmitArticleView(View):
                 )
                 attachment.save()
 
+            messages.success(
+                request, "Your article has been submitted and is waiting to be reviewed by the admin.")
             return redirect('news_list')
         else:
             return render(request, 'submit_article.html', {'NewsForm': news_form})

@@ -15,9 +15,15 @@
             </div>
         </div>
     </header>
-
     <div class="gtco-section gtco-gray-bg">
         <div class="gtco-container">
+            {%if messages%}
+            {%for message in messages%}
+                <div class="alert alert-{{message.tags}}">
+                    {{message}}
+                </div>
+            {%endfor%}
+        {%endif%}
 
             <div class="row">
                 {% if categories %}
@@ -37,7 +43,9 @@
                     <a href="{% url 'news' slug=article.slug %}" class="gtco-card-item">
                         <figure>
                             <div class="overlay"><i class="ti-plus"></i></div>
+                            {%if article.image.url is not None%}
                             <img src="{{ article.image.url }}" alt="Image" class="img-responsive">
+                            {%endif%}
                         </figure>
                         <div class="gtco-text text-left">
                             <h2>{{ article.title|truncatechars:55 }}</h2>
