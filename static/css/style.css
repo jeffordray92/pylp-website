@@ -2213,3 +2213,19 @@ table.row-no-color tr:nth-child(even) {
   overflow: auto !important;
   
 }
+
+.author-image-round {
+  flex:1;
+  border-radius: 50%;
+  min-height: 0;
+  max-width: 85px;
+  max-height: 85px;
+}
+
+.author-details-container {
+  margin-left: 20px;
+  flex: 2;
+  display: flex;
+  flex-flow: column;
+  align-items: stretch;
+}

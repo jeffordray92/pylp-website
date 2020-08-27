@@ -30,6 +30,18 @@
                     <div class="col-md-12 ck-content" style="margin-top: 5px;">
                         {{content}}
                     </div>
+                    <div class="col-md-12" style="display: flex;" >
+                            {% if article.author.photo %}
+                            <img src="{{ article.author.photo.url }}" class="author-image-round">
+                            {%else%}
+                            <img src="{% static 'images/logo.jpg' %}" class="author-image-round">
+                            {%endif%}
+                        <div class="author-details-container">
+                          <span >Author: {{article.author.user.get_full_name}}</span>
+                          <span style="font-size: small;" >PYLP Batch {{article.author.pylp_batch}}</span>
+                          <span  style="font-size: small;">PYLP Year {{article.author.pylp_year}}</span>
+                        </div>
+                      </div>
                     <div class="col-md-12" style="margin-top: 15px;">
                         {% if attachments %}
                             <strong>Attachments</strong>
