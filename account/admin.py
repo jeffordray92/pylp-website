@@ -99,10 +99,10 @@ class ProfileAdmin(admin.ModelAdmin):
     get_userstaff.short_description = 'staff'
 
     def verify_selected(self, request, queryset):
-        queryset.update(is_verified=True)
         for q in queryset:
             q.user.is_active = True
             q.user.save()
+        queryset.update(is_verified=True)
     verify_selected.short_description = "Mark selected users as verified"
 
     def has_add_permission(self, request, obj=None):
