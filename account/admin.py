@@ -16,6 +16,24 @@ from account.models import (
 # Register your models here.
 
 
+class UserVerifiedListFilter(admin.SimpleListFilter):
+    title = 'User Verification'
+
+    parameter_name = 'verified'
+
+    def lookups(self, request, model_admin):
+        return (
+            ('verified', 'verified'),
+            ('not verified', 'not verified'),
+        )
+
+    def queryset(self, request, queryset):
+        if self.value() == "verified":
+            return queryset.filter(is_verified=True)
+        elif self.value() == "not verified":
+            return queryset.exclude(is_verified=True)
+
+
 class EducationalBackgroundInLine(admin.TabularInline):
     model = EducationalBackground
     extra = 1
@@ -33,37 +51,15 @@ class CommunityActivityInLine(admin.TabularInline):
 
 class ImageListFilter(admin.SimpleListFilter):
 
-    title = _('Has photo')
+    title = _('Profile Photo')
 
     parameter_name = 'has_photo'
 
     def lookups(self, request, model_admin):
 
         return (
-            ('yes', _('Yes')),
-            ('no',  _('No')),
-        )
-
-    def queryset(self, request, queryset):
-
-        if self.value() == 'yes':
-            return queryset.filter(image__isnull=False).exclude(image='')
-
-        if self.value() == 'no':
-            return queryset.filter(Q(image__isnull=True) | Q(image__exact=''))
-
-
-class ImageListFilter(admin.SimpleListFilter):
-
-    title = _('Has photo')
-
-    parameter_name = 'has_photo'
-
-    def lookups(self, request, model_admin):
-
-        return (
-            ('yes', _('Yes')),
-            ('no',  _('No')),
+            ('yes', _('has photo')),
+            ('no',  _('no photo')),
         )
 
     def queryset(self, request, queryset):
@@ -81,7 +77,7 @@ class ProfileAdmin(admin.ModelAdmin):
     actions = ['verify_selected', ]
     list_display = ['email', 'get_username',
                     'get_name', 'is_verified', 'get_userstaff']
-    list_filter = ['is_verified', 'cluster', 'pylp_batch', 'educationalbackground__school',
+    list_filter = [UserVerifiedListFilter, 'cluster', 'pylp_batch', 'educationalbackground__school',
                    'membershiporganization__organization', 'committees', ImageListFilter]
     filter_horizontal = ('committees',)
     inlines = [EducationalBackgroundInLine,

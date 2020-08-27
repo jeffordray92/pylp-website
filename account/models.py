@@ -62,8 +62,9 @@ def max_value_current_year(value):
 class Profile(DirtyFieldsMixin, models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, editable=False)
     cluster = models.ForeignKey(
-        "Cluster", on_delete=models.CASCADE, null=True, blank=True)
-    committees = models.ManyToManyField('Committee', blank=True)
+        "Cluster", on_delete=models.CASCADE, null=True, blank=True, verbose_name=u"Cluster")
+    committees = models.ManyToManyField(
+        'Committee', blank=True, verbose_name=u"Committees")
     is_verified = models.BooleanField(default=False)
     photo = models.ImageField(upload_to=upload_to(
         "photos", type="PHOTOS"), blank=True, null=True, verbose_name=u"Profile Picture", storage=gd_storage)
@@ -130,7 +131,7 @@ class EducationalBackground(models.Model):
     education_type = models.CharField(
         max_length=1, choices=EDUCATIONAL_TYPE, default="C")
     school = models.ForeignKey(
-        "School", on_delete=models.CASCADE)
+        "School", on_delete=models.CASCADE, verbose_name=u"School")
     inclusive_date = models.DateField()
     level_attained = models.CharField(max_length=150)
 
@@ -142,7 +143,7 @@ class MembershipOrganization(models.Model):
     profile = models.ForeignKey(
         "Profile", on_delete=models.CASCADE, editable=False)
     organization = models.ForeignKey(
-        "Organization", on_delete=models.CASCADE)
+        "Organization", on_delete=models.CASCADE, verbose_name=u"Organization")
     inclusive_date = models.DateField()
     position_held = models.CharField(max_length=150)
 
