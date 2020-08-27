@@ -120,7 +120,7 @@ class ContactUsView(View):
         name = ""
         email = ""
         try:
-            name = request.user.first_name
+            name = request.user.get_full_name()
             email = request.user.email
         except:
             pass

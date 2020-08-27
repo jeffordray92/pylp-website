@@ -34,10 +34,17 @@
                     Please double-check the following:    
                     {{contactForm.errors}}
                     {% endif %}
+                    {% if user.is_authenticated %}
+                    {{contactForm.name.as_hidden}}
+                    {{contactForm.email.as_hidden}}
+                    {{contactForm.subject|as_crispy_field}}
+                    {{contactForm.message|as_crispy_field}}
+                    {% else%}
                     {{ contactForm|crispy }}
+                    {%endif%}
                 </fieldset>
                 <div class="form-group">
-                    <button class="btn" style="background-color: black;" type="submit">Submit  Message</button>
+                    <button class="btn btn-primary"  type="submit">Submit  Message</button>
                 </div>
             </form>
         </div>
