@@ -89,7 +89,7 @@ class Profile(DirtyFieldsMixin, models.Model):
     birth_date = models.DateField(null=True, verbose_name=u"Date of Birth")
     birth_place = models.CharField(
         max_length=100, null=True, verbose_name=u"Place of Birth")
-    civil_status = models.CharField(null=True,
+    civil_status = models.CharField(null=True, default="S",
                                     max_length=100, choices=CIVIL_OPTIONS, verbose_name=u"Civil Status")
     gender = models.CharField(
         max_length=1, choices=GENDER_CHOICES, default="M")
