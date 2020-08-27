@@ -293,7 +293,7 @@ class ProfileView(View):
                            'profile': profile})
 
 
-def send_email(photo=None, e_sig=None):
+def send_email(name, email, batch, year, photo=None, e_sig=None):
     subject = ""
     body = ""
     contact_email = ""
@@ -302,14 +302,14 @@ def send_email(photo=None, e_sig=None):
     except:
         contact_email = ""
     if photo and e_sig:
-        subject = "[Photo & E-Signature Update]"
-        body = f"Updated Photo: {photo} \n\n Updated E-Signature: {e_sig}"
+        subject = "[ACCESSPYLPAA: Photo & E-Signature Update]"
+        body = f"{name}({email}) from PYLP batch {batch}, year {year} has updated his/her photo & electronic signature. \n\nUpdated Photo: {photo} \n\n Updated E-Signature: {e_sig}"
     elif photo:
-        subject = "[Photo Update]"
-        body = f"Updated Photo: {photo}"
+        subject = "[ACCESSPYLPAA: Photo Update]"
+        body = f"{name}({email}) from PYLP batch {batch}, year {year} has updated his/her photo. \n\nUpdated Photo: {photo}"
     elif e_sig:
-        subject = "[E-Signature Update]"
-        body = f"Updated E-Signature: {e_sig}"
+        subject = "[ACCESSPYLPAA: E-Signature Update]"
+        body = f"{name}({email}) from PYLP batch {batch}, year {year} has updated his/her electronic signature. \n\nUpdated E-Signature: {e_sig}"
 
     email = EmailMessage(
         subject,
@@ -323,8 +323,12 @@ def send_email(photo=None, e_sig=None):
 @ receiver(post_save, sender=Profile)
 def email_handler(sender, instance, **kwargs):
     if instance.is_dirty():
-        dirty = instance.get_dirty_fields()
         try:
+            dirty = instance.get_dirty_fields()
+            name = instance.user.get_full_name()
+            email = instance.email
+            batch = instance.pylp_batch
+            year = instance.pylp_year
             if 'photo' in dirty and 'electronic_signature' in dirty:
                 photo = "User removed photo"
                 e_sig = "User removed photo"
@@ -332,17 +336,17 @@ def email_handler(sender, instance, **kwargs):
                     photo = instance.photo.url
                 if instance.electronic_signature:
                     e_sig = instance.electronic_signature.url
-                send_email(photo=photo, e_sig=e_sig)
+                send_email(name, email, batch, year, photo=photo, e_sig=e_sig)
             elif 'photo' in dirty:
                 photo = "User removed photo"
                 if instance.photo:
                     photo = instance.photo.url
-                send_email(photo=photo)
+                send_email(name, email, batch, year, photo=photo)
             elif 'electronic_signature' in dirty:
                 e_sig = "User removed photo"
                 if instance.electronic_signature:
                     e_sig = instance.electronic_signature.url
-                send_email(e_sig=e_sig)
+                send_email(name, email, batch, year, e_sig=e_sig)
         except:
             pass
 
