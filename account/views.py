@@ -52,11 +52,11 @@ class RequiredFormSet(BaseModelFormSet):
 class SignupView(View):
 
     EducationalBackgroundFormSet = modelformset_factory(EducationalBackground,
-                                                        form=EducationalBackgroundForm, formset=RequiredFormSet, extra=1, max_num=4)
+                                                        form=EducationalBackgroundForm, formset=RequiredFormSet, max_num=4)
     MembershipOrganizationFormSet = modelformset_factory(MembershipOrganization,
-                                                         form=MembershipOrganizationForm, formset=RequiredFormSet, extra=1)
+                                                         form=MembershipOrganizationForm, formset=RequiredFormSet, max_num=5)
     CommunityActivityFormSet = modelformset_factory(CommunityActivity,
-                                                    form=CommunityActivityForm, formset=RequiredFormSet, extra=1)
+                                                    form=CommunityActivityForm, formset=RequiredFormSet, max_num=5)
 
     def get(self, request, *args, **kwargs):
         if(request.user.is_authenticated):

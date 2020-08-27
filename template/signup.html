@@ -56,20 +56,62 @@
                     </legend>
                     {{ EducationForm.media }}
                     {{ EducationForm.management_form|crispy }}
-                    {{EducationForm|crispy}}
+                    <div id="education_set">
+                        {% for form in EducationForm.forms %}
+                            {{form.non_field_errors}}
+                            <table class='no_error row-no-color'>
+                                {{ form|crispy }}
+                            </table>
+                        {% endfor %}
+                    </div>
+                    <input type="button" class="btn-sm" value="Add More" id="add_education">
+                    <div id="empty_education" style="display:none">
+                        <table class='no_error row-no-color'>
+                            {{ EducationForm.empty_form|crispy }}
+                        </table>
+                    </div>
+                    <script>
+
+                    </script>
                     <legend class="border-bottom mb-4">
                         III. MEMBERSHIP IN YOUTH ORGANIZATIONS
                     </legend>
                     {{ MembershipForm.management_form|crispy }}
-                    {{MembershipForm|crispy}}
+                    <div id="membership_set">
+                        {% for form in MembershipForm.forms %}
+                            {{form.non_field_errors}}
+                            <table class='no_error row-no-color'>
+                                {{ form|crispy }}
+                            </table>
+                        {% endfor %}
+                    </div>
+                    <input type="button" class="btn-sm" value="Add More" id="add_membership">
+                    <div id="empty_membership" style="display:none">
+                        <table class='no_error row-no-color'>
+                            {{ MembershipForm.empty_form|crispy }}
+                        </table>
+                    </div>
                     <legend class="border-bottom mb-4">
                         IV. INVOLVEMENT IN YOUTH/COMMUNITY RELATED ACTIVITIES
                     </legend>
                     {{ CommunityForm.management_form|crispy }}
-                    {{CommunityForm|crispy}}
+                    <div id="community_set">
+                        {% for form in CommunityForm.forms %}
+                            {{form.non_field_errors}}
+                            <table class='no_error row-no-color'>
+                                {{ form|crispy }}
+                            </table>
+                        {% endfor %}
+                    </div>
+                    <input type="button" class="btn-sm" value="Add More" id="add_community">
+                    <div id="empty_community" style="display:none">
+                        <table class='no_error row-no-color'>
+                            {{ CommunityForm.empty_form|crispy }}
+                        </table>
+                    </div>
                 </fieldset>
                 <div class="form-group">
-                    <button class="btn" style="background-color: black;" type="submit">Sign Up</button>
+                    <button class="btn btn-primary" type="submit">Sign Up</button>
                 </div>
                 <small class="text-muted">
                     Already Have An Account? <a class="ml-2" href="{% url 'login'%}">Log in here</a>
@@ -78,7 +120,23 @@
         </div>
     </div>
 </div>
-
+<script>
+    $('#add_education').click(function() {
+    var form_idx = $('#id_education-TOTAL_FORMS').val();
+    $('#education_set').append($('#empty_education').html().replace(/__prefix__/g, form_idx));
+    $('#id_education-TOTAL_FORMS').val(parseInt(form_idx) + 1);
+});
+$('#add_membership').click(function() {
+    var form_idx = $('#id_membership-TOTAL_FORMS').val();
+    $('#membership_set').append($('#empty_membership').html().replace(/__prefix__/g, form_idx));
+    $('#id_membership-TOTAL_FORMS').val(parseInt(form_idx) + 1);
+});
+$('#add_community').click(function() {
+    var form_idx = $('#id_activity-TOTAL_FORMS').val();
+    $('#community_set').append($('#empty_community').html().replace(/__prefix__/g, form_idx));
+    $('#id_activity-TOTAL_FORMS').val(parseInt(form_idx) + 1);
+});
+</script>
 {% endblock %}
 {% block meta %}
     <meta name="viewport" content="width=device-width, initial-scale=1">
