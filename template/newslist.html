@@ -24,7 +24,6 @@
                 </div>
             {%endfor%}
         {%endif%}
-
             <div class="row">
                 {% if categories %}
                 <div class="col-lg-3 col-md-3 col-sm-6">
@@ -47,10 +46,10 @@
                             <img src="{{ article.image.url }}" alt="Image" class="img-responsive">
                             {%endif%}
                         </figure>
-                        <div class="gtco-text text-left" style="min-height: 210.4px;">
-                            <h2>{{ article.title|truncatechars:55 }}</h2>
-                            <p>{{ article.content|safe|striptags|truncatechars:140 }}</p>
+                        <div class="gtco-text text-left" style="min-height: 210.4px; max-height: 210.4px;">
                             <p class="gtco-category">{{ article.date_published|date:"F j, Y"}}</p>
+                            <h2>{{ article.title|truncatechars:55 }}</h2>
+                            <p>{{ article.content|safe|striptags|truncatechars:80 }}</p>
                         </div>
                     </a>
                 </div>
