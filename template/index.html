@@ -117,8 +117,8 @@
                                 <div class="overlay"><i class="ti-plus"></i></div>
                                 {% if resource.image %}
                                 <img src="{{ resource.image.url }}" alt="Image" class="img-responsive">
-                                <!-- {% else %}
-                                <img src="{% static 'images/logo.jpg' %}" alt="Image" class="img-responsive"> -->
+                                {% else %}
+                                <img src="{% static 'images/logo.jpg' %}" alt="Image" class="img-responsive">
                                 {% endif %}
                             </figure>
                             <div class="gtco-text" style="min-height: 116px; max-height: 116px;">
