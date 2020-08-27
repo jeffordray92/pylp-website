@@ -11,7 +11,6 @@
             <div class="row row-mt-15em">
                 <div class="col-md-7 mt-text text-left animate-box" data-animate-effect="fadeInUp">
                     <h1><strong>{{ resource.title }}</strong></h1>  
-                    <h2>{{ resource.description }}</h2>
                 </div>
             </div>
         </div>
@@ -23,7 +22,6 @@
             <div class="row row-mt-15em">
                 <div class="col-md-7 mt-text text-left animate-box" data-animate-effect="fadeInUp">
                     <h1><strong>{{ resource.title }}</strong></h1>  
-                    <h2>{{ resource.description }}</h2>
                 </div>
             </div>
         </div>
@@ -34,7 +32,10 @@
         <div>
             <div class="text">
                 <div class="row" style="padding-left:10%; padding-right:10%; padding-top:5%; padding-bottom:5%">
-                    <div class="col-md-12" style="margin-top: 15px;">
+                    <div class="col-md-12 ck-content" style="margin-top: 35px;">
+                        {{resource.description}}
+                    </div>
+                    <div class="col-md-12" style="margin-top: 35px;">
                             <strong>Attachments</strong>
                             <br/>
                             {%for attach in attachments%}

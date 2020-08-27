@@ -1,13 +1,15 @@
 from django import forms
-from content.models import SignUpInstructions
+from content.models import Resource, SignUpInstructions
 
 
-class ResourceForm(forms.Form):
-    title = forms.CharField(max_length=100)
-    description = forms.CharField()
-    image = forms.ImageField()
+class ResourceForm(forms.ModelForm):
+    description = forms.CharField(required=True, widget=forms.Textarea)
     attachments = forms.FileField(required=False,
                                   widget=forms.ClearableFileInput(attrs={'multiple': True, 'id': 'attachment_tag'}))
+
+    class Meta:
+        model = Resource
+        fields = ('title', 'description', 'image')
 
 
 class SignUpInstructionsForm(forms.ModelForm):

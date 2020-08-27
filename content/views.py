@@ -87,11 +87,7 @@ class SubmitResourceView(View):
         resource_form = ResourceForm(request.POST, request.FILES)
         if resource_form.is_valid():
             files = request.FILES.getlist('attachments')
-            resource = Resource(
-                title=resource_form.cleaned_data['title'],
-                description=resource_form.cleaned_data['description'],
-                image=request.FILES['image'])
-            resource.save()
+            resource = resource_form.save()
             for f in files:
                 attachment = Attachment(
                     resource=resource,

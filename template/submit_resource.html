@@ -8,8 +8,7 @@
         <div class="gtco-container">
             <div class="row row-mt-15em">
                 <div class="col-md-7 mt-text text-left animate-box" data-animate-effect="fadeInUp">
-                    <h1><strong>{{ details.title }}</strong></h1>  
-                    <h2>{{ details.subtitle }}</h2>
+                    <h1><strong>Add Resource</strong></h1>  
                 </div>
             </div>
         </div>
@@ -23,9 +22,11 @@
                     <div style="margin-bottom: 15px;">
                     {{ResourceForm.errors}}
                     <br/>
+                    </div>
                     <div style="margin-bottom: 15px;">
                         {{ResourceForm|crispy}}
                     <button class="btn btn-primary" type="submit">Submit Resource</button>
+                    </div>
                 </div>
             </div>
         </div>
