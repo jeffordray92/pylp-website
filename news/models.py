@@ -45,7 +45,7 @@ class News(models.Model):
     author = models.ForeignKey(
         Profile, on_delete=models.CASCADE, **optional, verbose_name="Author")
     content = models.TextField(blank=True)
-    image = models.ImageField(upload_to=get_image_path)
+    image = models.ImageField(upload_to=get_image_path, **optional)
     date_uploaded = models.DateTimeField(default=datetime.now, blank=True)
     slug = models.SlugField(default="", **optional)
     categories = models.ManyToManyField(

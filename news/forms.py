@@ -4,13 +4,22 @@ from news.models import News
 from django.forms import ModelForm, Textarea, CheckboxInput
 
 
-class NewsForm(forms.Form):
-    title = forms.CharField(max_length=100)
-    content = forms.CharField()
-    image = forms.ImageField()
-    tags = forms.CharField()
+class NewsForm(forms.ModelForm):
+    image = forms.ImageField(required=False)
     attachments = forms.FileField(required=False,
                                   widget=forms.ClearableFileInput(attrs={'multiple': True}))
+
+    class Meta:
+        model = News
+        fields = ('title', 'content', 'tags', 'image')
+        required = '__all__'
+
+    def save(self, commit=True, author=None):
+        news = super(NewsForm, self).save(commit=False)
+        news.author = author
+        if commit:
+            news.save()
+        return news
 
 
 class NewsModelForm(ModelForm):

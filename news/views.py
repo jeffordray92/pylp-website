@@ -61,12 +61,12 @@ class SubmitArticleView(View):
         news_form = NewsForm(request.POST, request.FILES)
         if news_form.is_valid():
             files = request.FILES.getlist('attachments')
-            news = News(
-                title=news_form.cleaned_data['title'],
-                author=request.user,
-                content=news_form.cleaned_data['content'],
-                image=request.FILES['image'],
-                tags=news_form.cleaned_data['tags'])
+            news = news_form
+            try:
+                if(request.user.profile != None):
+                    news = news_form.save(author=request.user.profile)
+            except:
+                news = news_form.save()
             news.save()
             for f in files:
                 attachment = Attachment(
