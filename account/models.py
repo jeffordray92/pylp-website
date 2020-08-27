@@ -4,6 +4,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.core.mail import EmailMessage
 from django.core.validators import MaxValueValidator, MinValueValidator
+from django.core.exceptions import ValidationError
 from django.db.models.signals import post_delete
 from django.dispatch import receiver
 from phonenumber_field.modelfields import PhoneNumberField
@@ -13,6 +14,16 @@ from django.conf import settings
 from dirtyfields import DirtyFieldsMixin
 
 gd_storage = GoogleDriveStorage()
+
+
+def validate_image_size(value):
+    filesize = value.size
+
+    if int(filesize) > 10485760:
+        raise ValidationError(
+            "The maximum image size that can be uploaded is 10MB")
+    else:
+        return value
 
 
 def _update_filename(instance, filename, path, type):
@@ -67,9 +78,9 @@ class Profile(DirtyFieldsMixin, models.Model):
         'Committee', blank=True, verbose_name=u"Committees")
     is_verified = models.BooleanField(default=False)
     photo = models.ImageField(upload_to=upload_to(
-        "photos", type="PHOTOS"), blank=True, null=True, verbose_name=u"Profile Picture", storage=gd_storage)
+        "photos", type="PHOTOS"), blank=True, null=True, verbose_name=u"Profile Picture", storage=gd_storage, validators=[validate_image_size, ])
     electronic_signature = models.ImageField(upload_to=upload_to(
-        "e_signature", type="SIGNATURES"), blank=True, null=True, verbose_name=u"Electronic Signature", storage=gd_storage)
+        "e_signature", type="SIGNATURES"), blank=True, null=True, verbose_name=u"Electronic Signature", storage=gd_storage, validators=[validate_image_size, ])
     email = models.EmailField(null=True)
     first_name = models.CharField(
         max_length=100, null=True, verbose_name=u"First Name")

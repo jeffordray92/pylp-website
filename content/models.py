@@ -38,6 +38,16 @@ def validate_file_size(value):
         return value
 
 
+def validate_image_size(value):
+    filesize = value.size
+
+    if int(filesize) > 10485760:
+        raise ValidationError(
+            "The maximum image size that can be uploaded is 10MB")
+    else:
+        return value
+
+
 def get_image_path(instance, filename):
     return os.path.join('resource-image', str(datetime.now().date()), filename)
 
@@ -45,7 +55,8 @@ def get_image_path(instance, filename):
 class Header(models.Model):
     title = models.CharField(max_length=100)
     subtitle = models.CharField(max_length=200)
-    image = models.ImageField(upload_to='header/')
+    image = models.ImageField(
+        upload_to='header/', validators=[validate_image_size, ])
     video = models.URLField(max_length=200, default="")
     details = models.TextField(**optional)
 
@@ -60,8 +71,10 @@ class Header(models.Model):
 class Section(models.Model):
     title = models.CharField(max_length=100)
     content = HTMLField()
-    section_image = models.ImageField(upload_to='section/')
-    subquote_image = models.ImageField(upload_to='section/')
+    section_image = models.ImageField(
+        upload_to='section/', validators=[validate_image_size, ])
+    subquote_image = models.ImageField(
+        upload_to='section/', validators=[validate_image_size, ])
 
     def __str__(self):
         return self.title
@@ -99,7 +112,8 @@ class SocialMedia(models.Model):
 class Resource(models.Model):
     title = models.CharField(max_length=100)
     description = models.TextField(**optional)
-    image = models.ImageField(upload_to=get_image_path, **optional)
+    image = models.ImageField(upload_to=get_image_path,
+                              **optional, validators=[validate_image_size, ])
     slug = models.SlugField(default="", **optional)
 
     def __str__(self):
@@ -129,7 +143,8 @@ class Attachment(models.Model):
 class ResourceListDetail(models.Model):
     title = models.CharField(max_length=20)
     subtitle = models.CharField(max_length=200)
-    image = models.ImageField(upload_to="resource_header/")
+    image = models.ImageField(
+        upload_to="resource_header/", validators=[validate_image_size, ])
 
     def __str__(self):
         return self.title

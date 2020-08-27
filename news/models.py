@@ -24,13 +24,24 @@ def validate_file_size(value):
             "The maximum file size that can be uploaded is 25MB")
     else:
         return value
+
+
+def validate_image_size(value):
+    filesize = value.size
+
+    if int(filesize) > 10485760:
+        raise ValidationError(
+            "The maximum image size that can be uploaded is 10MB")
+    else:
+        return value
 # Create your models here.
 
 
 class NewsList(models.Model):
     title = models.CharField(max_length=100)
     subtitle = models.CharField(max_length=200)
-    image = models.ImageField(upload_to="news_header/")
+    image = models.ImageField(upload_to="news_header/",
+                              validators=[validate_image_size, ])
 
     def __str__(self):
         return self.title
@@ -45,7 +56,8 @@ class News(models.Model):
     author = models.ForeignKey(
         Profile, on_delete=models.CASCADE, **optional, verbose_name="Author")
     content = models.TextField(blank=True)
-    image = models.ImageField(upload_to=get_image_path, **optional)
+    image = models.ImageField(upload_to=get_image_path,
+                              **optional, validators=[validate_image_size, ])
     date_uploaded = models.DateTimeField(default=datetime.now, blank=True)
     slug = models.SlugField(default="", **optional)
     categories = models.ManyToManyField(
