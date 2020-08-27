@@ -52,7 +52,10 @@
                     </legend>
                     {{InformationForm|crispy}}
                     <legend class="border-bottom mb-4">
-                        II. EDUCATIONAL BACKGROUND
+                        <div style="display: flex; justify-content: space-between;">
+                            II. EDUCATIONAL BACKGROUND
+                            <input type="button" class="btn-sm"  value="Add Another Education Background" id="add_education" >
+                        </div>
                     </legend>
                     {{ EducationForm.media }}
                     {{ EducationForm.management_form|crispy }}
@@ -62,19 +65,20 @@
                             <table class='no_error row-no-color'>
                                 {{ form|crispy }}
                             </table>
+                            <hr class="solid">
                         {% endfor %}
                     </div>
-                    <input type="button" class="btn-sm" value="Add More" id="add_education">
                     <div id="empty_education" style="display:none">
                         <table class='no_error row-no-color'>
                             {{ EducationForm.empty_form|crispy }}
+                            <hr class="solid">
                         </table>
                     </div>
-                    <script>
-
-                    </script>
                     <legend class="border-bottom mb-4">
-                        III. MEMBERSHIP IN YOUTH ORGANIZATIONS
+                        <div style="display: flex; justify-content: space-between;">
+                            III. MEMBERSHIP IN YOUTH ORGANIZATIONS
+                            <input type="button" class="btn-sm" value="Add Another Membership" id="add_membership">
+                        </div>
                     </legend>
                     {{ MembershipForm.management_form|crispy }}
                     <div id="membership_set">
@@ -83,17 +87,21 @@
                             <table class='no_error row-no-color'>
                                 {{ form|crispy }}
                             </table>
+                            <hr class="solid">
                         {% endfor %}
                     </div>
-                    <input type="button" class="btn-sm" value="Add More" id="add_membership">
                     <div id="empty_membership" style="display:none">
                         <table class='no_error row-no-color'>
                             {{ MembershipForm.empty_form|crispy }}
+                            <hr class="solid">
                         </table>
                     </div>
                     <legend class="border-bottom mb-4">
-                        IV. INVOLVEMENT IN YOUTH/COMMUNITY RELATED ACTIVITIES
-                    </legend>
+                        <div style="display: flex; justify-content: space-between;">
+                            IV. INVOLVEMENT IN YOUTH/COMMUNITY RELATED ACTIVITIES
+                            <input type="button" class="btn-sm" value="Add Another Activity" id="add_community">
+                        </div>
+                        </legend>
                     {{ CommunityForm.management_form|crispy }}
                     <div id="community_set">
                         {% for form in CommunityForm.forms %}
@@ -101,12 +109,13 @@
                             <table class='no_error row-no-color'>
                                 {{ form|crispy }}
                             </table>
+                            <hr class="solid">
                         {% endfor %}
                     </div>
-                    <input type="button" class="btn-sm" value="Add More" id="add_community">
                     <div id="empty_community" style="display:none">
                         <table class='no_error row-no-color'>
                             {{ CommunityForm.empty_form|crispy }}
+                            <hr class="solid">
                         </table>
                     </div>
                 </fieldset>
@@ -125,16 +134,25 @@
     var form_idx = $('#id_education-TOTAL_FORMS').val();
     $('#education_set').append($('#empty_education').html().replace(/__prefix__/g, form_idx));
     $('#id_education-TOTAL_FORMS').val(parseInt(form_idx) + 1);
+    $('html, body').animate({
+        scrollTop: $(`#div_id_education-${form_idx-1}-level_attained`).offset().top
+    }, 2000);
 });
 $('#add_membership').click(function() {
     var form_idx = $('#id_membership-TOTAL_FORMS').val();
     $('#membership_set').append($('#empty_membership').html().replace(/__prefix__/g, form_idx));
     $('#id_membership-TOTAL_FORMS').val(parseInt(form_idx) + 1);
+    $('html, body').animate({
+        scrollTop: $(`#div_id_membership-${form_idx-1}-position_held`).offset().top
+    }, 2000);
 });
 $('#add_community').click(function() {
     var form_idx = $('#id_activity-TOTAL_FORMS').val();
     $('#community_set').append($('#empty_community').html().replace(/__prefix__/g, form_idx));
     $('#id_activity-TOTAL_FORMS').val(parseInt(form_idx) + 1);
+    $('html, body').animate({
+        scrollTop: $(`#div_id_activity-${form_idx-1}-inclusive_date`).offset().top
+    }, 2000);
 });
 </script>
 {% endblock %}

@@ -110,6 +110,8 @@
         </div>
     </header>
     {% block content %}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+  <script src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
     <div class="gtco-section gtco-gray-bg">
         <div class="gtco-container">
             <div class="row">
@@ -170,24 +172,76 @@
                             I. PERSONAL INFORMATION
                         </legend>
                         {{updateProfileForm|crispy}}
-                        <legend  style="border-bottom-color: transparent; margin-top: 30px;" ></legend>
-                            II. EDUCATIONAL BACKGROUND
+                        <legend style="border-bottom-color: transparent; margin-top: 30px;">
+                            <div style="display: flex; justify-content: space-between;">
+                                II. EDUCATIONAL BACKGROUND
+                                <input type="button" class="btn-sm"  value="Add Another Education Background" id="add_education" >
+                            </div>
                         </legend>
+                        {{ EducationForm.media }}
                         {{ EducationForm.management_form|crispy }}
-                        {{EducationForm|crispy}}
-                        <legend  style="border-bottom-color: transparent; margin-top: 30px;" ></legend>
-                            III. MEMBERSHIP IN YOUTH ORGANIZATIONS
+                        <div id="education_set">
+                            {% for form in EducationForm.forms %}
+                                {{form.non_field_errors}}
+                                <table class='no_error row-no-color'>
+                                    {{ form|crispy }}
+                                </table>
+                                <hr class="solid">
+                            {% endfor %}
+                        </div>
+                        <div id="empty_education" style="display:none">
+                            <table class='no_error row-no-color'>
+                                {{ EducationForm.empty_form|crispy }}
+                                <hr class="solid">
+                            </table>
+                        </div>
+                        <legend style="border-bottom-color: transparent; margin-top: 30px;">
+                            <div style="display: flex; justify-content: space-between;">
+                                III. MEMBERSHIP IN YOUTH ORGANIZATIONS
+                                <input type="button" class="btn-sm" value="Add Another Membership" id="add_membership">
+                            </div>
                         </legend>
                         {{ MembershipForm.management_form|crispy }}
-                        {{MembershipForm|crispy}}
-                        <legend  style="border-bottom-color: transparent; margin-top: 30px;" ></legend>
-                            IV. INVOLVEMENT IN YOUTH/COMMUNITY RELATED ACTIVITIES
-                        </legend>
+                        <div id="membership_set">
+                            {% for form in MembershipForm.forms %}
+                                {{form.non_field_errors}}
+                                <table class='no_error row-no-color'>
+                                    {{ form|crispy }}
+                                </table>
+                                <hr class="solid">
+                            {% endfor %}
+                        </div>
+                        <div id="empty_membership" style="display:none">
+                            <table class='no_error row-no-color'>
+                                {{ MembershipForm.empty_form|crispy }}
+                                <hr class="solid">
+                            </table>
+                        </div>
+                        <legend style="border-bottom-color: transparent; margin-top: 30px;">
+                            <div style="display: flex; justify-content: space-between;">
+                                IV. INVOLVEMENT IN YOUTH/COMMUNITY RELATED ACTIVITIES
+                                <input type="button" class="btn-sm" value="Add Another Activity" id="add_community">
+                            </div>
+                            </legend>
                         {{ CommunityForm.management_form|crispy }}
-                        {{CommunityForm|crispy}}
+                        <div id="community_set">
+                            {% for form in CommunityForm.forms %}
+                                {{form.non_field_errors}}
+                                <table class='no_error row-no-color'>
+                                    {{ form|crispy }}
+                                </table>
+                                <hr class="solid">
+                            {% endfor %}
+                        </div>
+                        <div id="empty_community" style="display:none">
+                            <table class='no_error row-no-color'>
+                                {{ CommunityForm.empty_form|crispy }}
+                                <hr class="solid">
+                            </table>
+                        </div>
                     </fieldset>
                     <div class="form-group">
-                        <button class="btn" style="background-color: black;" type="submit">Update</button>
+                        <button class="btn btn-primary" type="submit">Update</button>
                     </div>
                 </form>
             </div>
@@ -218,6 +272,32 @@
         if(id == "signature"){document.getElementById("clearsig").value = 1;}
      }
     };
+    </script>
+    <script>
+        $('#add_education').click(function() {
+    var form_idx = $('#id_education-TOTAL_FORMS').val();
+    $('#education_set').append($('#empty_education').html().replace(/__prefix__/g, form_idx));
+    $('#id_education-TOTAL_FORMS').val(parseInt(form_idx) + 1);
+    $('html, body').animate({
+        scrollTop: $(`#div_id_education-${form_idx-1}-level_attained`).offset().top
+    }, 2000);
+});
+$('#add_membership').click(function() {
+    var form_idx = $('#id_membership-TOTAL_FORMS').val();
+    $('#membership_set').append($('#empty_membership').html().replace(/__prefix__/g, form_idx));
+    $('#id_membership-TOTAL_FORMS').val(parseInt(form_idx) + 1);
+    $('html, body').animate({
+        scrollTop: $(`#div_id_membership-${form_idx-1}-position_held`).offset().top
+    }, 2000);
+});
+$('#add_community').click(function() {
+    var form_idx = $('#id_activity-TOTAL_FORMS').val();
+    $('#community_set').append($('#empty_community').html().replace(/__prefix__/g, form_idx));
+    $('#id_activity-TOTAL_FORMS').val(parseInt(form_idx) + 1);
+    $('html, body').animate({
+        scrollTop: $(`#div_id_activity-${form_idx-1}-inclusive_date`).offset().top
+    }, 2000);
+});
     </script>
     {% endblock %}
     
