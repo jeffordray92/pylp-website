@@ -47,7 +47,7 @@
                             <img src="{{ article.image.url }}" alt="Image" class="img-responsive">
                             {%endif%}
                         </figure>
-                        <div class="gtco-text text-left">
+                        <div class="gtco-text text-left" style="min-height: 210.4px;">
                             <h2>{{ article.title|truncatechars:55 }}</h2>
                             <p>{{ article.content|safe|striptags|truncatechars:140 }}</p>
                             <p class="gtco-category">{{ article.date_published|date:"F j, Y"}}</p>
