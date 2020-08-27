@@ -141,15 +141,14 @@ class PhotoSignatureView(View):
             return redirect('index')
 
     def post(self, request, pk, *args, **kwargs):
-        photo_sig_form = PhotoSignatureForm(request.POST, request.FILES)
+        pk = force_text(urlsafe_base64_decode(pk))
+        profile = Profile.objects.get(pk=pk)
+        photo_sig_form = PhotoSignatureForm(
+            request.POST, request.FILES, instance=profile)
         if photo_sig_form.is_valid():
-            pk = force_text(urlsafe_base64_decode(pk))
-            profile = Profile.objects.get(pk=pk)
-            if photo_sig_form.cleaned_data['photo']:
-                profile.photo = photo_sig_form.cleaned_data['photo']
-            if photo_sig_form.cleaned_data['e_sig']:
-                profile.electronic_signature = photo_sig_form.cleaned_data['e_sig']
             profile.save()
+        else:
+            return render(request, 'submit_photo_signature.html', {'photoSignatureForm': photo_sig_form})
         instruction = SignUpInstructions.objects.last()
         content = format_html(instruction.content)
         return render(request, 'activate_account.html', {'header': "How To Activate Your Account", 'instruction_content': content})

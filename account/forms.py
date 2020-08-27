@@ -119,8 +119,12 @@ class LogInForm(forms.Form):
     password = forms.CharField(required=True, widget=forms.PasswordInput)
 
 
-class PhotoSignatureForm(forms.Form):
+class PhotoSignatureForm(forms.ModelForm):
     photo = forms.ImageField(required=False, label="2x2 with white background is encouraged.",
                              widget=forms.FileInput(attrs={'accept': ".png, .jpg", 'id': "photo_img"}))
-    e_sig = forms.ImageField(required=False, label="Please sign it in a blank white paper using black marker.",
-                             widget=forms.FileInput(attrs={'accept': ".png, .jpg", 'id': "esig_img"}))
+    electronic_signature = forms.ImageField(required=False, label="Please sign it in a blank white paper using black marker.",
+                                            widget=forms.FileInput(attrs={'accept': ".png, .jpg", 'id': "esig_img"}))
+
+    class Meta:
+        model = Profile
+        fields = ('photo', 'electronic_signature')
