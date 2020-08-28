@@ -12,6 +12,9 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 
 import os
 import django_heroku
+import environ
+env = environ.Env()
+env.read_env()
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -30,23 +33,28 @@ ALLOWED_HOSTS = [
     "access-pylp.herokuapp.com",
     "localhost",
     "www.access-pylp.com",
-    "access-pylp.com"
+    "access-pylp.com",
+    "1dd89df2b185.ngrok.io"
 ]
 
 
 # Application definition
 
 INSTALLED_APPS = [
+    'dal',
+    'dal_select2',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
-    'tinymce',
+    'django_cleanup.apps.CleanupConfig',
     'djrichtextfield',
-
+    'crispy_forms',
+    'gdstorage',
+    'phonenumber_field',
+    'account',
     'content',
     'news',
 ]
@@ -81,9 +89,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'pylp.wsgi.application'
-
-
-
 
 
 # Password validation
@@ -132,16 +137,11 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 MEDIA_URL = '/media/'
 
 
-#DJ RichTextField
+# DJ RichTextField
 DJRICHTEXTFIELD_CONFIG = {
-    'js': ['//tinymce.cachefly.net/4.1/tinymce.min.js'],
-    'init_template': 'djrichtextfield/init/tinymce.js',
-    'settings': {
-        'menubar': False,
-        'plugins': 'link image code',
-        'toolbar': 'bold italic | link image code | removeformat ',
-        'width': 700
-    }
+    'js': ['//cdn.ckeditor.com/4.14.1/standard/ckeditor.js'],
+    'init_template': 'djrichtextfield/init/ckeditor.js',
+
 }
 
 
@@ -152,3 +152,23 @@ PROJECT_APP_PATH = os.path.dirname(os.path.abspath(__file__))
 f = os.path.join(PROJECT_APP_PATH, "local_settings.py")
 if os.path.exists(f):
     exec(open(f, "rb").read())
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    }
+}
+
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = env('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
+
+LOGIN_REDIRECT_URL = 'index'
+LOGOUT_REDIRECT_URL = 'index'
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+GOOGLE_DRIVE_STORAGE_JSON_KEY_FILE = f"{os.path.dirname(__file__)}/pylp-dev-key.json"

@@ -5,8 +5,15 @@
 {% block title %}{{ article.title }}{% endblock %}
 
 {% block content %}
-    
-    <header id="gtco-header" class="gtco-cover gtco-cover-sm" role="banner" style="background-image: url({{ article.image.url }})" data-stellar-background-ratio="0.5">
+    <head>
+        <script async charset="utf-8" src="//cdn.embedly.com/widgets/platform.js"></script>
+        <link rel="stylesheet" href="{% static 'css/content-styles.css' %}" type="text/css">
+    </head>
+    {%if article.image %}
+    <header id="gtco-header" class="gtco-cover gtco-cover-sm" role="banner" style="background-image: url({{ article.image.url|safe }})" data-stellar-background-ratio="0.5">
+    {%else%}
+    <header id="gtco-header" class="gtco-cover gtco-cover-sm" role="banner" data-stellar-background-ratio="0.5">
+    {%endif%}
         <div class="overlay"></div>
         <div class="gtco-container">
             <div class="row row-mt-15em">
@@ -22,16 +29,49 @@
             <div class="text">
                 <div class="row" style="padding-left:10%; padding-right:10%; padding-top:5%; padding-bottom:5%">
                     <div class="col-md-12">
-                    <strong>Published on: {{ article.date_uploaded|date:"F j, Y"}}
-                    </strong>
+                    <strong>Published on: {{ article.date_published|date:"F j, Y"}}</strong>
                     </div>
-                    <div class="col-md-12">
-                    {{ article.content|safe }}
+                    <div class="col-md-12 ck-content" style="margin-top: 5px;">
+                        {{content}}
+                    </div>
+                    <div class="col-md-12" style="display: flex; margin-top: 30px;" >
+                            {% if article.author.photo %}
+                            <img src="{{ article.author.photo.url }}" class="author-image-round">
+                            {%else%}
+                            <img src="{% static 'images/logo.jpg' %}" class="author-image-round">
+                            {%endif%}
+                        <div class="author-details-container">
+                          <span >Author: {{article.author.user.get_full_name}}</span>
+                          <span style="font-size: small;" >PYLP Batch {{article.author.pylp_batch}}</span>
+                          <span  style="font-size: small;">PYLP Year {{article.author.pylp_year}}</span>
+                        </div>
+                      </div>
+                    <div class="col-md-12" style="margin-top: 35px;">
+                        {% if attachments %}
+                            <strong>Attachments</strong>
+                            <br/>
+                            {%for attach in attachments%}
+                            <a href="{{attach.file.url}}" download>{{attach.file.name}}</a>
+                            <br/>
+                            {%endfor%}
+                        {% endif %}
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    <script>
+        document.querySelectorAll( 'oembed[url]' ).forEach( element => {
+            // Create the <a href="..." class="embedly-card"></a> element that Embedly uses
+            // to discover the media.
+            const anchor = document.createElement( 'a' );
+    
+            anchor.setAttribute( 'href', element.getAttribute( 'url' ) );
+            anchor.className = 'embedly-card';
+    
+            element.appendChild( anchor );
+        } );
+    </script>
 {% endblock %}
 
 {% block meta %}
@@ -43,14 +83,16 @@
 
     <!-- Facebook and Twitter integration -->
     <meta property="og:title" content="{{ article.title }}"/>
+    {%if article.image %}
     <meta property="og:image" content="{% if request.is_secure %}https://{% else %}http://{% endif %}{{ request.get_host }}{{ article.image.url }}"/>
+    <meta name="twitter:image" content="{% if request.is_secure %}https://{% else %}http://{% endif %}{{ request.get_host }}{{ article.image.url }}" />
+    {%endif%}
     <meta property="og:type" content="website" />
     <meta property="og:url" content="{{ request.build_absolute_uri }}"/>
     <meta property="og:site_name" content="ACCESS PYLP Alumni Association, Inc."/>
-    <meta property="og:description" content="{{ article.content|truncatewords:15|safe }}"/>
+    <!-- <meta property="og:description" content="{{ article.content|truncatewords:15|safe }}"/> -->
     <meta name="twitter:title" content="{{ article.title }}" />
-    <meta name="twitter:description" content="{{ article.content|truncatewords:15|safe }}" />
-    <meta name="twitter:image" content="{% if request.is_secure %}https://{% else %}http://{% endif %}{{ request.get_host }}{{ article.image.url }}" />
+    <!-- <meta name="twitter:description" content="{{ article.content|truncatewords:15|safe }}" /> -->
     <meta name="twitter:url" content="{{ request.build_absolute_uri }}" />
     <meta name="twitter:card" content="summary_large_image" />
 {% endblock %}

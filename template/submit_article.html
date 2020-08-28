@@ -1,0 +1,142 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}TITLE{% endblock %}
+{% block nav %}
+<nav class="gtco-nav" role="navigation">
+    <div class="gtco-container">
+        
+        <div class="row">
+            <div class="col-xs-12 text-center menu-1">
+                <ul>
+                    {% if request.get_full_path == "/"%}
+                    <li class="active"><a href="#head-top" class="button-home">Home</a></li>
+                    <li><a href="#gtco-about" class="button-home">Who We Are</a></li>
+                    <li><a href="#gtco-news" class="button-home">News and Events</a></li>
+                    <li><a href="#gtco-subscribe" class="button-home">Resources</a></li>
+                    <li><a href="{% url 'directory' %}" class="button-home">Directory</a></li>
+                    <li><a href="{% url 'contact-us' %}" class="button-home">Contact Us</a></li>
+                    {% else %}
+                    <li class="active"><a href="{% url 'index' %}">Home</a></li>
+                    <li><a href="{% url 'index' %}#gtco-about">Who We Are</a></li>
+                    <li><a href="{% url 'news_list' %}">News and Events</a></li>
+                    <li><a href="{% url 'resource_list' %}" class="button-home">Resources</a></li>
+                    <li><a href="{% url 'directory' %}" class="button-home">Directory</a></li>
+                    <li><a href="{% url 'contact-us' %}" class="button-home">Contact Us</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+        
+    </div>
+</nav>
+{% endblock %}
+{% block content %}
+<head>
+    <script src="https://cdn.ckeditor.com/ckeditor5/21.0.0/classic/ckeditor.js"></script>
+</head>
+    <form method="post" enctype="multipart/form-data" >
+        {% csrf_token %}
+    <header id="gtco-header" class="gtco-cover gtco-cover-sm" role="banner"  data-stellar-background-ratio="0.5">
+        <div class="overlay"></div>
+        <div class="gtco-container">
+            <div class="row row-mt-15em">
+                <div class="col-md-12 mt-text text-left animate-box" data-animate-effect="fadeInUp">
+                    <h1 style="text-transform: none;"><strong><input name="title" style="background-color: transparent; border: none"  type="text" placeholder="Article Title"></strong></h1>
+                    <label class="btn btn-primary">
+                        <i class="fa fa-image"></i> Choose Article Image
+                        <input type="file" accept=".png, .jpg" style="display: none;" onchange="previewFile()" id="upload_image" name="image">
+                      </label>
+                </div>
+            </div>
+        </div>
+    </header>
+    <div class="flex-section gtco-gray-bg">
+        <div class="container">
+            <div class="text">
+                <div class="row" style="padding-left:10%; padding-right:10%; padding-top:5%; padding-bottom:5%">
+                    <div style="margin-bottom: 15px;">
+                    {{NewsForm.errors}}
+                    <br/>
+                    Content:
+                    <textarea name="content" id="editor">
+                        &lt;p&gt;This is some sample content.&lt;/p&gt;
+                    </textarea>
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        Tags:
+                        <br/>
+                        <input style="width: 700px;" name="tags" type="text" placeholder="(comma-separated)">
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        Attachments:
+                        <br/>
+                        <input name="attachments" type="file" id="attachment_tag" multiple>
+                    </div>
+                    <button class="btn btn-primary" type="submit">Submit Article</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</form>
+
+    <script>
+        function previewFile() {
+            const preview = document.getElementById('gtco-header');
+            const file = document.getElementById('upload_image').files[0];
+            const reader = new FileReader();
+            reader.addEventListener("load", function () {
+            // convert image file to base64 string
+            preview.style.backgroundImage = "url("+reader.result+")";
+            }, false);
+
+            if (file) {
+            reader.readAsDataURL(file);
+            }
+        }
+        
+        var uploadField = document.getElementById("attachment_tag");
+        uploadField.onchange = function() {
+        if(this.files[0].size > (2097152*12.5)){
+            alert("Maximum of 25 mb of File size accepted.");
+            this.value = "";
+            };
+        if (this.files.length > 5) {
+            alert("Only 5 files accepted.");
+            this.value = "";
+            };
+        };
+    
+        ClassicEditor
+            .create( document.querySelector( '#editor' ), {
+                cloudServices: {
+                    tokenUrl: 'https://73723.cke-cs.com/token/dev/402fa9a2ec59e068f5f88f4d7e5c9119d1f7a4baf3b69c11efa91d8ed639',
+                    uploadUrl: 'https://73723.cke-cs.com/easyimage/upload/'
+                    }
+                } )
+                .catch( error => {
+                    console.error( error );
+                } );
+    </script>
+{% endblock %}
+
+{% block meta %}
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="The official website of the ACCESS Philippine Youth Leadership Program - Alumni Association, Inc." />
+    <meta name="keywords" content="access, pylp, access pylp, philippine youth leadership program" />
+    <meta name="author" content="ACCESS-PYLP" />
+    <meta name="google" content="notranslate">
+
+    <!-- Facebook and Twitter integration -->
+    <meta property="og:title" content="{{ article.title }}"/>
+    <meta property="og:image" content="{% if request.is_secure %}https://{% else %}http://{% endif %}{{ request.get_host }}{{ article.image.url }}"/>
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="{{ request.build_absolute_uri }}"/>
+    <meta property="og:site_name" content="ACCESS PYLP Alumni Association, Inc."/>
+    <meta property="og:description" content="{{ article.content|truncatewords:15|safe }}"/>
+    <meta name="twitter:title" content="{{ article.title }}" />
+    <meta name="twitter:description" content="{{ article.content|truncatewords:15|safe }}" />
+    <meta name="twitter:image" content="{% if request.is_secure %}https://{% else %}http://{% endif %}{{ request.get_host }}{{ article.image.url }}" />
+    <meta name="twitter:url" content="{{ request.build_absolute_uri }}" />
+    <meta name="twitter:card" content="summary_large_image" />
+{% endblock %}
