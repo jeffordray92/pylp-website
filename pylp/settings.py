@@ -34,7 +34,7 @@ ALLOWED_HOSTS = [
     "localhost",
     "www.access-pylp.com",
     "access-pylp.com",
-    "4439347f751b.ngrok.io"
+    "1dd89df2b185.ngrok.io"
 ]
 
 
@@ -145,7 +145,7 @@ DJRICHTEXTFIELD_CONFIG = {
 }
 
 
-# django_heroku.settings(locals())
+django_heroku.settings(locals())
 
 PROJECT_APP_PATH = os.path.dirname(os.path.abspath(__file__))
 
