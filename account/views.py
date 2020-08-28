@@ -277,8 +277,8 @@ class ProfileView(View):
                 profile.electronic_signature.delete(save=False)
             if photo_sig_form.cleaned_data['photo'] and clear_photo == "0":
                 profile.photo = photo_sig_form.cleaned_data['photo']
-            if photo_sig_form.cleaned_data['e_sig'] and clear_sig == "0":
-                profile.electronic_signature = photo_sig_form.cleaned_data['e_sig']
+            if photo_sig_form.cleaned_data['electronic_signature'] and clear_sig == "0":
+                profile.electronic_signature = photo_sig_form.cleaned_data['electronic_signature']
             profile.save()
             return redirect('profile')
         else:

@@ -55,8 +55,10 @@
                         <a href="{% url 'news' slug=article.slug %}" class="gtco-card-item">
                             <figure>
                                 <div class="overlay"><i class="ti-plus"></i></div>
-                                {%if article.image.url is not None%}
+                                {%if article.image%}
                                 <img src="{{ article.image.url }}" alt="Image" class="img-responsive">
+                                {%else%}
+                                <img src="{% static 'images/logo.jpg' %}" alt="Image" class="img-responsive">
                                 {%endif%}
                             </figure>
                             <div class="gtco-text" style="min-height: 210.4px; max-height: 210.4px;">
