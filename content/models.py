@@ -7,6 +7,7 @@ from django.template.defaultfilters import slugify
 from django.db.models.signals import post_save
 from django.core.exceptions import ValidationError
 from djrichtextfield.models import RichTextField
+from content.utils import unique_slugify
 from gdstorage.storage import GoogleDriveStorage
 
 # Define Google Drive Storage
@@ -122,7 +123,8 @@ class Resource(models.Model):
     def save(self, *args, **kwargs):
         if not self.id:
             # Newly created object, so set slug
-            self.slug = slugify(self.title)
+            slug_str = slugify(self.title)
+            unique_slugify(self, slug_str)
         super(Resource, self).save(*args, **kwargs)
 
     class Meta:
