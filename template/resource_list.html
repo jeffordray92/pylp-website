@@ -9,8 +9,12 @@
         <div class="gtco-container">
             <div class="row row-mt-15em">
                 <div class="col-md-7 mt-text text-left animate-box" data-animate-effect="fadeInUp">
+                    {% if details %}
                     <h1><strong>{{ details.title }}</strong></h1>  
                     <h2>{{ details.subtitle }}</h2>
+                    {%else%}
+                    <h1><strong>Resources</strong></h1>  
+                    {%endif%}
                 </div>
             </div>
         </div>
@@ -24,16 +28,23 @@
                     <a href="{% url 'resource' resource.slug %}" class="gtco-card-item" target="_blank">
                         <figure>
                             <div class="overlay"><i class="ti-plus"></i></div>
+                            {% if resource.image %}
                             <img src="{{ resource.image.url }}" alt="Image" class="img-responsive">
+                            {% else %}
+                            <img src="{% static 'images/logo.jpg' %}" alt="Image" class="img-responsive">
+                            {% endif %}
                         </figure>
-                        <div class="gtco-text text-left">
-                            <h2>{{ resource.title|truncatechars:55 }}</h2>
-                            <p>{{ resource.description|safe }}</p>
+                        <div class="gtco-text text-left" style="min-height: 116px;">
+                            <h2>{{ resource.title }}</h2>
+                            <p>{{ resource.description|safe|truncatechars:55 }}</p>
                         </div>
                     </a>
                 </div>
                 {% endfor %}
             </div>
+            {% if request.user.is_staff %}
+            <div><a href="{% url 'submit-resource' %}" style="border-color: grey" class="btn text-center gtco-card-item">Add Resources</a></div>
+            {% endif %}
         </div>
     </div>
 {% endblock %}

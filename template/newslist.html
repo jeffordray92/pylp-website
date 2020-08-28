@@ -15,10 +15,15 @@
             </div>
         </div>
     </header>
-
     <div class="gtco-section gtco-gray-bg">
         <div class="gtco-container">
-
+            {%if messages%}
+            {%for message in messages%}
+                <div class="alert alert-{{message.tags}}">
+                    {{message}}
+                </div>
+            {%endfor%}
+        {%endif%}
             <div class="row">
                 {% if categories %}
                 <div class="col-lg-3 col-md-3 col-sm-6">
@@ -37,17 +42,24 @@
                     <a href="{% url 'news' slug=article.slug %}" class="gtco-card-item">
                         <figure>
                             <div class="overlay"><i class="ti-plus"></i></div>
+                            {%if article.image%}
                             <img src="{{ article.image.url }}" alt="Image" class="img-responsive">
+                            {%else%}
+                            <img src="{% static 'images/logo.jpg' %}" alt="Image" class="img-responsive">
+                            {%endif%}
                         </figure>
-                        <div class="gtco-text text-left">
+                        <div class="gtco-text text-left" style="min-height: 210.4px; max-height: 210.4px;">
+                            <p class="gtco-category">{{ article.date_published|date:"F j, Y"}}</p>
                             <h2>{{ article.title|truncatechars:55 }}</h2>
-                            <p>{{ article.content|safe|truncatewords:12 }}</p>
-                            <p class="gtco-category">{{ article.date_uploaded|date:"F j, Y"}}</p>
+                            <p>{{ article.content|safe|striptags|truncatechars:80 }}</p>
                         </div>
                     </a>
                 </div>
                 {% endfor %}
             </div>
+            {% if request.user.is_authenticated %}
+            <div><a href="{% url 'submit-news' %}" style="border-color: grey" class="btn text-center gtco-card-item">Submit an article</a></div>
+            {% endif %}
         </div>
     </div>
 {% endblock %}

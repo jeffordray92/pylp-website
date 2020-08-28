@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block title %}Resources{% endblock %}
+{% block content %}
+    {% if resource.image %}
+    <header id="gtco-header" class="gtco-cover gtco-cover-sm" role="banner" style="background-image: url({{ resource.image.url|safe }})" data-stellar-background-ratio="0.5">
+    {% else %}
+    <header id="gtco-header" class="gtco-cover gtco-cover-sm" role="banner"  data-stellar-background-ratio="0.5">
+    {% endif %}
+        <div class="overlay"></div>
+        <div class="gtco-container">
+            <div class="row row-mt-15em">
+                <div class="col-md-7 mt-text text-left animate-box" data-animate-effect="fadeInUp">
+                    <h1><strong>{{ resource.title }}</strong></h1>  
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="gtco-gray-bg">
+        <div>
+            <div class="text">
+                <div class="row" style="padding-left:10%; padding-right:10%; padding-top:5%; padding-bottom:5%">
+                    <div class="col-md-12 ck-content" style="margin-top: 35px;">
+                        {{resource.description}}
+                    </div>
+                    <div class="col-md-12" style="margin-top: 35px;">
+                            <strong>Attachments</strong>
+                            <br/>
+                            {%for attach in attachments%}
+                            <a href="{{attach.file.url}}" download>{{attach.file.name}}</a>
+                            <br/>
+                            {%endfor%}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block meta %}
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="The official website of the ACCESS Philippine Youth Leadership Program - Alumni Association, Inc." />
+    <meta name="keywords" content="access, pylp, access pylp, philippine youth leadership program" />
+    <meta name="author" content="ACCESS-PYLP" />
+    <meta name="google" content="notranslate">
+
+    <!-- Facebook and Twitter integration -->
+    <meta property="og:title" content="Resources - ACCESS PYLP Alumni Association, Inc."/>
+    {% if details.image %}
+    <meta property="og:image" content="{% if request.is_secure %}https://{% else %}http://{% endif %}{{ request.get_host }}{{ details.image.url }}"/>
+    <meta name="twitter:image" content="{% if request.is_secure %}https://{% else %}http://{% endif %}{{ request.get_host }}{{ details.image.url }}" />
+    {%endif%}
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="{{ request.build_absolute_uri }}"/>
+    <meta property="og:site_name" content="ACCESS PYLP Alumni Association, Inc."/>
+    <meta property="og:description" content="The official website of the ACCESS Philippine Youth Leadership Program - Alumni Association, Inc."/>
+    <meta name="twitter:title" content="Resources - ACCESS PYLP Alumni Association, Inc." />
+    <meta name="twitter:description" content="The official website of the ACCESS Philippine Youth Leadership Program - Alumni Association, Inc." />
+    <meta name="twitter:url" content="{{ request.build_absolute_uri }}" />
+    <meta name="twitter:card" content="summary_large_image" />
+{% endblock %}

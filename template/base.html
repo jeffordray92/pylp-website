@@ -53,20 +53,28 @@
         <div class="gtco-top">
             <div class="container-fluid">
                 <div class="row">
-                    <div class="col-md-9 col-xs-9">
+                    <div class="col-md-5 col-xs-5">
                         <div id="gtco-logo"><a href="{% url 'index' %}"><img src="{% static 'images/logo.jpg' %}" alt="Image" class="img-responsive"/ ></a></div>
                     </div>
-                    <div class="col-md-3 col-xs-3 social-icons no-mobile">
+                    <div class="col-md-7 col-xs-7 social-icons no-mobile">
                         <ul class="gtco-social-top">
                             {% if facebook %}<li><a href="{{ facebook }}"><i class="icon-facebook"></i></a></li>{% endif %}
                             {% if twitter %}<li><a href="{{ twitter }}"><i class="icon-twitter"></i></a></li>{% endif %}
                             {% if instagram %}<li><a href="{{ instagram }}"><i class="icon-instagram"></i></a></li>{% endif %}
                             {% if linkedin %}<li><a href="{{ linkedin }}"><i class="icon-linkedin"></i></a></li>{% endif %}
+                            {% if request.user.is_authenticated %}
+                                <li><a href="{% url 'profile' %}">{{request.user.email}}</a></li>
+                                <li><a href="{% url 'logout' %}">Sign out</a></li>
+                            {% else %}
+                                <li><a href="{% url 'login' %}">Login</a></li>
+                                <li><a href="{% url 'signup' %}">Sign Up</a></li>
+                            {% endif %}
                         </ul>
                     </div>
                 </div>
             </div>  
         </div>
+        {% block nav %}
         <nav class="gtco-nav sticky-banner" role="navigation">
             <div class="gtco-container">
                 
@@ -77,16 +85,16 @@
                             <li class="active"><a href="#head-top" class="button-home">Home</a></li>
                             <li><a href="#gtco-about" class="button-home">Who We Are</a></li>
                             <li><a href="#gtco-news" class="button-home">News and Events</a></li>
-                            <li><a href="#gtco-subscribe" class="button-home">Resources</a></li>
+                            {% if request.user.is_authenticated%}<li><a href="#gtco-subscribe" class="button-home">Resources</a></li>{%endif%}
                             <li><a href="{% url 'directory' %}" class="button-home">Directory</a></li>
-                            <li><a href="#gtco-footer" class="button-home">Contact Us</a></li>
+                            <li><a href="{% url 'contact-us' %}" class="button-home">Contact Us</a></li>
                             {% else %}
                             <li class="active"><a href="{% url 'index' %}">Home</a></li>
                             <li><a href="{% url 'index' %}#gtco-about">Who We Are</a></li>
                             <li><a href="{% url 'news_list' %}">News and Events</a></li>
-                            <li><a href="{% url 'resource_list' %}" class="button-home">Resources</a></li>
+                            {% if request.user.is_authenticated %}<li><a href="{% url 'resource_list' %}" class="button-home">Resources</a></li>{%endif%}
                             <li><a href="{% url 'directory' %}" class="button-home">Directory</a></li>
-                            <li><a href="#gtco-footer" class="button-home">Contact Us</a></li>
+                            <li><a href="{% url 'contact-us' %}" class="button-home">Contact Us</a></li>
                             {% endif %}
                         </ul>
                     </div>
@@ -94,6 +102,7 @@
                 
             </div>
         </nav>
+        {% endblock %}
     </div>
     {% block content %}{% endblock %}
     

@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% load static %}
+{% load crispy_forms_tags%}
+{% block title %}Resources{% endblock %}
+{% block content %}
+    <header id="gtco-header" class="gtco-cover gtco-cover-sm" role="banner" style="background-image: url({{ details.image.url|safe }})" data-stellar-background-ratio="0.5">
+        <div class="overlay"></div>
+        <div class="gtco-container">
+            <div class="row row-mt-15em">
+                <div class="col-md-7 mt-text text-left animate-box" data-animate-effect="fadeInUp">
+                    <h1><strong>Add Resource</strong></h1>  
+                </div>
+            </div>
+        </div>
+    </header>
+    <form method="post" enctype="multipart/form-data" >
+        {% csrf_token %}
+    <div class="flex-section gtco-gray-bg">
+        <div class="container">
+            <div class="text">
+                <div class="row" style="padding-left:10%; padding-right:10%; padding-top:5%; padding-bottom:5%">
+                    <div style="margin-bottom: 15px;">
+                    {{ResourceForm.errors}}
+                    <br/>
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        {{ResourceForm|crispy}}
+                    <button class="btn btn-primary" type="submit">Submit Resource</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </form>
+    <script>
+        var uploadField = document.getElementById("attachment_tag");
+        uploadField.onchange = function() {
+        if(this.files[0].size > (2097152*12.5)){
+            alert("Maximum of 25 mb of File size accepted.");
+            this.value = "";
+            };
+        if (this.files.length > 5) {
+            alert("Only 5 files accepted.");
+            this.value = "";
+            };
+        };
+    </script>
+{% endblock %}
+
+{% block meta %}
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="The official website of the ACCESS Philippine Youth Leadership Program - Alumni Association, Inc." />
+    <meta name="keywords" content="access, pylp, access pylp, philippine youth leadership program" />
+    <meta name="author" content="ACCESS-PYLP" />
+    <meta name="google" content="notranslate">
+
+    <!-- Facebook and Twitter integration -->
+    <meta property="og:title" content="Resources - ACCESS PYLP Alumni Association, Inc."/>
+    <meta property="og:image" content="{% if request.is_secure %}https://{% else %}http://{% endif %}{{ request.get_host }}{{ details.image.url }}"/>
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="{{ request.build_absolute_uri }}"/>
+    <meta property="og:site_name" content="ACCESS PYLP Alumni Association, Inc."/>
+    <meta property="og:description" content="The official website of the ACCESS Philippine Youth Leadership Program - Alumni Association, Inc."/>
+    <meta name="twitter:title" content="Resources - ACCESS PYLP Alumni Association, Inc." />
+    <meta name="twitter:description" content="The official website of the ACCESS Philippine Youth Leadership Program - Alumni Association, Inc." />
+    <meta name="twitter:image" content="{% if request.is_secure %}https://{% else %}http://{% endif %}{{ request.get_host }}{{ details.image.url }}" />
+    <meta name="twitter:url" content="{{ request.build_absolute_uri }}" />
+    <meta name="twitter:card" content="summary_large_image" />
+{% endblock %}
