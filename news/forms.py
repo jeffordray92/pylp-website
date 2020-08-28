@@ -12,7 +12,7 @@ class NewsForm(forms.ModelForm):
     class Meta:
         model = News
         fields = ('title', 'content', 'tags', 'image')
-        required = '__all__'
+        required = ('title', 'content')
 
     def save(self, commit=True, author=None):
         news = super(NewsForm, self).save(commit=False)

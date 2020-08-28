@@ -64,9 +64,10 @@ class SubmitArticleView(View):
             try:
                 if(request.user.profile != None):
                     news = news_form.save(author=request.user.profile)
+                else:
+                    news = news_form.save()
             except:
-                news = news_form.save()
-            news.save()
+                pass
             for f in files:
                 attachment = Attachment(
                     news=news,
