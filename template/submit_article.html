@@ -33,6 +33,7 @@
 {% block content %}
 <head>
     <script src="https://cdn.ckeditor.com/ckeditor5/21.0.0/classic/ckeditor.js"></script>
+    <script src="{% static 'js/simpleuploadadapter.js' %}"></script>
 </head>
     <form method="post" enctype="multipart/form-data" >
         {% csrf_token %}
@@ -109,12 +110,9 @@
     
         ClassicEditor
             .create( document.querySelector( '#editor' ), {
-                cloudServices: {
-                    tokenUrl: 'https://73723.cke-cs.com/token/dev/402fa9a2ec59e068f5f88f4d7e5c9119d1f7a4baf3b69c11efa91d8ed639',
-                    uploadUrl: 'https://73723.cke-cs.com/easyimage/upload/'
-                    }
-                } )
-                .catch( error => {
+            extraPlugins: [ MyCustomUploadAdapterPlugin ],
+            uploadUrl: '/news/upload-image/',
+        }).catch( error => {
                     console.error( error );
                 } );
     </script>
