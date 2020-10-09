@@ -19,9 +19,10 @@
 <body class="{% if is_popup %}popup {% endif %}{% block bodyclass %}{% endblock %}"
   data-admin-utc-offset="{% now "Z" %}">
   <script>
+    var fb_app_id = "{{facebook_app_id}}";
     window.fbAsyncInit = function() {
       FB.init({
-        appId            : '72386462151',
+        appId            : fb_app_id,
         xfbml            : true,
         version          : 'v8.0'
       });
