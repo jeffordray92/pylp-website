@@ -34,7 +34,6 @@ ALLOWED_HOSTS = [
     "localhost",
     "www.access-pylp.com",
     "access-pylp.com",
-    env('ALLOWED_WEBSITE_FOR_FACEBOOK')
 ]
 
 
@@ -172,6 +171,6 @@ LOGOUT_REDIRECT_URL = 'index'
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
-GOOGLE_DRIVE_STORAGE_JSON_KEY_FILE = f"{os.path.dirname(__file__)}/pylp-dev-key.json"
+GOOGLE_DRIVE_STORAGE_JSON_KEY_FILE = env('PATH_TO_GOOGLE_DRIVE_JSON_KEY')
 
 FACEBOOK_APP_ID = env('FACEBOOK_APP_ID')
