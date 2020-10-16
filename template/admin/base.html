@@ -19,15 +19,17 @@
 <body class="{% if is_popup %}popup {% endif %}{% block bodyclass %}{% endblock %}"
   data-admin-utc-offset="{% now "Z" %}">
   <script>
+    var fb_app_id = "{{facebook_app_id}}";
     window.fbAsyncInit = function() {
       FB.init({
-        appId            : '72386462151',
+        appId            : fb_app_id,
         xfbml            : true,
         version          : 'v8.0'
       });
     };
   </script>
   <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js"></script>
+  <script src="{% static 'js/simpleuploadadapter.js' %}"></script>
 <!-- Container -->
 <div id="container">
 
@@ -101,12 +103,9 @@
 <script>
             ClassicEditor
             .create( document.querySelector( '#news_textarea' ), {
-                cloudServices: {
-                    tokenUrl: 'https://73723.cke-cs.com/token/dev/402fa9a2ec59e068f5f88f4d7e5c9119d1f7a4baf3b69c11efa91d8ed639',
-                    uploadUrl: 'https://73723.cke-cs.com/easyimage/upload/'
-                    }
-                } )
-                .catch( error => {
+            extraPlugins: [ MyCustomUploadAdapterPlugin ],
+            uploadUrl: '/news/upload-image/',
+        }).catch( error => {
                     console.error( error );
                 } );
 

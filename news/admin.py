@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.models import Group
-from news.models import News, NewsList, Category, Attachment
+from news.models import News, NewsList, Category, CkeditorMedia, Attachment
 from news.forms import NewsModelForm
 
 
@@ -69,3 +69,4 @@ class CategoryAdmin(admin.ModelAdmin):
 admin.site.register(News, NewsAdmin)
 admin.site.register(NewsList)
 admin.site.register(Category)
+admin.site.register(CkeditorMedia)

@@ -34,7 +34,6 @@ ALLOWED_HOSTS = [
     "localhost",
     "www.access-pylp.com",
     "access-pylp.com",
-    "1dd89df2b185.ngrok.io"
 ]
 
 
@@ -83,6 +82,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'content.context_processors.social_media',
+                'content.context_processors.facebook_app_id'
             ],
         },
     },
@@ -171,4 +171,6 @@ LOGOUT_REDIRECT_URL = 'index'
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
-GOOGLE_DRIVE_STORAGE_JSON_KEY_FILE = f"{os.path.dirname(__file__)}/pylp-dev-key.json"
+GOOGLE_DRIVE_STORAGE_JSON_KEY_FILE = env('PATH_TO_GOOGLE_DRIVE_JSON_KEY')
+
+FACEBOOK_APP_ID = env('FACEBOOK_APP_ID')

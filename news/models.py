@@ -124,3 +124,8 @@ class Attachment(models.Model):
 
     def __str__(self):
         return self.file.name
+
+
+class CkeditorMedia(models.Model):
+    image = models.ImageField(upload_to="ckeditor_media/",
+                              validators=[validate_image_size, ])

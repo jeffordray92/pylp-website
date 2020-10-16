@@ -1,10 +1,12 @@
 from django.shortcuts import render
 from django.contrib import messages
 from django.views import View
+from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponseNotFound
+from django.http.response import JsonResponse
 from django.shortcuts import redirect
 from django.utils.html import format_html
-from news.models import Attachment, Category, News, NewsList
+from news.models import Attachment, Category, News, NewsList, CkeditorMedia
 from news.forms import NewsForm
 
 
@@ -80,3 +82,15 @@ class SubmitArticleView(View):
             return redirect('news_list')
         else:
             return render(request, 'submit_article.html', {'NewsForm': news_form})
+
+
+@csrf_exempt
+def simple_upload(request):
+    if request.method == 'POST':
+        image = CkeditorMedia(
+            image=request.FILES['upload']
+        )
+        image.save()
+        base_url = request.get_host()
+        image_url = f'http://{base_url}{image.image.url}'
+        return JsonResponse({'url': image_url})
